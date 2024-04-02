@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="性能优化 资料来源 分析问题的一般步骤 CPU性能分析  磁盘和文件系统I&#x2F;O性能分析  网络性能分析  CPU 进程和CPU原理 进程与线程 CPU调度 中断系统 CPU缓存 NUMA 性能指标 平均负载  系统处于可运行状态和不可中断状态的平均进程数，也就是平均活跃进程数，当平均负载大于CPU数量70%的时间需要注意  由于负载包含了等待IO的进程，所以负载和CPU使用率不能完全划等号，如果是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux">
+<meta property="og:url" content="http://localhost:4000/2024/01/24/read/linux/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="性能优化 资料来源 分析问题的一般步骤 CPU性能分析  磁盘和文件系统I&#x2F;O性能分析  网络性能分析  CPU 进程和CPU原理 进程与线程 CPU调度 中断系统 CPU缓存 NUMA 性能指标 平均负载  系统处于可运行状态和不可中断状态的平均进程数，也就是平均活跃进程数，当平均负载大于CPU数量70%的时间需要注意  由于负载包含了等待IO的进程，所以负载和CPU使用率不能完全划等号，如果是">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.postimg.cc/QCDKf9pJ/Pasted-image-20240125200945.png">
+<meta property="og:image" content="https://i.postimg.cc/J73kGxL6/Pasted-image-20240125201146.png">
+<meta property="og:image" content="https://i.postimg.cc/8cbJ9p4Q/Pasted-image-20240125201226.png">
+<meta property="og:image" content="https://i.postimg.cc/K8jkpygw/Pasted-image-20240125170507.png">
+<meta property="og:image" content="https://i.postimg.cc/028JmS58/Pasted-image-20240125193429.png">
+<meta property="og:image" content="https://i.postimg.cc/TwgWjqWP/Pasted-image-20240125104300.png">
+<meta property="article:published_time" content="2024-01-24T03:12:44.007Z">
+<meta property="article:modified_time" content="2024-04-02T11:00:03.546Z">
+<meta property="article:author" content="jonas">
+<meta property="article:tag" content="八股">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.postimg.cc/QCDKf9pJ/Pasted-image-20240125200945.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>linux</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">About</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2024/01/26/read/golang/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/01/21/read/%E7%BC%93%E5%AD%98/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/01/24/read/linux/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/01/24/read/linux/&text=linux"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/01/24/read/linux/&is_video=false&description=linux"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=linux&body=Check out this article: http://localhost:4000/2024/01/24/read/linux/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/01/24/read/linux/&name=linux&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/01/24/read/linux/&t=linux"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.1.</span> <span class="toc-text">分析问题的一般步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">CPU性能分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9FI-O%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">磁盘和文件系统I&#x2F;O性能分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.1.3.</span> <span class="toc-text">网络性能分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU"><span class="toc-number">1.2.</span> <span class="toc-text">CPU</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8CCPU%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">进程和CPU原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-number">1.2.2.</span> <span class="toc-text">性能指标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B3%E5%9D%87%E8%B4%9F%E8%BD%BD"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">平均负载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E4%BD%BF%E7%94%A8%E7%8E%87"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">CPU使用率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%89%E4%BB%BB%E5%8A%A1%E4%B8%8D%E5%90%8C%E5%88%92%E5%88%86"><span class="toc-number">1.2.2.3.1.</span> <span class="toc-text">按任务不同划分</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD%E7%8E%87"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">CPU缓存命中率</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90"><span class="toc-number">1.2.3.</span> <span class="toc-text">性能剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#top-ps"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">top&#x2F;ps</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#vmstat"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">vmstat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mpstat"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">mpstat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sar"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">sar</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pidstat"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">pidstat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strace"><span class="toc-number">1.2.3.6.</span> <span class="toc-text">strace</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#perf"><span class="toc-number">1.2.3.7.</span> <span class="toc-text">perf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#execsnoop"><span class="toc-number">1.2.3.8.</span> <span class="toc-text">execsnoop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#proc%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.3.9.</span> <span class="toc-text">proc文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.3.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">内存原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-2"><span class="toc-number">1.3.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-2"><span class="toc-number">1.3.3.</span> <span class="toc-text">性能剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#free"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">free</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#top"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">top</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-2"><span class="toc-number">1.3.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">1.4.</span> <span class="toc-text">网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.1.</span> <span class="toc-text">网络原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-3"><span class="toc-number">1.4.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-3"><span class="toc-number">1.4.3.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-3"><span class="toc-number">1.4.4.</span> <span class="toc-text">调优方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E8%B0%83%E4%BC%98"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">网卡调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E8%B0%83%E4%BC%98"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">协议调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%8E%A7%E5%88%B6"><span class="toc-number">1.4.4.3.</span> <span class="toc-text">资源控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%B0%83%E4%BC%98"><span class="toc-number">1.4.4.4.</span> <span class="toc-text">内核调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E7%AD%94"><span class="toc-number">1.4.4.5.</span> <span class="toc-text">问答</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%98%AF%E4%B8%8D%E6%98%AF%E5%8F%97%E9%99%90%E4%BA%8E-65535-%E4%B8%AA%E7%AB%AF%E5%8F%A3%EF%BC%9F"><span class="toc-number">1.4.4.5.1.</span> <span class="toc-text">最大连接数是不是受限于 65535 个端口？</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98IO"><span class="toc-number">1.5.</span> <span class="toc-text">磁盘IO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.1.</span> <span class="toc-text">磁盘原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-4"><span class="toc-number">1.5.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-4"><span class="toc-number">1.5.3.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-4"><span class="toc-number">1.5.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.6.</span> <span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86"><span class="toc-number">1.6.1.</span> <span class="toc-text">文件系统原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-5"><span class="toc-number">1.6.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-5"><span class="toc-number">1.6.3.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-5"><span class="toc-number">1.6.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E6%A0%B8"><span class="toc-number">1.7.</span> <span class="toc-text">linux内核</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E5%8E%9F%E7%90%86"><span class="toc-number">1.7.1.</span> <span class="toc-text">内核原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-6"><span class="toc-number">1.7.2.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%B0%83%E4%BC%98-2"><span class="toc-number">1.7.3.</span> <span class="toc-text">内核调优</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.8.</span> <span class="toc-text">应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-6"><span class="toc-number">1.8.1.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-7"><span class="toc-number">1.8.2.</span> <span class="toc-text">性能剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#USE%E6%96%B9%E6%B3%95"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">USE方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%89%96%E6%9E%90"><span class="toc-number">1.8.2.2.</span> <span class="toc-text">进程剖析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#APM"><span class="toc-number">1.8.2.3.</span> <span class="toc-text">APM</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-6"><span class="toc-number">1.8.3.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.9.</span> <span class="toc-text">架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E6%8D%A2%E6%97%B6%E9%97%B4"><span class="toc-number">1.9.1.</span> <span class="toc-text">空间换时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%8D%A2%E7%A9%BA%E9%97%B4"><span class="toc-number">1.9.2.</span> <span class="toc-text">时间换空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86"><span class="toc-number">1.9.3.</span> <span class="toc-text">并行处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86"><span class="toc-number">1.9.4.</span> <span class="toc-text">异步处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="toc-number">1.10.</span> <span class="toc-text">性能监控</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E5%88%86%E6%9E%90"><span class="toc-number">1.10.1.</span> <span class="toc-text">时间序列分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E8%BF%BD%E8%B8%AA"><span class="toc-number">1.10.2.</span> <span class="toc-text">服务调用追踪</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-number">1.10.3.</span> <span class="toc-text">数据可视化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%8A%E8%AD%A6%E9%80%9A%E7%9F%A5"><span class="toc-number">1.10.4.</span> <span class="toc-text">告警通知</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="toc-number">1.11.</span> <span class="toc-text">性能测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%8E%E7%A1%AE%E9%9C%80%E6%B1%82"><span class="toc-number">1.11.1.</span> <span class="toc-text">明确需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%81%87%E8%AE%BE"><span class="toc-number">1.11.2.</span> <span class="toc-text">环境假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95-2"><span class="toc-number">1.11.3.</span> <span class="toc-text">性能测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="toc-number">1.11.4.</span> <span class="toc-text">结果分析</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        linux
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">jonas</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-01-24T03:12:44.007Z" class="dt-published" itemprop="datePublished">2024-01-24</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/linux/" rel="tag">linux</a>, <a class="p-category" href="/tags/%E5%85%AB%E8%82%A1/" rel="tag">八股</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1>性能优化</h1>
+<p><a target="_blank" rel="noopener" href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Linux%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98">资料来源</a></p>
+<h2 id="分析问题的一般步骤">分析问题的一般步骤</h2>
+<h3 id="CPU性能分析">CPU性能分析</h3>
+<p><img src="https://i.postimg.cc/QCDKf9pJ/Pasted-image-20240125200945.png" alt></p>
+<h3 id="磁盘和文件系统I-O性能分析">磁盘和文件系统I/O性能分析</h3>
+<p><img src="https://i.postimg.cc/J73kGxL6/Pasted-image-20240125201146.png" alt></p>
+<h3 id="网络性能分析">网络性能分析</h3>
+<p><img src="https://i.postimg.cc/8cbJ9p4Q/Pasted-image-20240125201226.png" alt></p>
+<h2 id="CPU">CPU</h2>
+<h3 id="进程和CPU原理">进程和CPU原理</h3>
+<p>进程与线程<br>
+CPU调度<br>
+中断系统<br>
+CPU缓存<br>
+NUMA</p>
+<h3 id="性能指标">性能指标</h3>
+<h4 id="平均负载">平均负载</h4>
+<blockquote>
+<p>系统处于<strong>可运行状态</strong>和<strong>不可中断状态</strong>的平均进程数，也就是<strong>平均活跃进程数</strong>，当平均负载大于CPU数量70%的时间需要注意</p>
+</blockquote>
+<p>由于负载包含了等待IO的进程，所以负载和CPU使用率不能完全划等号，如果是CPU密集型，这两者几乎是一直的，如果是IO密集型，CPU使用率不一定高</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uptime</span></span><br><span class="line">11:22:02 up 552 days, 12:47,  1 user,  load average: 4.10, 4.06, 3.79</span><br><span class="line">当前时间，已运行时间，登录用户数，每分钟，5分钟，15分钟的平均负载</span><br></pre></td></tr></table></figure>
+<h4 id="CPU使用率">CPU使用率</h4>
+<p>用户CPU<br>
+系统CPU<br>
+iowait （等待IO的CPU使用率）<br>
+硬中断 （其实就是要把网卡的数据读到内存中，然后更新一下硬件寄存器的状态（表示数据已经读好了），最后再发送一个<strong>软中断</strong>信号）<br>
+软中断 （从内存中找到网络数据，再按照网络协议栈，对数据进行逐层解析和处理，直到把它送给应用程序 在/proc/softirqs可查看）<br>
+窃取CPU<br>
+客户CPU</p>
+<h4 id="上下文切换">上下文切换</h4>
+<blockquote>
+<p>CPU 上下文切换，就是先把前一个任务的 CPU 上下文（也就是 CPU 寄存器和程序计数器）保存起来，然后加载新任务的上下文到这些寄存器和程序计数器，最后再跳转到程序计数器所指的新位置，运行新任务</p>
+</blockquote>
+<h5 id="按任务不同划分">按任务不同划分</h5>
+<ol>
+<li>进程上下文切换</li>
+</ol>
+<blockquote>
+<p>进程的上下文不仅包括了虚拟内存、栈、全局变量等用户空间的资源，还包括了内核堆栈、寄存器等内核空间的状态</p>
+</blockquote>
+<ol start="3">
+<li>线程上下文切换</li>
+</ol>
+<blockquote>
+<p>因为虚拟内存是共享的，所以在切换时，虚拟内存这些资源就保持不动，只需要切换线程的私有数据、寄存器等不共享的数据</p>
+</blockquote>
+<ol start="5">
+<li>中断上下文切换<br>
+自愿上下文切换<br>
+非自愿上下文切换</li>
+</ol>
+<h4 id="CPU缓存命中率">CPU缓存命中率</h4>
+<h3 id="性能剖析">性能剖析</h3>
+<h4 id="top-ps">top/ps</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">top - 15:26:26 up 125 days, 21:01,  1 user,  load average: 17.20, 15.05, 16.71</span><br><span class="line">Tasks:  48 total,   1 running,  47 sleeping,   0 stopped,   0 zombie</span><br><span class="line">Cpu(s): 38.0% us, 12.7% sy,  2.7% ni, 44.8% <span class="built_in">id</span>,  1.0% wa,  0.0% hi,  0.8% si</span><br><span class="line">Mem:  196170728k total, 186873632k used,  9297096k free,  2712492k buffers</span><br><span class="line">Swap:        0k total,        0k used,        0k free, 128334812k cached</span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</span><br><span class="line">45143 work      20   0 1107m 232m  13m S  5.3  0.1 237:11.44 ral-agent</span><br></pre></td></tr></table></figure>
+<p>cpu的数据在第三行</p>
+<ul>
+<li>user（通常缩写为 us），代表用户态 CPU 时间。注意，它不包括下面的 nice 时间，但包括了 guest 时间。</li>
+<li>nice（通常缩写为 ni），代表低优先级用户态 CPU 时间，也就是进程的 nice 值被调整为 1-19 之间时的 CPU 时间。这里注意，nice 可取值范围是 -20 到 19，数值越大，优先级反而越低。</li>
+<li>system（通常缩写为sys），代表内核态 CPU 时间。</li>
+<li>idle（通常缩写为id），代表空闲时间。注意，它不包括等待 I/O 的时间（iowait）。</li>
+<li>iowait（通常缩写为 wa），代表等待 I/O 的 CPU 时间。</li>
+<li>irq（通常缩写为 hi），代表处理硬中断的 CPU 时间。</li>
+<li>softirq（通常缩写为 si），代表处理软中断的 CPU 时间。</li>
+<li>steal（通常缩写为 st），代表当系统运行在虚拟机中的时候，被其他虚拟机占用的 CPU 时间。</li>
+<li>guest（通常缩写为 guest），代表通过虚拟化运行其他操作系统的时间，也就是运行虚拟机的 CPU 时间。</li>
+<li>guest_nice（通常缩写为 gnice），代表以低优先级运行虚拟机的时间。<br>
+S列的状态枚举</li>
+<li><strong>R</strong> 是 Running 或 Runnable 的缩写，表示进程在 CPU 的就绪队列中，正在运行或者正在等待运行。</li>
+<li><strong>D</strong> 是 Disk Sleep 的缩写，也就是不可中断状态睡眠（Uninterruptible Sleep），一般表示进程正在跟硬件交互，并且交互过程不允许被其他进程或中断打断。</li>
+<li><strong>Z</strong> 是 Zombie 的缩写，它表示僵尸进程，也就是进程实际上已经结束了，但是父进程还没有回收它的资源（比如进程的描述符、PID 等）。</li>
+<li><strong>S</strong> 是 Interruptible Sleep 的缩写，也就是可中断状态睡眠，表示进程因为等待某个事件而被系统挂起。当进程等待的事件发生时，它会被唤醒并进入 R 状态。</li>
+<li><strong>I</strong> 是 Idle 的缩写，也就是空闲状态，用在不可中断睡眠的内核线程上。前面说了，硬件交互导致的不可中断进程用 D 表示，但对某些内核线程来说，它们有可能实际上并没有任何负载，用 Idle 正是为了区分这种情况。要注意，D 状态的进程会导致平均负载升高， I 状态的进程却不会</li>
+</ul>
+<h4 id="vmstat">vmstat</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每隔5秒输出1组数据 $ vmstat 5 </span></span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- --system-- ----cpu----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   <span class="keyword">in</span>    cs us sy <span class="built_in">id</span> wa</span><br><span class="line">10  0      0 18101528 2727076 128367312    0    0     0     0    0     0 35 10 53  2</span><br><span class="line">19  0      0 17971712 2727080 128359792    0    0     0     0 181662 343710 34 12 54  1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>r（Running or Runnable）是就绪队列的长度，也就是正在运行和等待CPU的进程数。</li>
+<li>b（Blocked）则是处于不可中断睡眠状态的进程数。</li>
+<li>cs（context switch）是每秒上下文切换的次数。</li>
+<li>in（interrupt）则是每秒中断的次数。</li>
+</ul>
+<h4 id="mpstat">mpstat</h4>
+<h4 id="sar">sar</h4>
+<h4 id="pidstat">pidstat</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">03:21:26 PM       PID   cswch/s nvcswch/s  Command</span><br><span class="line">03:21:31 PM         3     99.40      0.20  matrix-init-pro</span><br><span class="line">03:21:31 PM     36399      2.00      0.00  nginx</span><br><span class="line">03:21:31 PM     36400      1.00      0.00  nginx</span><br><span class="line">03:21:31 PM     36401      2.00      0.20  nginx</span><br><span class="line">03:21:31 PM     36402      2.00      0.00  nginx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>cswch （voluntary context switches）的次数</li>
+<li>nvcswch（non voluntary context switches）</li>
+</ul>
+<h4 id="strace">strace</h4>
+<h4 id="perf">perf</h4>
+<h4 id="execsnoop">execsnoop</h4>
+<h4 id="proc文件系统">proc文件系统</h4>
+<p>/proc/stat<br>
+/proc/[pid]/stat</p>
+<h3 id="调优方法">调优方法</h3>
+<p>CPU绑定<br>
+进程CPU自愿限制<br>
+进程优先级调整<br>
+中断负载均衡<br>
+CPU缓存<br>
+NUMA优化 （Non-Uniform Memory Access）</p>
+<h2 id="内存">内存</h2>
+<h3 id="内存原理">内存原理</h3>
+<p>内存地址<br>
+虚拟内存<br>
+内存分配与回收<br>
+缓存与缓冲区</p>
+<ol>
+<li>Buffers 是内核缓冲区用到的内存(对<strong>磁盘</strong>数据的缓存)，对应的是 <code>/proc/meminfo</code> 中的 Buffers 值</li>
+<li>Cache 是内核页缓存和Slab用到的内存(对<strong>文件</strong>数据的缓存)，对应的是 <code>/proc/meminfo</code> 中的 Cached 与 SReclaimable 之和<br>
+SWAP</li>
+</ol>
+<h3 id="性能指标-2">性能指标</h3>
+<p>系统内存使用量<br>
+进程内存使用量<br>
+缓存与缓冲区命中率<br>
+swap使用量</p>
+<h3 id="性能剖析-2">性能剖析</h3>
+<ol>
+<li>先用free和top，查看系统整体的内存使用情况。</li>
+<li>再用vmstat和pidstat，查看一段时间的趋势，从而判断出内存问题的类型。</li>
+<li>最后进行详细分析，比如内存分配分析、缓存/缓冲区分析、具体进程的内存使用分析等。</li>
+</ol>
+<h4 id="free">free</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:     527636740  478091560   49545180          0   34889028  356636252</span><br><span class="line">-/+ buffers/cache:   86566280  441070460</span><br><span class="line">Swap:            0          0          0</span><br></pre></td></tr></table></figure>
+<h4 id="top">top</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">top - 20:39:01 up 552 days, 22:04,  1 user,  load average: 4.68, 4.02, 3.61</span><br><span class="line">Tasks:  46 total,   1 running,  45 sleeping,   0 stopped,   0 zombie</span><br><span class="line">Cpu(s):  4.4% us,  2.1% sy,  2.9% ni, 90.5% <span class="built_in">id</span>,  0.0% wa,  0.0% hi,  0.1% si</span><br><span class="line">Mem:  527636740k total, 478203424k used, 49433316k free, 34889028k buffers</span><br><span class="line">Swap:        0k total,        0k used,        0k free, 356744572k cached</span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</span><br><span class="line"> 7938 work      20   0 5181m 1.2g  97m S  3.0  0.2   9312:45 hhvm_bin</span><br><span class="line">    3 root      20   0 15536  404   44 S  0.0  0.0 265:43.28 matrix-init-pro</span><br><span class="line"> 7936 work      20   0  3208  392  292 S  0.0  0.0   0:00.38 supervise.hhvm</span><br><span class="line"> 7945 work      20   0 1104m 634m 2076 S  0.0  0.1   0:00.01 hhvm_bin</span><br></pre></td></tr></table></figure>
+<ul>
+<li>VIRT 是进程虚拟内存的大小，只要是进程申请过的内存，即便还没有真正分配物理内存，也会计算在内。</li>
+<li>RES 是常驻内存的大小，也就是进程实际使用的物理内存大小，但不包括 Swap 和共享内存。</li>
+<li>SHR 是共享内存的大小，比如与其他进程共同使用的共享内存、加载的动态链接库以及程序的代码段等。</li>
+<li>%MEM 是进程使用物理内存占系统总内存的百分比。<br>
+sar<br>
+vmstat<br>
+cachestat<br>
+cahcetop<br>
+memleak<br>
+proc文件系统 /proc/meminfo</li>
+</ul>
+<h3 id="调优方法-2">调优方法</h3>
+<p>利用缓存与缓冲区<br>
+减少swap使用<br>
+减少动态分配内存<br>
+优化NUMA<br>
+限制进程内存志愿<br>
+使用HugePage</p>
+<h2 id="网络">网络</h2>
+<h3 id="网络原理">网络原理</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th>数据</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td>TCP头部(20 bytes)</td>
+<td>数据</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>IP头(20 bytes)</td>
+<td>TCP头部</td>
+<td>数据</td>
+<td></td>
+</tr>
+<tr>
+<td>帧头</td>
+<td>IP头</td>
+<td>TCP头部</td>
+<td>数据</td>
+<td>帧尾</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>MTU ip包的最大传输单元<br>
+网络配置<br>
+TCP/IP协议<br>
+网络收发流程</li>
+</ul>
+<ol>
+<li>当一个网络帧到达网卡后，网卡会通过 DMA 方式，把这个网络包放到收包队列中；然后通过硬中断，告诉中断处理程序已经收到了网络包</li>
+<li>网卡中断处理程序会为网络帧分配内核数据结构（sk_buff），并将其拷贝到 sk_buff 缓冲区中；然后再通过软中断，通知内核收到了新的网络帧</li>
+<li>内核协议栈从缓冲区中取出网络帧，并通过网络协议栈，从下到上逐层处理这个网络帧
+<ul>
+<li>在链路层检查报文的合法性，找出上层协议的类型（比如 IPv4 还是 IPv6），再去掉帧头、帧尾，然后交给网络层。</li>
+<li>网络层取出 IP 头，判断网络包下一步的走向，比如是交给上层处理还是转发。当网络层确认这个包是要发送到本机后，就会取出上层协议的类型（比如 TCP 还是 UDP），去掉 IP 头，再交给传输层处理。</li>
+<li>传输层取出 TCP 头或者 UDP 头后，根据 &lt;源 IP、源端口、目的 IP、目的端口&gt; 四元组作为标识，找出对应的 Socket，并把数据拷贝到 Socket 的接收缓存中。<br>
+高级路由<br>
+网络QoS<br>
+网络防火墙<br>
+C10K与C100K</li>
+</ul>
+</li>
+<li>C10K</li>
+</ol>
+<blockquote>
+<p>1999年提出，对应的是早期32位操作系统，linux2.2，2GB内存，千兆网卡，对于这样的服务器，要支撑10000的请求，那么对应的单个请求，内存=2GB/10000=200K, 带宽=1000Mbit/10000=100Kbit。物理资源是够的，主要是软件的问题，尤其是网络IO模型的问题。C10k以前，主要是同步阻塞IO，每个请求都分配一个进程或者线程，无法满足C10K的请求。</p>
+</blockquote>
+<p>要解决的问题</p>
+<ol>
+<li>一个线程内处理多个请求</li>
+</ol>
+<p>触发方式</p>
+<ul>
+<li>水平触发（Level-triggered）：这种模式下，只要某个条件满足（例如：数据可读、可写等），系统就会触发通知。例如，如果你注册了“数据可读”事件，那么只要有数据可读，<strong>不管你是否已经读取</strong>，系统都会不断地发出通知。这就像一种状态通知，只要满足这个状态，就会触发。</li>
+<li>边缘触发（Edge-triggered）：这种模式下，只有在状态发生变化时（例如：从无数据可读变为有数据可读），系统才会触发通知。也就是说，如果数据已经可读，然后你读取了部分数据，剩余的数据即使仍然可读，系统也不会再发出通知。这就像一种事件通知，只有事件发生时才会触发。</li>
+</ul>
+<p>多路复用IO</p>
+<ol>
+<li>select 或poll</li>
+</ol>
+<blockquote>
+<p>缺点：1024限制，遍历的复杂度是o(N)</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> infds = select(maxfd + <span class="number">1</span>, &amp;tmpfdset, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//遍历infds</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> eventfd = <span class="number">0</span>; eventfd &lt;= maxfd; eventfd++) &#123;</span><br><span class="line">	<span class="type">int</span> clientsock = accept(listensock, (<span class="keyword">struct</span> sockaddr *)&amp;client, &amp;len);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>epoll (linux 2.6)</li>
+</ol>
+<blockquote>
+<p>epoll 使用红黑树，在内核中管理文件描述符的集合; epoll 使用事件驱动的机制，只关注有 I/O 事件发生的文件描述符，不需要轮询扫描整个集合</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建eventpoll对象, size用来告诉内核这个监听的数目一共有多大</span></span><br><span class="line"><span class="comment">//int size 给一个大于0的数就行, 没有太多意义</span></span><br><span class="line"><span class="comment">// return epfd</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_create</span><span class="params">(<span class="type">int</span> size)</span>；</span><br><span class="line"></span><br><span class="line"><span class="comment">//int epfd epoll_create返回的fd</span></span><br><span class="line"><span class="comment">//int op 表示op操作，用三个宏来表示：添加EPOLL_CTL_ADD，删除EPOLL_CTL_DEL，修改EPOLL_CTL_MOD</span></span><br><span class="line"><span class="comment">//int fd  是需要监听的fd（文件描述符）</span></span><br><span class="line"><span class="comment">//struct epoll_event *event 是告诉内核需要监听什么事件</span></span><br><span class="line"><span class="comment">//return 0:success &lt;0 : error</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_ctl</span><span class="params">(<span class="type">int</span> epfd, <span class="type">int</span> op, <span class="type">int</span> fd, <span class="keyword">struct</span> epoll_event *event)</span>；</span><br><span class="line"></span><br><span class="line"><span class="comment">//int epfd epoll_create返回的fd</span></span><br><span class="line"><span class="comment">//struct epoll_event * events 存放有事件发生的结构数组</span></span><br><span class="line"><span class="comment">//int timeout 超时时间</span></span><br><span class="line"><span class="comment">//return int &gt; 0: 就绪的文件描述符数量 0: 没有就绪的文件描述符 &lt;0: error</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_wait</span><span class="params">(<span class="type">int</span> epfd, <span class="keyword">struct</span> epoll_event * events, <span class="type">int</span> maxevents, <span class="type">int</span> timeout)</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.postimg.cc/K8jkpygw/Pasted-image-20240125170507.png" alt><br>
+3. AIO linux 2.6引入，不完善<br>
+2. C100K</p>
+<blockquote>
+<p>可以通过加大内存和网卡来解决</p>
+</blockquote>
+<ol start="3">
+<li>C10M</li>
+</ol>
+<blockquote>
+<p>跳过内核协议栈的冗长路径，把网络包直接送到要处理的应用程序那里去; DPDK, XDP</p>
+</blockquote>
+<p>DNS</p>
+<ul>
+<li>A 记录，用来把域名转换成 IP 地址；</li>
+<li>CNAME 记录，用来创建别名；</li>
+<li>而 NS 记录，则表示该域名对应的域名服务器地址(由顶级DNS服务器返回根DNS服务器时就是NS记录)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ping time.geekbang.org</span><br><span class="line">nslookup time.geekbang.org</span><br><span class="line">dig +trace +nodnssec time.geekbang.org</span><br></pre></td></tr></table></figure>
+<p>TCP<br>
+<img src="https://i.postimg.cc/028JmS58/Pasted-image-20240125193429.png" alt></p>
+<ol>
+<li>SYN Flood攻击
+<ol>
+<li>调大tcp_max_syn_backlog，调小net.ipv4.tcp_synack_retries</li>
+<li>开启TCP SYN Cookies （不会维护半连接队列）<br>
+NAT</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>静态 NAT，即内网 IP 与公网 IP 是一对一的永久映射关系；</li>
+<li>动态 NAT，即内网 IP 从公网 IP 池中，动态选择一个进行映射；</li>
+<li>网络地址端口转换 NAPT（Network Address and Port Translation），即把内网 IP 映射到公网 IP 的不同端口上，让多个内网 IP 可以共享同一个公网 IP 地址 <strong>✓</strong></li>
+</ul>
+<h3 id="性能指标-3">性能指标</h3>
+<p>吞吐量： 单位时间内成功传输的数据量</p>
+<ul>
+<li>BPS</li>
+<li>QPS</li>
+<li>PPS： Packet Per Second<br>
+延迟：从网络请求发出后，一直到收到远端响应，所需要的时间延迟<br>
+丢包<br>
+TCP重传</li>
+</ul>
+<h3 id="性能剖析-3">性能剖析</h3>
+<p>ethtool<br>
+sar<br>
+ping<br>
+netstat/ss</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># -l 表示只显示监听套接字 </span><br><span class="line"># -n 表示显示数字地址和端口(而不是名字) </span><br><span class="line"># -t 表示只显示 TCP 套接字</span><br><span class="line"># -p 表示显示进程信息</span><br><span class="line">netstat -nlp</span><br><span class="line"></span><br><span class="line"># Recv-Q 表示套接字缓冲还没有被应用程序取走的字节数（即接收队列长度）,被 accept() 系统调用取走</span><br><span class="line"># 而 Send-Q 表示还没有被远端主机确认的字节数（即发送队列长度）</span><br><span class="line"></span><br><span class="line">(Not all processes could be identified, non-owned process info</span><br><span class="line"> will not be shown, you would have to be root to see it all.)</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State       PID/Program name</span><br><span class="line">tcp        0      0 *:793                       *:*                         LISTEN      -</span><br><span class="line">tcp        0      0 *:8633                      *:*                         LISTEN      -</span><br><span class="line">tcp        0      0 *:409                       *:*                         LISTEN      -</span><br></pre></td></tr></table></figure>
+<p>ifstat<br>
+ifconfig<br>
+tcpdump<br>
+wireshark<br>
+iptables<br>
+traceoute<br>
+ipcontrack<br>
+perf</p>
+<h3 id="调优方法-3">调优方法</h3>
+<h4 id="网卡调优">网卡调优</h4>
+<p>MTU<br>
+队列长度<br>
+链路聚合</p>
+<h4 id="协议调优">协议调优</h4>
+<p>HTTP<br>
+TCP<br>
+overlay</p>
+<h4 id="资源控制">资源控制</h4>
+<p>QoS</p>
+<h4 id="内核调优">内核调优</h4>
+<p>NAT调优<br>
+功能写在<br>
+负载均衡<br>
+DPDK</p>
+<h4 id="问答">问答</h4>
+<h5 id="最大连接数是不是受限于-65535-个端口？">最大连接数是不是受限于 65535 个端口？</h5>
+<ol>
+<li>对客户端来说，每次发起 TCP 连接请求时，都需要分配一个空闲的本地端口，去连接远端的服务器。由于这个本地端口是独占的，所以客户端最多只能发起 65535 个连接</li>
+<li>对服务器端来说，其通常监听在固定端口上（比如 80 端口），等待客户端的连接。根据五元组结构，我们知道，客户端的IP和端口都是可变的。如果不考虑 IP 地址分类以及资源限制，服务器端的理论最大连接数，可以达到 2 的 48 次方（IP 为 32 位，端口号为 16 位），远大于65535</li>
+</ol>
+<h2 id="磁盘IO">磁盘IO</h2>
+<h3 id="磁盘原理">磁盘原理</h3>
+<p>磁盘管理</p>
+<blockquote>
+<p><strong>磁盘实际上是作为一个块设备来管理的</strong>，也就是以块为单位读写数据</p>
+</blockquote>
+<p>磁盘类型</p>
+<blockquote>
+<p>HDD SSD</p>
+</blockquote>
+<p>磁盘接口<br>
+ &gt;IDE（Integrated Drive Electronics）、SCSI（Small Computer System Interface） 、SAS（Serial Attached SCSI） 、SATA（Serial ATA） 、FC（Fibre Channel）</p>
+<p>通用块层</p>
+<blockquote>
+<p>处在文件系统和磁盘驱动中间的一个块设备抽象层。 第一个功能跟虚拟文件系统的功能类似。向上，为文件系统和应用程序，提供访问块设备的标准接口；向下，把各种异构的磁盘设备抽象为统一的块设备，并提供统一框架来管理这些设备的驱动程序。 第二个功能，通用块层还会给文件系统和应用程序发来的 I/O 请求排队，并通过重新排序、请求合并等方式，提高磁盘读写的效率</p>
+</blockquote>
+<p>磁盘I/O栈</p>
+<ul>
+<li>文件系统层，包括虚拟文件系统和其他各种文件系统的具体实现。它为上层的应用程序，提供标准的文件访问接口；对下会通过通用块层，来存储和管理磁盘数据。</li>
+<li>通用块层，包括块设备 I/O 队列和 I/O 调度器。它会对文件系统的 I/O 请求进行排队，再通过重新排序和请求合并，然后才要发送给下一级的设备层。</li>
+<li>设备层，包括存储设备和相应的驱动程序，负责最终物理设备的I/O操作</li>
+</ul>
+<h3 id="性能指标-4">性能指标</h3>
+<p>使用率<br>
+iops<br>
+吞吐量<br>
+iostat</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">iostat iostat -x</span><br><span class="line">Linux 4.14.0_1-0-0-30 (m1-sys-rpm2767e5725.m1.baidu.com) 	01/25/2024 	_x86_64_	(48 CPU)</span><br><span class="line">avg-cpu:  %user   %<span class="built_in">nice</span> %system %iowait  %steal   %idle</span><br><span class="line">           5.36    0.94    2.44    0.30    0.00   90.95</span><br><span class="line">Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn</span><br><span class="line">nvme0n1           0.24         0.00         1.59      29294   75858240</span><br><span class="line">nvme1n1           0.22         0.00         1.43       1278   68183796</span><br><span class="line">sda              48.25        10.03      1028.90  479752447 49207812913</span><br><span class="line">sdb              38.90        11.98      1017.21  572815306 48648596420</span><br><span class="line">sdc              28.20         8.49       750.63  406106130 35899261756</span><br><span class="line">sdd              20.55         8.14       595.56  389184494 28482909728</span><br></pre></td></tr></table></figure>
+<h3 id="性能剖析-4">性能剖析</h3>
+<p>dstat<br>
+sar<br>
+iowait<br>
+pidstat<br>
+iotop<br>
+iolatency<br>
+blktrace<br>
+fio 文件系统和磁盘 I/O 性能基准测试工具<br>
+perf</p>
+<h3 id="调优方法-4">调优方法</h3>
+<p>系统调用<br>
+IO资源控制<br>
+充分利用缓存<br>
+raid<br>
+IO隔离</p>
+<h2 id="文件系统">文件系统</h2>
+<h3 id="文件系统原理">文件系统原理</h3>
+<p><img src="https://i.postimg.cc/TwgWjqWP/Pasted-image-20240125104300.png" alt><br>
+文件结构</p>
+<blockquote>
+<p>目录项(directory entry)  + 索引节点(index node) + 逻辑块 + 超级块</p>
+</blockquote>
+<p>虚拟文件系统</p>
+<blockquote>
+<p>为了支持各种不同的文件系统，Linux内核在用户进程和文件系统的中间，又引入了一个抽象层，也就是虚拟文件系统VFS（Virtual File System）</p>
+</blockquote>
+<p>文件系统IO栈<br>
+缓冲I/O与非缓冲I/O</p>
+<ul>
+<li>缓冲I/O，是指利用标准库缓存来加速文件的访问，而标准库内部再通过系统调度访问文件。</li>
+<li>非缓冲I/O，是指直接通过系统调用来访问文件，不再经过标准库缓存</li>
+</ul>
+<p>直接I/O与非直接I/O</p>
+<ul>
+<li>直接I/O，是指跳过操作系统的页缓存，直接跟文件系统交互来访问文件。</li>
+<li>非直接I/O正好相反，文件读写时，先要经过系统的页缓存，然后再由内核或额外的系统调用，真正写入磁盘</li>
+</ul>
+<p>同步和异步I/O （消息响应的方式）</p>
+<ul>
+<li>所谓同步I/O，是指应用程序执行I/O操作后，要一直等到整个I/O完成后，才能获得I/O响应。</li>
+<li>所谓异步I/O，是指应用程序执行I/O操作后，不用等待完成和完成后的响应，而是继续执行就可以。等到这次 I/O完成后，响应会用事件通知的方式，告诉应用程序。</li>
+</ul>
+<p>阻塞与非阻塞IO （调用者是否被阻塞）</p>
+<ul>
+<li>阻塞I/O：应用程序在执行I/O操作后，如果没有获得响应，就会阻塞当前线程，不能执行其他任务</li>
+<li>非阻塞I/O：是指应用程序在执行I/O操作后，不会阻塞当前的线程，可以继续执行其他的任务</li>
+</ul>
+<p>文件系统缓存<br>
+文件系统种类</p>
+<h3 id="性能指标-5">性能指标</h3>
+<p>容量<br>
+<code>df -h</code><br>
+iops<br>
+缓存命中率</p>
+<h3 id="性能剖析-5">性能剖析</h3>
+<p>df<br>
+strace<br>
+vmstat<br>
+sar<br>
+perf<br>
+proc文件系统</p>
+<h3 id="调优方法-5">调优方法</h3>
+<p>应用层</p>
+<ol>
+<li>追加写答题随机写</li>
+<li>借助缓存IO</li>
+<li>频繁读写一块磁盘，用mmap答题read/write，减少内存拷贝<br>
+文件系统层</li>
+<li>选择最合适的文件系统 ext4， xfs</li>
+<li>进一步优化文件系统的配置选项</li>
+<li>文件系统的缓存<br>
+磁盘层</li>
+<li>ssd代替hdd</li>
+<li>RAID</li>
+<li>合适的IO调度算法</li>
+</ol>
+<h2 id="linux内核">linux内核</h2>
+<h3 id="内核原理">内核原理</h3>
+<p>内核态</p>
+<h3 id="性能剖析-6">性能剖析</h3>
+<p>BPF<br>
+perf<br>
+proc文件系统</p>
+<h3 id="内核调优-2">内核调优</h3>
+<p>内核选项</p>
+<h2 id="应用程序">应用程序</h2>
+<h3 id="性能指标-6">性能指标</h3>
+<p>吞吐量<br>
+响应时间<br>
+资源利用率</p>
+<h3 id="性能剖析-7">性能剖析</h3>
+<h4 id="USE方法">USE方法</h4>
+<p>使用率<br>
+饱和度<br>
+错误</p>
+<h4 id="进程剖析">进程剖析</h4>
+<p>进程状态<br>
+资源利用率<br>
+IO剖析<br>
+系统调用<br>
+热点函数<br>
+动态追踪</p>
+<h4 id="APM">APM</h4>
+<h3 id="调优方法-6">调优方法</h3>
+<p>逻辑优化<br>
+编程语言<br>
+算法调优<br>
+非阻塞IO<br>
+利用缓存与缓冲区<br>
+异步处理与并发<br>
+垃圾回收</p>
+<h2 id="架构设计">架构设计</h2>
+<h3 id="空间换时间">空间换时间</h3>
+<p>缓存<br>
+缓冲区<br>
+冗余数据</p>
+<h3 id="时间换空间">时间换空间</h3>
+<p>压缩编码<br>
+页面交换</p>
+<h3 id="并行处理">并行处理</h3>
+<p>多线程<br>
+多进程<br>
+分布式</p>
+<h3 id="异步处理">异步处理</h3>
+<p>异步IO<br>
+消息队列<br>
+时间通知</p>
+<h2 id="性能监控">性能监控</h2>
+<h3 id="时间序列分析">时间序列分析</h3>
+<p>历史趋势分析<br>
+性能模型构建<br>
+未来趋势预测</p>
+<h3 id="服务调用追踪">服务调用追踪</h3>
+<p>服务盗用流程追踪<br>
+服务调用性能分析<br>
+服务盗用链拓扑展示</p>
+<h3 id="数据可视化">数据可视化</h3>
+<p>趋势图<br>
+散点图<br>
+热点图<br>
+饼图</p>
+<h3 id="告警通知">告警通知</h3>
+<p>阈值选择<br>
+报警策略<br>
+通知渠道</p>
+<h2 id="性能测试">性能测试</h2>
+<h3 id="明确需求">明确需求</h3>
+<p>系统资源需求<br>
+应用程序需求</p>
+<h3 id="环境假设">环境假设</h3>
+<p>合理的假设<br>
+生产环境模拟<br>
+生产负载模拟</p>
+<h3 id="性能测试-2">性能测试</h3>
+<p>基准测试<br>
+负载测试<br>
+压力测试</p>
+<h3 id="结果分析">结果分析</h3>
+<p>应用程序瓶颈<br>
+数据集瓶颈<br>
+系统资源瓶颈</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">About</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.1.</span> <span class="toc-text">分析问题的一般步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">CPU性能分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9FI-O%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">磁盘和文件系统I&#x2F;O性能分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.1.3.</span> <span class="toc-text">网络性能分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU"><span class="toc-number">1.2.</span> <span class="toc-text">CPU</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8CCPU%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">进程和CPU原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-number">1.2.2.</span> <span class="toc-text">性能指标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B3%E5%9D%87%E8%B4%9F%E8%BD%BD"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">平均负载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E4%BD%BF%E7%94%A8%E7%8E%87"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">CPU使用率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%89%E4%BB%BB%E5%8A%A1%E4%B8%8D%E5%90%8C%E5%88%92%E5%88%86"><span class="toc-number">1.2.2.3.1.</span> <span class="toc-text">按任务不同划分</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD%E7%8E%87"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">CPU缓存命中率</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90"><span class="toc-number">1.2.3.</span> <span class="toc-text">性能剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#top-ps"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">top&#x2F;ps</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#vmstat"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">vmstat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mpstat"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">mpstat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sar"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">sar</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pidstat"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">pidstat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strace"><span class="toc-number">1.2.3.6.</span> <span class="toc-text">strace</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#perf"><span class="toc-number">1.2.3.7.</span> <span class="toc-text">perf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#execsnoop"><span class="toc-number">1.2.3.8.</span> <span class="toc-text">execsnoop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#proc%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.3.9.</span> <span class="toc-text">proc文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.3.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">内存原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-2"><span class="toc-number">1.3.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-2"><span class="toc-number">1.3.3.</span> <span class="toc-text">性能剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#free"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">free</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#top"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">top</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-2"><span class="toc-number">1.3.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">1.4.</span> <span class="toc-text">网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.1.</span> <span class="toc-text">网络原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-3"><span class="toc-number">1.4.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-3"><span class="toc-number">1.4.3.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-3"><span class="toc-number">1.4.4.</span> <span class="toc-text">调优方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E8%B0%83%E4%BC%98"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">网卡调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E8%B0%83%E4%BC%98"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">协议调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%8E%A7%E5%88%B6"><span class="toc-number">1.4.4.3.</span> <span class="toc-text">资源控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%B0%83%E4%BC%98"><span class="toc-number">1.4.4.4.</span> <span class="toc-text">内核调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E7%AD%94"><span class="toc-number">1.4.4.5.</span> <span class="toc-text">问答</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%80%E5%A4%A7%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%98%AF%E4%B8%8D%E6%98%AF%E5%8F%97%E9%99%90%E4%BA%8E-65535-%E4%B8%AA%E7%AB%AF%E5%8F%A3%EF%BC%9F"><span class="toc-number">1.4.4.5.1.</span> <span class="toc-text">最大连接数是不是受限于 65535 个端口？</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98IO"><span class="toc-number">1.5.</span> <span class="toc-text">磁盘IO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.1.</span> <span class="toc-text">磁盘原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-4"><span class="toc-number">1.5.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-4"><span class="toc-number">1.5.3.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-4"><span class="toc-number">1.5.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.6.</span> <span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86"><span class="toc-number">1.6.1.</span> <span class="toc-text">文件系统原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-5"><span class="toc-number">1.6.2.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-5"><span class="toc-number">1.6.3.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-5"><span class="toc-number">1.6.4.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E6%A0%B8"><span class="toc-number">1.7.</span> <span class="toc-text">linux内核</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E5%8E%9F%E7%90%86"><span class="toc-number">1.7.1.</span> <span class="toc-text">内核原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-6"><span class="toc-number">1.7.2.</span> <span class="toc-text">性能剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E8%B0%83%E4%BC%98-2"><span class="toc-number">1.7.3.</span> <span class="toc-text">内核调优</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.8.</span> <span class="toc-text">应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87-6"><span class="toc-number">1.8.1.</span> <span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90-7"><span class="toc-number">1.8.2.</span> <span class="toc-text">性能剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#USE%E6%96%B9%E6%B3%95"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">USE方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%89%96%E6%9E%90"><span class="toc-number">1.8.2.2.</span> <span class="toc-text">进程剖析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#APM"><span class="toc-number">1.8.2.3.</span> <span class="toc-text">APM</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95-6"><span class="toc-number">1.8.3.</span> <span class="toc-text">调优方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.9.</span> <span class="toc-text">架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E6%8D%A2%E6%97%B6%E9%97%B4"><span class="toc-number">1.9.1.</span> <span class="toc-text">空间换时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%8D%A2%E7%A9%BA%E9%97%B4"><span class="toc-number">1.9.2.</span> <span class="toc-text">时间换空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86"><span class="toc-number">1.9.3.</span> <span class="toc-text">并行处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86"><span class="toc-number">1.9.4.</span> <span class="toc-text">异步处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="toc-number">1.10.</span> <span class="toc-text">性能监控</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E5%88%86%E6%9E%90"><span class="toc-number">1.10.1.</span> <span class="toc-text">时间序列分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E8%BF%BD%E8%B8%AA"><span class="toc-number">1.10.2.</span> <span class="toc-text">服务调用追踪</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-number">1.10.3.</span> <span class="toc-text">数据可视化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%8A%E8%AD%A6%E9%80%9A%E7%9F%A5"><span class="toc-number">1.10.4.</span> <span class="toc-text">告警通知</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="toc-number">1.11.</span> <span class="toc-text">性能测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%8E%E7%A1%AE%E9%9C%80%E6%B1%82"><span class="toc-number">1.11.1.</span> <span class="toc-text">明确需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%81%87%E8%AE%BE"><span class="toc-number">1.11.2.</span> <span class="toc-text">环境假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95-2"><span class="toc-number">1.11.3.</span> <span class="toc-text">性能测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="toc-number">1.11.4.</span> <span class="toc-text">结果分析</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/01/24/read/linux/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/01/24/read/linux/&text=linux"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/01/24/read/linux/&is_video=false&description=linux"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=linux&body=Check out this article: http://localhost:4000/2024/01/24/read/linux/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/01/24/read/linux/&title=linux"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/01/24/read/linux/&name=linux&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/01/24/read/linux/&t=linux"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2024
+    jonas
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">About</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="三大log redo log  write ahead logging, 提高写并发 ，acid中的d innodb_io_capacity， flush_log_at_trx_commit 0,1,2  bin log  server层的日志 用于主从同步 用户数据恢复（row） sync_bin_log 0,1,N  undo log  事物回滚 mvcc实现多版本并发控制  B+Tree中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL">
+<meta property="og:url" content="http://localhost:4000/2024/01/18/read/mysql/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="三大log redo log  write ahead logging, 提高写并发 ，acid中的d innodb_io_capacity， flush_log_at_trx_commit 0,1,2  bin log  server层的日志 用于主从同步 用户数据恢复（row） sync_bin_log 0,1,N  undo log  事物回滚 mvcc实现多版本并发控制  B+Tree中的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.postimg.cc/Qt3MDLHX/Pasted-image-20240205194046.png">
+<meta property="article:published_time" content="2024-01-18T07:57:05.874Z">
+<meta property="article:modified_time" content="2024-04-02T11:02:38.807Z">
+<meta property="article:author" content="jonas">
+<meta property="article:tag" content="八股">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.postimg.cc/Qt3MDLHX/Pasted-image-20240205194046.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>MySQL</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">About</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2024/01/21/read/%E7%BC%93%E5%AD%98/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/11/25/read/%E4%BA%BA%E6%80%A7%E7%9A%84%E5%BC%B1%E7%82%B9/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/01/18/read/mysql/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/01/18/read/mysql/&text=MySQL"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/01/18/read/mysql/&is_video=false&description=MySQL"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MySQL&body=Check out this article: http://localhost:4000/2024/01/18/read/mysql/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/01/18/read/mysql/&name=MySQL&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/01/18/read/mysql/&t=MySQL"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%A4%A7log"><span class="toc-number">1.</span> <span class="toc-text">三大log</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redo-log"><span class="toc-number">1.1.</span> <span class="toc-text">redo log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bin-log"><span class="toc-number">1.2.</span> <span class="toc-text">bin log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undo-log"><span class="toc-number">1.3.</span> <span class="toc-text">undo log</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-Tree%E4%B8%AD%E7%9A%84N%E8%B7%AF%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="toc-number">2.</span> <span class="toc-text">B+Tree中的N路搜索树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%90%8D%E8%AF%8D"><span class="toc-number">3.</span> <span class="toc-text">索引的名词</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96"><span class="toc-number">3.1.</span> <span class="toc-text">索引覆盖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8-%EF%BC%88Index-Condition-Pushdown-ICP%EF%BC%89-5-6"><span class="toc-number">3.2.</span> <span class="toc-text">索引下推 （Index Condition Pushdown ICP）&gt;&#x3D;5.6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BC%80%E7%B4%A2%E5%BC%95"><span class="toc-number">3.3.</span> <span class="toc-text">前缀索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">4.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E9%94%81"><span class="toc-number">4.1.</span> <span class="toc-text">全局锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81%EF%BC%8C%E8%A1%A8%E9%94%81"><span class="toc-number">4.2.</span> <span class="toc-text">表级锁，表锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E9%94%81"><span class="toc-number">4.3.</span> <span class="toc-text">行锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E9%98%B6%E6%AE%B5%E9%94%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.</span> <span class="toc-text">两阶段锁协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0"><span class="toc-number">6.</span> <span class="toc-text">更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%8D%B1%E9%99%A9%E7%9A%84%E5%88%B7%E8%84%8F%E9%A1%B5%E8%A1%8C%E4%B8%BA"><span class="toc-number">7.</span> <span class="toc-text">有危险的刷脏页行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order-by"><span class="toc-number">8.</span> <span class="toc-text">order by</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%85%A2%E5%8F%AF%E8%83%BD%E5%AF%BC%E8%87%B4%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">9.</span> <span class="toc-text">查询慢可能导致的情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%BB%E8%AF%BB"><span class="toc-number">10.</span> <span class="toc-text">幻读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E"><span class="toc-number">11.</span> <span class="toc-text">主从</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">11.1.</span> <span class="toc-text">复制过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%B6%E8%BF%9F%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">11.2.</span> <span class="toc-text">延迟的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">11.3.</span> <span class="toc-text">主备切换的方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E6%AD%A2%E8%BF%87%E6%9C%9F%E8%AF%BB%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">11.4.</span> <span class="toc-text">防止过期读的方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E5%90%A6%E6%AD%A3%E5%B8%B8"><span class="toc-number">12.</span> <span class="toc-text">判断数据库是否正常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kill"><span class="toc-number">13.</span> <span class="toc-text">kill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buffer-pool"><span class="toc-number">14.</span> <span class="toc-text">buffer pool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#join"><span class="toc-number">15.</span> <span class="toc-text">join</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#index-nested-loop-join-NLJ"><span class="toc-number">15.1.</span> <span class="toc-text">index nested loop join(NLJ)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#block-nested-loop-join-BNL"><span class="toc-number">15.2.</span> <span class="toc-text">block nested loop join(BNL)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="toc-number">16.</span> <span class="toc-text">临时表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E7%89%A9"><span class="toc-number">17.</span> <span class="toc-text">分布式事物</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xa%E5%8D%8F%E8%AE%AE"><span class="toc-number">17.1.</span> <span class="toc-text">xa协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">17.1.1.</span> <span class="toc-text">流程图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-number">17.1.2.</span> <span class="toc-text">示例代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCC"><span class="toc-number">17.2.</span> <span class="toc-text">TCC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mysql%E8%84%86%E5%BC%B1%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">18.</span> <span class="toc-text">Mysql脆弱的原因</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        MySQL
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">jonas</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-01-18T07:57:05.874Z" class="dt-published" itemprop="datePublished">2024-01-18</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Mysql/" rel="tag">Mysql</a>, <a class="p-category" href="/tags/%E5%85%AB%E8%82%A1/" rel="tag">八股</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="三大log">三大log</h2>
+<h3 id="redo-log">redo log</h3>
+<ol>
+<li>write ahead logging, 提高写并发 ，acid中的d</li>
+<li>innodb_io_capacity， flush_log_at_trx_commit 0,1,2</li>
+</ol>
+<h3 id="bin-log">bin log</h3>
+<ol>
+<li>server层的日志</li>
+<li>用于主从同步</li>
+<li>用户数据恢复（row）</li>
+<li>sync_bin_log 0,1,N</li>
+</ol>
+<h3 id="undo-log">undo log</h3>
+<ol>
+<li>事物回滚</li>
+<li>mvcc实现多版本并发控制</li>
+</ol>
+<h2 id="B-Tree中的N路搜索树">B+Tree中的N路搜索树</h2>
+<p>N取决于页大小，innodb默认页大小为16k，<br>
+17亿数据只需三次磁盘访问<br>
+在B+Tree的非叶子结点中，存的是值和下个节点的指针。以bigint 8字节为例，指针为6字节，一个单位大概是14字节，每个页大概是16K，大约能存放 16000/(8+6) = 1142 ~ 1200<br>
+$1200^{3} = 17亿$</p>
+<h2 id="索引的名词">索引的名词</h2>
+<h3 id="索引覆盖">索引覆盖</h3>
+<blockquote>
+<p>只需要访问索引即可查到所有的数据，不需要回表，效率高 Using index</p>
+</blockquote>
+<h3 id="索引下推-（Index-Condition-Pushdown-ICP）-5-6">索引下推 （Index Condition Pushdown ICP）&gt;=5.6</h3>
+<blockquote>
+<p>在条件查询中 where a = b and c=d，通过索引内容评估该记录是否满足，而不是回表去判断  Using index condition</p>
+</blockquote>
+<h3 id="前缀索引">前缀索引</h3>
+<p>select count(distinct left(field, 6))/select count(*) 来测试区分度</p>
+<h2 id="锁">锁</h2>
+<p>通过加锁范围分类</p>
+<h3 id="全局锁">全局锁</h3>
+<p>flush tables with read/write lock;</p>
+<h3 id="表级锁，表锁">表级锁，表锁</h3>
+<p>meta data lock (ddl加写锁，其他加读锁)<br>
+表锁：lock tables … read/write</p>
+<h3 id="行锁">行锁</h3>
+<p>innodb的锁</p>
+<h2 id="两阶段锁协议">两阶段锁协议</h2>
+<ol>
+<li>锁不是在执行begin的时候加的，是在第一个执行语句才加</li>
+<li>在执行commit的时候释放</li>
+</ol>
+<h2 id="更新">更新</h2>
+<p>更新是先读后写，读是当前读</p>
+<h2 id="有危险的刷脏页行为">有危险的刷脏页行为</h2>
+<ol>
+<li>redo log文件写满</li>
+<li>内存不足（要淘汰的脏页数量太多）</li>
+</ol>
+<h2 id="order-by">order by</h2>
+<ol>
+<li>全字段排序
+<ol>
+<li>通过max_length_for_sort_buffer判断是否能使用全字段排序</li>
+</ol>
+</li>
+<li>row id排序<br>
+如果sort buffer不够的话，会使用文件排序</li>
+</ol>
+<h2 id="查询慢可能导致的情况">查询慢可能导致的情况</h2>
+<ol>
+<li>索引失效（使用函数，不满足最左原则）</li>
+<li>隐式的类型转换（string转int ）</li>
+<li>隐式的编码转换</li>
+</ol>
+<h2 id="幻读">幻读</h2>
+<blockquote>
+<p>rr的隔离通过next key lock（gap lock + 行锁）解决解决了幻读的问题，但是当前读除外（update， select for update /in share mode）<br>
+幻读指的是新插入的行</p>
+</blockquote>
+<h2 id="主从">主从</h2>
+<h3 id="复制过程">复制过程</h3>
+<ol>
+<li>master dump thread 将bin log传给slave</li>
+<li>slave的io_thread 将bin log转成relay log，sql_thread执行数据同步操作</li>
+</ol>
+<h3 id="延迟的原因">延迟的原因</h3>
+<ol>
+<li>备库配置比主库差</li>
+<li>备库的压力比较大</li>
+<li>ddl</li>
+<li>大事务</li>
+</ol>
+<h3 id="主备切换的方式">主备切换的方式</h3>
+<ol>
+<li>基于位点</li>
+<li>基于gtid</li>
+</ol>
+<h3 id="防止过期读的方式">防止过期读的方式</h3>
+<ol>
+<li>强制走主库</li>
+<li>sleep方案</li>
+<li>判读second_behind_master =0再执行查询（show slave status）</li>
+<li>semi-sync的方式可满足一主一从，对于都从无效</li>
+<li>基于gtid的查询</li>
+</ol>
+<h2 id="判断数据库是否正常">判断数据库是否正常</h2>
+<ol>
+<li>select 1 (只能判断mysql服务进程存在，如果并发查询现成数满了不能检测，最常用)</li>
+<li>select * from mysql.heal_check （能检测出并发线程数满的情况，但是如果数据库满了不能检测）</li>
+<li>update mysql.health_check set … （最优）</li>
+</ol>
+<h2 id="kill">kill</h2>
+<ol>
+<li>kill query thread_id 通常是给ctrl +c的这种方式用的api，这种会新建一个mysql链接，然后执行kill query</li>
+<li>kill [connection] thread_id 先断开对应的mysql链接，再执行kill query的逻辑</li>
+</ol>
+<h2 id="buffer-pool">buffer pool</h2>
+<p>使用lru的算法进行内存淘汰策略，分为young(5/8)和old(3/8)区，超过1s没有被访问的数据才会放倒young区，对于全表扫描（一个页的访问间隔会小于1s）的情况都只是在old区，不会有影响</p>
+<h2 id="join">join</h2>
+<blockquote>
+<p>使用小表作为驱动表 （进行where筛选后数据量小的表）</p>
+</blockquote>
+<h3 id="index-nested-loop-join-NLJ">index nested loop join(NLJ)</h3>
+<p>被驱动表能用到索引时使用这种方案。效率高</p>
+<h3 id="block-nested-loop-join-BNL">block nested loop join(BNL)</h3>
+<p>被驱动表不能使用索引时使用的方式，效率不高</p>
+<ol>
+<li>将驱动表的数据放入join buffer中，再全表扫描被驱动表的数据进行连接</li>
+</ol>
+<h2 id="临时表">临时表</h2>
+<ol>
+<li>group by</li>
+<li>union</li>
+</ol>
+<h2 id="分布式事物">分布式事物</h2>
+<h3 id="xa协议">xa协议</h3>
+<blockquote>
+<p>XA协议是一个很流行的分布式事务协议，可以很好地支撑我们实现分布式事务，比如常见的2PC、3PC等</p>
+</blockquote>
+<p>在XA协议里有三个主要的角色：</p>
+<ul>
+<li><strong>应用（AP）</strong>：应用是具体的业务逻辑代码实现，业务逻辑通过请求事务协调器开启全局事务，在事务协调器注册多个子事务后，业务代码会依次给所有参与事务的子业务下发请求。待所有子业务提交成功后，业务代码根据返回情况告诉事务协调器各个子事务的执行情况，由事务协调器决策子事务是提交还是回滚（有些实现是事务协调器发请求给子服务）。</li>
+<li><strong>事务协调器（TM）</strong>：用于创建主事务，同时协调各个子事务。事务协调器会根据各个子事务的执行情况，决策这些子事务最终是提交执行结果，还是回滚执行结果。此外，事务协调器很多时候还会自动帮我们提交事务；(通常是在业务层实现的协调)</li>
+<li><strong>资源管理器（RM）</strong>：是一种支持事务或XA协议的数据资源，比如MySQL、Redis等。</li>
+</ul>
+<h4 id="流程图">流程图</h4>
+<p><img src="https://i.postimg.cc/Qt3MDLHX/Pasted-image-20240205194046.png" alt></p>
+<h4 id="示例代码">示例代码</h4>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">   <span class="string">&quot;database/sql&quot;</span></span><br><span class="line">   <span class="string">&quot;fmt&quot;</span></span><br><span class="line">   _ <span class="string">&quot;github.com/go-sql-driver/mysql&quot;</span></span><br><span class="line">   <span class="string">&quot;strconv&quot;</span></span><br><span class="line">   <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="comment">// 库存的连接</span></span><br><span class="line">   stockDb, err := sql.Open(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;root:paswd@tcp(127.0.0.1:3306)/shop_product_stock&quot;</span>)</span><br><span class="line">   <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">defer</span> stockDb.Close()</span><br><span class="line">   <span class="comment">//订单的连接</span></span><br><span class="line">   orderDb, err := sql.Open(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;root:paswd@tcp(127.0.0.1:3307)/shop_order&quot;</span>)</span><br><span class="line">   <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">defer</span> orderDb.Close()</span><br><span class="line">   <span class="comment">//钱包的连接</span></span><br><span class="line">   moneyDb, err := sql.Open(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;root:paswd@tcp(127.0.0.1:3308)/user_money_bag&quot;</span>)</span><br><span class="line">   <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">defer</span> moneyDb.Close()</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 生成xid(如果在同一个数据库，子事务不能使用相同xid)</span></span><br><span class="line">   xid := strconv.FormatInt(time.Now().UnixMilli(), <span class="number">10</span>)</span><br><span class="line">   <span class="comment">//如果后续执行过程有报错，那么回滚所有子事务</span></span><br><span class="line">   <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      <span class="keyword">if</span> err := <span class="built_in">recover</span>(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">         stockDb.Exec(<span class="string">&quot;XA ROLLBACK ?&quot;</span>, xid)</span><br><span class="line">         orderDb.Exec(<span class="string">&quot;XA ROLLBACK ?&quot;</span>, xid)</span><br><span class="line">         moneyDb.Exec(<span class="string">&quot;XA ROLLBACK ?&quot;</span>, xid)</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;()</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 第一阶段 Prepare</span></span><br><span class="line">   <span class="comment">// 库存 子事务启动</span></span><br><span class="line">   <span class="keyword">if</span> _, err = stockDb.Exec(<span class="string">&quot;XA START ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//扣除库存，这里省略了数据行锁操作</span></span><br><span class="line">   <span class="keyword">if</span> _, err = stockDb.Exec(<span class="string">&quot;update product_stock set stock=stock-1 where id =1&quot;</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//事务执行结束</span></span><br><span class="line">   <span class="keyword">if</span> _, err = stockDb.Exec(<span class="string">&quot;XA END ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//设置库存任务为Prepared状态</span></span><br><span class="line">   <span class="keyword">if</span> _, err = stockDb.Exec(<span class="string">&quot;XA PREPARE ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 订单 子事务启动</span></span><br><span class="line">   <span class="keyword">if</span> _, err = orderDb.Exec(<span class="string">&quot;XA START ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//创建订单</span></span><br><span class="line">   <span class="keyword">if</span> _, err = orderDb.Exec(<span class="string">&quot;insert shop_order(id,pid,xx) value (1,2,3)&quot;</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//事务执行结束</span></span><br><span class="line">   <span class="keyword">if</span> _, err = orderDb.Exec(<span class="string">&quot;XA END ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//设置任务为Prepared状态</span></span><br><span class="line">   <span class="keyword">if</span> _, err = orderDb.Exec(<span class="string">&quot;XA PREPARE ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 钱包 子事务启动</span></span><br><span class="line">   <span class="keyword">if</span> _, err = moneyDb.Exec(<span class="string">&quot;XA START ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//扣减用户账户现金，这里省略了数据行锁操作</span></span><br><span class="line">   <span class="keyword">if</span> _, err = moneyDb.Exec(<span class="string">&quot;update user_money_bag set money=money-1 where id =9527&quot;</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//事务执行结束</span></span><br><span class="line">   <span class="keyword">if</span> _, err = moneyDb.Exec(<span class="string">&quot;XA END ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//设置任务为Prepared状态</span></span><br><span class="line">   <span class="keyword">if</span> _, err = moneyDb.Exec(<span class="string">&quot;XA PREPARE ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 在这时，如果链接断开、Prepared状态的XA事务仍旧在MySQL存在</span></span><br><span class="line">   <span class="comment">// 任意一个链接调用XA RECOVER都能够看到这三个没有最终提交的事务</span></span><br><span class="line">   </span><br><span class="line">   <span class="comment">// --------</span></span><br><span class="line">   <span class="comment">// 第二阶段 运行到这里没有任何问题</span></span><br><span class="line">   <span class="comment">// 那么执行 commit</span></span><br><span class="line">   <span class="comment">// --------</span></span><br><span class="line">   <span class="keyword">if</span> _, err = stockDb.Exec(<span class="string">&quot;XA COMMIT ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> _, err = orderDb.Exec(<span class="string">&quot;XA COMMIT ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> _, err = moneyDb.Exec(<span class="string">&quot;XA COMMIT ?&quot;</span>, xid); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="built_in">panic</span>(err.Error())</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//到这里全部流程完毕</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="TCC">TCC</h3>
+<blockquote>
+<p>TCC是Try-Confirm-Cancel的缩写</p>
+</blockquote>
+<p>首先在 <strong>Try阶段</strong>，业务代码会预留业务所需的全部资源，比如冻结用户账户100元、提前扣除一个商品库存、提前创建一个没有开始交易的订单等，这样可以减少各个子事务锁定的数据量。业务拿到这些资源后，后续两个阶段操作就可以无锁进行了。<br>
+在 <strong>Confirm阶段</strong>，业务确认所需的资源都拿到后，子事务会并行执行这些业务。执行时可以不做任何锁互斥，也无需检查，直接执行Try阶段准备的所有资源就行。<br>
+请注意，协议要求所有操作都是幂等的，以支持失败重试，因为在一些特殊情况下，比如资源锁争抢超时、网络不稳定等，操作要尝试执行多次才会成功。<br>
+最后在 <strong>Cancel阶段</strong>：如果子事务在Try阶段或Confirm阶段多次执行重试后仍旧失败，TM就会执行Cancel阶段的代码，并释放Try预留的资源，同时回滚Confirm期间的内容。注意，Cancel阶段的代码也要做幂等，以支持多次执行。</p>
+<h2 id="Mysql脆弱的原因">Mysql脆弱的原因</h2>
+<ol>
+<li>数据存储在磁盘</li>
+<li>通常是一主多从，写在主节点，并发能力有限</li>
+<li>不能并发查询</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">About</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%A4%A7log"><span class="toc-number">1.</span> <span class="toc-text">三大log</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redo-log"><span class="toc-number">1.1.</span> <span class="toc-text">redo log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bin-log"><span class="toc-number">1.2.</span> <span class="toc-text">bin log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undo-log"><span class="toc-number">1.3.</span> <span class="toc-text">undo log</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-Tree%E4%B8%AD%E7%9A%84N%E8%B7%AF%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="toc-number">2.</span> <span class="toc-text">B+Tree中的N路搜索树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%90%8D%E8%AF%8D"><span class="toc-number">3.</span> <span class="toc-text">索引的名词</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96"><span class="toc-number">3.1.</span> <span class="toc-text">索引覆盖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8-%EF%BC%88Index-Condition-Pushdown-ICP%EF%BC%89-5-6"><span class="toc-number">3.2.</span> <span class="toc-text">索引下推 （Index Condition Pushdown ICP）&gt;&#x3D;5.6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BC%80%E7%B4%A2%E5%BC%95"><span class="toc-number">3.3.</span> <span class="toc-text">前缀索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">4.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E9%94%81"><span class="toc-number">4.1.</span> <span class="toc-text">全局锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81%EF%BC%8C%E8%A1%A8%E9%94%81"><span class="toc-number">4.2.</span> <span class="toc-text">表级锁，表锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E9%94%81"><span class="toc-number">4.3.</span> <span class="toc-text">行锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E9%98%B6%E6%AE%B5%E9%94%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.</span> <span class="toc-text">两阶段锁协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0"><span class="toc-number">6.</span> <span class="toc-text">更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%8D%B1%E9%99%A9%E7%9A%84%E5%88%B7%E8%84%8F%E9%A1%B5%E8%A1%8C%E4%B8%BA"><span class="toc-number">7.</span> <span class="toc-text">有危险的刷脏页行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order-by"><span class="toc-number">8.</span> <span class="toc-text">order by</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%85%A2%E5%8F%AF%E8%83%BD%E5%AF%BC%E8%87%B4%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">9.</span> <span class="toc-text">查询慢可能导致的情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%BB%E8%AF%BB"><span class="toc-number">10.</span> <span class="toc-text">幻读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E"><span class="toc-number">11.</span> <span class="toc-text">主从</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E8%BF%87%E7%A8%8B"><span class="toc-number">11.1.</span> <span class="toc-text">复制过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%B6%E8%BF%9F%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">11.2.</span> <span class="toc-text">延迟的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">11.3.</span> <span class="toc-text">主备切换的方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E6%AD%A2%E8%BF%87%E6%9C%9F%E8%AF%BB%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">11.4.</span> <span class="toc-text">防止过期读的方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E5%90%A6%E6%AD%A3%E5%B8%B8"><span class="toc-number">12.</span> <span class="toc-text">判断数据库是否正常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kill"><span class="toc-number">13.</span> <span class="toc-text">kill</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buffer-pool"><span class="toc-number">14.</span> <span class="toc-text">buffer pool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#join"><span class="toc-number">15.</span> <span class="toc-text">join</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#index-nested-loop-join-NLJ"><span class="toc-number">15.1.</span> <span class="toc-text">index nested loop join(NLJ)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#block-nested-loop-join-BNL"><span class="toc-number">15.2.</span> <span class="toc-text">block nested loop join(BNL)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="toc-number">16.</span> <span class="toc-text">临时表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E7%89%A9"><span class="toc-number">17.</span> <span class="toc-text">分布式事物</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xa%E5%8D%8F%E8%AE%AE"><span class="toc-number">17.1.</span> <span class="toc-text">xa协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">17.1.1.</span> <span class="toc-text">流程图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-number">17.1.2.</span> <span class="toc-text">示例代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCC"><span class="toc-number">17.2.</span> <span class="toc-text">TCC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mysql%E8%84%86%E5%BC%B1%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">18.</span> <span class="toc-text">Mysql脆弱的原因</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/01/18/read/mysql/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/01/18/read/mysql/&text=MySQL"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/01/18/read/mysql/&is_video=false&description=MySQL"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MySQL&body=Check out this article: http://localhost:4000/2024/01/18/read/mysql/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/01/18/read/mysql/&title=MySQL"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/01/18/read/mysql/&name=MySQL&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/01/18/read/mysql/&t=MySQL"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2024
+    jonas
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">About</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
