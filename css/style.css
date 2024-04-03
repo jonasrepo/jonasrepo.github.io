@@ -1004,11 +1004,17 @@ body {
   vertical-align: middle;
 }
 #footer-post #toc-footer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
+  height: 90%;
   clear: both;
   padding-top: 1rem;
   padding-bottom: 1rem;
   background: #e6e6e6;
   text-align: left;
+  overflow: scroll;
 }
 #footer-post #toc-footer ol {
   margin: 0;

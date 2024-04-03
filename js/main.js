@@ -84,9 +84,12 @@ $(document).ready(function() {
      * Show mobile navigation menu after scrolling upwards,
      * hide it again after scrolling downwards.
      */
-    if ($( "#footer-post").length) {
+    if ($("#footer-post").length) {
       var lastScrollTop = 0;
       $(window).on("scroll", function() {
+        if ($("#toc-footer").is(':visible')) {
+          return
+        }
         var topDistance = $(window).scrollTop();
 
         if (topDistance > lastScrollTop){
@@ -112,5 +115,9 @@ $(document).ready(function() {
         }
       });
     }
+
+    $('#toc-footer li').click(()=> {
+      $('#toc-footer').hide()
+    })
   }
 });
