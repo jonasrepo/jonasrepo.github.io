@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="二分查找如果定义的区间是$[left, right]$， 则终止条件是$left&lt;&#x3D;right$如果定义的区间是$[left, right)$， 则终止条件是$left&lt;right$，因为$left&#x3D;&#x3D;right$是没有意义的 123456789101112131415func search(nums []int, target int) int &amp;#12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数组">
+<meta property="og:url" content="http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="二分查找如果定义的区间是$[left, right]$， 则终止条件是$left&lt;&#x3D;right$如果定义的区间是$[left, right)$， 则终止条件是$left&lt;right$，因为$left&#x3D;&#x3D;right$是没有意义的 123456789101112131415func search(nums []int, target int) int &amp;#12">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-04-09T06:50:10.543Z">
+<meta property="article:modified_time" content="2024-04-09T08:49:25.743Z">
+<meta property="article:author" content="jonas">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="数组">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>数组</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search">Search</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo.github.io">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/04/09/read/web%E6%94%BB%E5%87%BB/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&text=数组"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&is_video=false&description=数组"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=数组&body=Check out this article: http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&name=数组&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&t=数组"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE"><span class="toc-number">1.</span> <span class="toc-text">二分查找</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#977-%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E5%B9%B3%E6%96%B9"><span class="toc-number"></span> <span class="toc-text">977 有序数组的平方</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0%E3%80%91"><span class="toc-number">1.</span> <span class="toc-text">【题目描述】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E3%80%91"><span class="toc-number">2.</span> <span class="toc-text">【解题思路】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E3%80%91"><span class="toc-number">3.</span> <span class="toc-text">【实现代码】</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#209-%E9%95%BF%E5%BA%A6%E6%9C%80%E5%B0%8F%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84"><span class="toc-number"></span> <span class="toc-text">209 长度最小的子数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0%E3%80%91-1"><span class="toc-number">1.</span> <span class="toc-text">【题目描述】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E3%80%91-1"><span class="toc-number">2.</span> <span class="toc-text">【解题思路】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E3%80%91-1"><span class="toc-number">3.</span> <span class="toc-text">【实现代码】</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#59-%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5-II"><span class="toc-number"></span> <span class="toc-text">59 螺旋矩阵 II</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0%E3%80%91-2"><span class="toc-number">1.</span> <span class="toc-text">【题目描述】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E3%80%91-2"><span class="toc-number">2.</span> <span class="toc-text">【解题思路】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E3%80%91-2"><span class="toc-number">3.</span> <span class="toc-text">【实现代码】</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        数组
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">jonas</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-04-09T06:50:10.543Z" class="dt-published" itemprop="datePublished">2024-04-09</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/leetcode/" rel="tag">leetcode</a>, <a class="p-category" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h3 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h3><p>如果定义的区间是$[left, right]$， 则终止条件是$left&lt;&#x3D;right$<br>如果定义的区间是$[left, right)$， 则终止条件是$left&lt;right$，因为$left&#x3D;&#x3D;right$是没有意义的</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">search</span><span class="params">(nums []<span class="type">int</span>, target <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	n := <span class="built_in">len</span>(nums)</span><br><span class="line">	l,r := <span class="number">0</span>,n<span class="number">-1</span></span><br><span class="line">	<span class="keyword">for</span> l&lt;=r &#123;</span><br><span class="line">		m := l + (r-l)&gt;&gt;<span class="number">2</span></span><br><span class="line">		<span class="keyword">if</span> nums[m] == target &#123;</span><br><span class="line">			<span class="keyword">return</span> m</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> nums[m] &gt; target &#123;</span><br><span class="line">			r = m<span class="number">-1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			l = m+<span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="977-有序数组的平方"><a href="#977-有序数组的平方" class="headerlink" title="977 有序数组的平方"></a>977 有序数组的平方</h2><h3 id="【题目描述】"><a href="#【题目描述】" class="headerlink" title="【题目描述】"></a>【题目描述】</h3><p>给你一个按非递减顺序排序的整数数组 <code>nums</code>，返回每个数字的平方组成的新数组，要求也按非递减顺序排序。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-4,-1,0,3,10]</span><br><span class="line">输出：[0,1,9,16,100]</span><br><span class="line">解释：平方后，数组变为 [16,1,0,9,100]</span><br><span class="line">排序后，数组变为 [0,1,9,16,100]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-7,-3,2,3,11]</span><br><span class="line">输出：[4,9,9,49,121]</span><br></pre></td></tr></table></figure>
+
+<h3 id="【解题思路】"><a href="#【解题思路】" class="headerlink" title="【解题思路】"></a>【解题思路】</h3><p>对于这个问题，一个直观的解法是先将数组中的每个元素平方，然后对数组进行排序。但是，这种方法的时间复杂度较高，因为排序操作是昂贵的。</p>
+<p>一个更高效的方法是利用输入数组已经是有序的这一特性。我们可以使用两个指针分别从数组的最左端和最右端开始，比较两端元素的绝对值大小，将较大的元素的平方放入结果数组的末尾，并移动指针。这样做的原因是，由于数组已经是有序的，那么最大的平方值只可能出现在数组的两端。通过这种方式，我们可以在不进行额外排序的情况下完成任务。</p>
+<h3 id="【实现代码】"><a href="#【实现代码】" class="headerlink" title="【实现代码】"></a>【实现代码】</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sortedSquares</span><span class="params">(nums []<span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">	n := <span class="built_in">len</span>(nums)</span><br><span class="line">	res := <span class="built_in">make</span>([]<span class="type">int</span>, n)</span><br><span class="line">	l,r := <span class="number">0</span>, n<span class="number">-1</span></span><br><span class="line">	index := n<span class="number">-1</span></span><br><span class="line">	<span class="keyword">for</span> l&lt;=r &#123;</span><br><span class="line">		<span class="comment">//左右两端的数据一定是最大的</span></span><br><span class="line">		<span class="keyword">if</span> nums[l] * nums[l] &gt; nums[r] * nums[r] &#123;</span><br><span class="line">			res[index] = nums[l] * nums[l]</span><br><span class="line">			l++</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			res[index] =  nums[r] * nums[r]</span><br><span class="line">			r--</span><br><span class="line">		&#125;</span><br><span class="line">		index--</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="209-长度最小的子数组"><a href="#209-长度最小的子数组" class="headerlink" title="209 长度最小的子数组"></a>209 长度最小的子数组</h2><h3 id="【题目描述】-1"><a href="#【题目描述】-1" class="headerlink" title="【题目描述】"></a>【题目描述】</h3><p>给定一个含有 <code>n</code> 个正整数的数组和一个正整数 <code>s</code> ，找出该数组中满足其和 ≥ <code>s</code> 的长度最小的连续子数组，并返回其长度。如果不存在符合条件的连续子数组，返回 0。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：s = 7, nums = [2,3,1,2,4,3]</span><br><span class="line">输出：2</span><br><span class="line">解释：子数组 [4,3] 是该条件下的长度最小的连续子数组。</span><br></pre></td></tr></table></figure>
+
+<h3 id="【解题思路】-1"><a href="#【解题思路】-1" class="headerlink" title="【解题思路】"></a>【解题思路】</h3><p>这个问题可以用双指针或滑动窗口的方法来解决。基本思路是，维护一个窗口的左右指针，开始时都指向数组的起始位置。然后，逐渐扩大窗口（即移动右指针）直到窗口内元素的总和大于等于 <code>s</code> 。此时，尝试缩小窗口（即移动左指针），以找到更小的满足条件的窗口。记录过程中窗口的最小长度。重复这个过程直到右指针到达数组末尾。</p>
+<h3 id="【实现代码】-1"><a href="#【实现代码】-1" class="headerlink" title="【实现代码】"></a>【实现代码】</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">minSubArrayLen</span><span class="params">(target <span class="type">int</span>, nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	res := math.MaxInt</span><br><span class="line">	n := <span class="built_in">len</span>(nums)</span><br><span class="line">	l,r := <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">	sum := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> r &lt; n &#123;</span><br><span class="line">		sum += nums[r]</span><br><span class="line">		r++</span><br><span class="line">		<span class="comment">//满足要求后，维护最小值，并左移左窗口</span></span><br><span class="line">		<span class="keyword">for</span> sum &gt;= target &#123;</span><br><span class="line">			res = min(r-l,res)</span><br><span class="line">			sum-=nums[l]	</span><br><span class="line">			l++	</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> res == math.MaxInt &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">min</span><span class="params">(a,b <span class="type">int</span>)</span></span><span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> a&gt;b &#123;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="59-螺旋矩阵-II"><a href="#59-螺旋矩阵-II" class="headerlink" title="59 螺旋矩阵 II"></a>59 螺旋矩阵 II</h2><h3 id="【题目描述】-2"><a href="#【题目描述】-2" class="headerlink" title="【题目描述】"></a>【题目描述】</h3><p>给你一个正整数 <code>n</code>，生成一个包含 <code>1</code> 到 <code>n^2</code> 所有元素，且元素按顺时针螺旋排列的 <code>n x n</code> 正方形矩阵 <code>matrix</code>。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n = 3</span><br><span class="line">输出：[[1,2,3],[8,9,4],[7,6,5]]</span><br></pre></td></tr></table></figure>
+
+<h3 id="【解题思路】-2"><a href="#【解题思路】-2" class="headerlink" title="【解题思路】"></a>【解题思路】</h3><p>生成螺旋矩阵的关键是按照螺旋的顺序填充矩阵。我们可以将矩阵看成是一层一层的环。每一次填充外层的环，然后是内层的环，直到填充完成。</p>
+<p>我们可以定义四个变量，<code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code>，分别表示当前环的上下左右边界。初始时，<code>top = 0</code>, <code>bottom = n-1</code>, <code>left = 0</code>, <code>right = n-1</code>。我们按照从左到右、从上到下、从右到左、从下到上的顺序填充矩阵，每填充完一圈，就将对应的边界向内缩一层，即 <code>top++</code>, <code>bottom--</code>, <code>left++</code>, <code>right--</code>，直到填充完成。</p>
+<h3 id="【实现代码】-2"><a href="#【实现代码】-2" class="headerlink" title="【实现代码】"></a>【实现代码】</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generateMatrix</span><span class="params">(n <span class="type">int</span>)</span></span> [][]<span class="type">int</span> &#123;</span><br><span class="line">    matrix := <span class="built_in">make</span>([][]<span class="type">int</span>, n)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> matrix &#123;</span><br><span class="line">        matrix[i] = <span class="built_in">make</span>([]<span class="type">int</span>, n)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    num := <span class="number">1</span></span><br><span class="line">    top, bottom, left, right := <span class="number">0</span>, n<span class="number">-1</span>, <span class="number">0</span>, n<span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> num &lt;= n*n &#123;</span><br><span class="line">        <span class="comment">// 从左到右填充上层</span></span><br><span class="line">        <span class="keyword">for</span> i := left; i &lt;= right; i++ &#123;</span><br><span class="line">            matrix[top][i] = num</span><br><span class="line">            num++</span><br><span class="line">        &#125;</span><br><span class="line">        top++</span><br><span class="line">        <span class="comment">// 从上到下填充右层</span></span><br><span class="line">        <span class="keyword">for</span> i := top; i &lt;= bottom; i++ &#123;</span><br><span class="line">            matrix[i][right] = num</span><br><span class="line">            num++</span><br><span class="line">        &#125;</span><br><span class="line">        right--</span><br><span class="line">        <span class="comment">// 从右到左填充下层</span></span><br><span class="line">        <span class="keyword">for</span> i := right; i &gt;= left; i-- &#123;</span><br><span class="line">            matrix[bottom][i] = num</span><br><span class="line">            num++</span><br><span class="line">        &#125;</span><br><span class="line">        bottom--</span><br><span class="line">        <span class="comment">// 从下到上填充左层</span></span><br><span class="line">        <span class="keyword">for</span> i := bottom; i &gt;= top; i-- &#123;</span><br><span class="line">            matrix[i][left] = num</span><br><span class="line">            num++</span><br><span class="line">        &#125;</span><br><span class="line">        left++</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> matrix</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+          <li><a href="/search">Search</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo.github.io">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE"><span class="toc-number">1.</span> <span class="toc-text">二分查找</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#977-%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E5%B9%B3%E6%96%B9"><span class="toc-number"></span> <span class="toc-text">977 有序数组的平方</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0%E3%80%91"><span class="toc-number">1.</span> <span class="toc-text">【题目描述】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E3%80%91"><span class="toc-number">2.</span> <span class="toc-text">【解题思路】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E3%80%91"><span class="toc-number">3.</span> <span class="toc-text">【实现代码】</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#209-%E9%95%BF%E5%BA%A6%E6%9C%80%E5%B0%8F%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84"><span class="toc-number"></span> <span class="toc-text">209 长度最小的子数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0%E3%80%91-1"><span class="toc-number">1.</span> <span class="toc-text">【题目描述】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E3%80%91-1"><span class="toc-number">2.</span> <span class="toc-text">【解题思路】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E3%80%91-1"><span class="toc-number">3.</span> <span class="toc-text">【实现代码】</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#59-%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5-II"><span class="toc-number"></span> <span class="toc-text">59 螺旋矩阵 II</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0%E3%80%91-2"><span class="toc-number">1.</span> <span class="toc-text">【题目描述】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E3%80%91-2"><span class="toc-number">2.</span> <span class="toc-text">【解题思路】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E3%80%91-2"><span class="toc-number">3.</span> <span class="toc-text">【实现代码】</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&text=数组"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&is_video=false&description=数组"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=数组&body=Check out this article: http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&title=数组"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&name=数组&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/04/09/leetcode/%E6%95%B0%E7%BB%84/&t=数组"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2024
+    jonas
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search">Search</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo.github.io">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
