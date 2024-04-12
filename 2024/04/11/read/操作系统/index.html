@@ -6,17 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="硬件结构冯洛伊曼模型 运算器、控制器、存储器、输入设备、输出设备   内存CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic) 缓存一致性问题产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称">
+    <meta name="description" content="硬件结构 冯洛伊曼模型  运算器、控制器、存储器、输入设备、输出设备   内存 CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)  缓存一致性问题 产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。 要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统">
 <meta property="og:url" content="http://localhost:4000/2024/04/11/read/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Jonas">
-<meta property="og:description" content="硬件结构冯洛伊曼模型 运算器、控制器、存储器、输入设备、输出设备   内存CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic) 缓存一致性问题产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称">
+<meta property="og:description" content="硬件结构 冯洛伊曼模型  运算器、控制器、存储器、输入设备、输出设备   内存 CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)  缓存一致性问题 产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。 要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cac">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Von_Neumann_architecture.svg">
 <meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/%E8%B0%83%E5%BA%A6%E7%B1%BB.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/CPU%E9%98%9F%E5%88%97.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%B5%AE%E7%82%B9/float.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/72ab76ba697e470b8ceb14d5fc5688d9.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/c5e2ab63e6ee4c8db575f3c7c9c85962.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/08a8e315fedc4a858060db5cb4a654af.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/7884f4d8db4949f7a5bb4bbd0f452609.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/8904fb89ae0c49c4b0f2f7b5a0a7b099.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/48403193b7354e618bf336892886bcff.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/32%E4%BD%8D%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png">
 <meta property="article:published_time" content="2024-04-11T11:50:19.497Z">
-<meta property="article:modified_time" content="2024-04-11T12:40:55.529Z">
+<meta property="article:modified_time" content="2024-04-12T04:39:36.060Z">
 <meta property="article:author" content="jonas">
 <meta property="article:tag" content="八股">
 <meta property="article:tag" content="操作系统">
@@ -102,6 +112,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" aria-label="Previous post" href="/2024/04/12/leetcode/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
         
         <li><a class="icon" aria-label="Next post" href="/2024/04/10/read/kafka/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
@@ -133,7 +145,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">1.3.1.</span> <span class="toc-text">中断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">1.4.</span> <span class="toc-text">浮点数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">2.1.</span> <span class="toc-text">内存分段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.1.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">2.2.</span> <span class="toc-text">内存分页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB%EF%BC%88translation-lookaside-buffer%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">TLB（translation lookaside buffer）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">段页式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.4.</span> <span class="toc-text">linux内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A84G%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E4%B8%8B%E7%94%B3%E8%AF%B78G%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%90%8E%E6%9E%9C"><span class="toc-number">2.5.</span> <span class="toc-text">在4G的物理内存下申请8G的内存会有什么后果</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -183,34 +195,126 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="硬件结构"><a href="#硬件结构" class="headerlink" title="硬件结构"></a>硬件结构</h1><h2 id="冯洛伊曼模型"><a href="#冯洛伊曼模型" class="headerlink" title="冯洛伊曼模型"></a>冯洛伊曼模型</h2><blockquote>
+    <h1><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/1_hardware/how_cpu_run.html">硬件结构</a></h1>
+<h2 id="冯洛伊曼模型">冯洛伊曼模型</h2>
+<blockquote>
 <p>运算器、控制器、存储器、输入设备、输出设备</p>
 </blockquote>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Von_Neumann_architecture.svg"></p>
-<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><p>CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.png"></p>
-<h3 id="缓存一致性问题"><a href="#缓存一致性问题" class="headerlink" title="缓存一致性问题"></a>缓存一致性问题</h3><p>产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。<br>要解决这个问题，要保证两点：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Von_Neumann_architecture.svg" alt></p>
+<h2 id="内存">内存</h2>
+<p>CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)<br>
+<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.png" alt></p>
+<h3 id="缓存一致性问题">缓存一致性问题</h3>
+<p>产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。<br>
+要解决这个问题，要保证两点：</p>
 <ol>
-<li>某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称为<strong>写传播（_Write Propagation_）</strong>；</li>
-<li>某个 CPU 核心里对数据的操作顺序，必须在其他核心看起来顺序是一样的，这个称为<strong>事务的串行化（_Transaction Serialization_）</strong>。</li>
+<li>某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称为<strong>写传播（<em>Write Propagation</em>）</strong>；</li>
+<li>某个 CPU 核心里对数据的操作顺序，必须在其他核心看起来顺序是一样的，这个称为<strong>事务的串行化（<em>Transaction Serialization</em>）</strong>。</li>
 </ol>
 <p>实现方式</p>
 <ol>
-<li><p>总线嗅探（_Bus Snooping_）<br>我还是以前面的 i 变量例子来说明总线嗅探的工作机制，当 A 号 CPU 核心修改了 L1 Cache 中 i 变量的值，通过总线把这个事件广播通知给其他所有的核心，然后每个 CPU 核心都会监听总线上的广播事件，并检查是否有相同的数据在自己的 L1 Cache 里面，如果 B 号 CPU 核心的 L1 Cache 中有该数据，那么也需要把该数据更新到自己的 L1 Cache。<br>缺点：总线消息繁忙，无法保证事物串行化</p>
+<li>
+<p>总线嗅探（Bus Snooping）<br>
+我还是以前面的 i 变量例子来说明总线嗅探的工作机制，当 A 号 CPU 核心修改了 L1 Cache 中 i 变量的值，通过总线把这个事件广播通知给其他所有的核心，然后每个 CPU 核心都会监听总线上的广播事件，并检查是否有相同的数据在自己的 L1 Cache 里面，如果 B 号 CPU 核心的 L1 Cache 中有该数据，那么也需要把该数据更新到自己的 L1 Cache。<br>
+缺点：总线消息繁忙，无法保证事物串行化</p>
 </li>
-<li><p>MESI协议<br>mesi：Modified，exclusive，shared，invalidated<br>我们举个具体的例子来看看这四个状态的转换：</p>
+<li>
+<p>MESI协议<br>
+mesi：Modified，exclusive，shared，invalidated<br>
+我们举个具体的例子来看看这四个状态的转换：</p>
 </li>
-<li><p>当 A 号 CPU 核心从内存读取变量 i 的值，数据被缓存在 A 号 CPU 核心自己的 Cache 里面，此时其他 CPU 核心的 Cache 没有缓存该数据，于是标记 Cache Line 状态为「独占」，此时其 Cache 中的数据与内存是一致的；</p>
+<li>
+<p>当 A 号 CPU 核心从内存读取变量 i 的值，数据被缓存在 A 号 CPU 核心自己的 Cache 里面，此时其他 CPU 核心的 Cache 没有缓存该数据，于是标记 Cache Line 状态为「独占」，此时其 Cache 中的数据与内存是一致的；</p>
 </li>
-<li><p>然后 B 号 CPU 核心也从内存读取了变量 i 的值，此时会发送消息给其他 CPU 核心，由于 A 号 CPU 核心已经缓存了该数据，所以会把数据返回给 B 号 CPU 核心。在这个时候， A 和 B 核心缓存了相同的数据，Cache Line 的状态就会变成「共享」，并且其 Cache 中的数据与内存也是一致的；</p>
+<li>
+<p>然后 B 号 CPU 核心也从内存读取了变量 i 的值，此时会发送消息给其他 CPU 核心，由于 A 号 CPU 核心已经缓存了该数据，所以会把数据返回给 B 号 CPU 核心。在这个时候， A 和 B 核心缓存了相同的数据，Cache Line 的状态就会变成「共享」，并且其 Cache 中的数据与内存也是一致的；</p>
 </li>
-<li><p>当 A 号 CPU 核心要修改 Cache 中 i 变量的值，发现数据对应的 Cache Line 的状态是共享状态，则要向所有的其他 CPU 核心广播一个请求，要求先把其他核心的 Cache 中对应的 Cache Line 标记为「无效」状态，然后 A 号 CPU 核心才更新 Cache 里面的数据，同时标记 Cache Line 为「已修改」状态，此时 Cache 中的数据就与内存不一致了。</p>
+<li>
+<p>当 A 号 CPU 核心要修改 Cache 中 i 变量的值，发现数据对应的 Cache Line 的状态是共享状态，则要向所有的其他 CPU 核心广播一个请求，要求先把其他核心的 Cache 中对应的 Cache Line 标记为「无效」状态，然后 A 号 CPU 核心才更新 Cache 里面的数据，同时标记 Cache Line 为「已修改」状态，此时 Cache 中的数据就与内存不一致了。</p>
 </li>
-<li><p>如果 A 号 CPU 核心「继续」修改 Cache 中 i 变量的值，由于此时的 Cache Line 是「已修改」状态，因此不需要给其他 CPU 核心发送消息，直接更新数据即可。</p>
+<li>
+<p>如果 A 号 CPU 核心「继续」修改 Cache 中 i 变量的值，由于此时的 Cache Line 是「已修改」状态，因此不需要给其他 CPU 核心发送消息，直接更新数据即可。</p>
 </li>
-<li><p>如果 A 号 CPU 核心的 Cache 里的 i 变量对应的 Cache Line 要被「替换」，发现 Cache Line 状态是「已修改」状态，就会在替换前先把数据同步到内存。</p>
+<li>
+<p>如果 A 号 CPU 核心的 Cache 里的 i 变量对应的 Cache Line 要被「替换」，发现 Cache Line 状态是「已修改」状态，就会在替换前先把数据同步到内存。</p>
 </li>
 </ol>
-<h2 id="cpu调度"><a href="#cpu调度" class="headerlink" title="cpu调度"></a>cpu调度</h2><p>在linux中，进程和线程都是用 <code>task_struct</code> 结构体表示的，区别在于线程的 task_struct 结构体里部分资源是共享了进程已创建的资源，比如内存地址空间、代码段、文件描述符等，所以 Linux 中的线程也被称为轻量级进程，因为线程的 task_struct 相比进程的 task_struct 承载的 资源比较少，因此以「轻」得名。<br>CPU调度的是task_struct。也就是所谓的线程是CPU调度的基本单位。</p>
+<h2 id="cpu调度">cpu调度</h2>
+<p>在linux中，进程和线程都是用 <code>task_struct</code> 结构体表示的，区别在于线程的 task_struct 结构体里部分资源是共享了进程已创建的资源，比如内存地址空间、代码段、文件描述符等，所以 Linux 中的线程也被称为轻量级进程，因为线程的 task_struct 相比进程的 task_struct 承载的 资源比较少，因此以「轻」得名。<br>
+CPU调度的是task_struct。也就是所谓的线程是CPU调度的基本单位。</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/%E8%B0%83%E5%BA%A6%E7%B1%BB.png" alt></p>
+<ul>
+<li>SCHED_DEADLINE：是按照 deadline 进行调度的，距离当前时间点最近的 deadline 的任务会被优先调度；</li>
+<li>SCHED_FIFO：对于相同优先级的任务，按先来先服务的原则，但是优先级更高的任务，可以抢占低优先级的任务，也就是优先级高的可以「插队」；</li>
+<li>SCHED_RR：对于相同优先级的任务，轮流着运行，每个任务都有一定的时间片，当用完时间片的任务会被放到队列尾部，以保证相同优先级任务的公平性，但是高优先级的任务依然可以抢占低优先级的任务；</li>
+<li>SCHED_NORMAL：普通任务使用的调度策略；</li>
+<li>SCHED_BATCH：后台任务的调度策略，不和终端进行交互，因此在不影响其他需要交互的任务，可以适当降低它的优先级。</li>
+</ul>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/CPU%E9%98%9F%E5%88%97.png" alt></p>
+<h3 id="中断">中断</h3>
+<p>在计算机中，中断是系统用来响应硬件设备请求的一种机制，操作系统收到硬件的中断请求，会打断正在执行的进程，然后调用内核中的中断处理程序来响应请求。<br>
+为了避免由于中断处理程序执行时间过长，而影响正常进程的调度，Linux 将中断处理程序分为上半部和下半部：</p>
+<ul>
+<li>上半部，对应硬中断，由硬件触发中断，用来快速处理中断；</li>
+<li>下半部，对应软中断，由内核触发中断，用来异步处理上半部未完成的工作；</li>
+</ul>
+<h2 id="浮点数">浮点数</h2>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%B5%AE%E7%82%B9/float.png" alt></p>
+<h1><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/3_memory/vmem.html">内存管理</a></h1>
+<p>操作系统会提供一种机制，将不同进程的虚拟地址和不同内存的物理地址映射起来<br>
+操作系统引入了虚拟内存，进程持有的虚拟地址会通过 CPU 芯片中的内存管理单元（MMU）的映射关系，来转换变成物理地址，然后再通过物理地址访问内存，如下图所示：<br>
+<img src="https://cdn.xiaolincoding.com//mysql/other/72ab76ba697e470b8ceb14d5fc5688d9.png" alt></p>
+<h2 id="内存分段">内存分段</h2>
+<p>程序是由若干个逻辑分段组成的，如可由代码分段、数据分段、栈段、堆段组成。不同的段是有不同的属性的，所以就用分段（Segmentation）的形式把这些段分离出来。<br>
+虚拟地址是通过<strong>段表</strong>与物理地址进行映射的，分段机制会把程序的虚拟地址分成 4 个段，每个段在段表中有一个项，在这一项找到段的基地址，再加上偏移量，于是就能找到物理内存中的地址，如下图：<br>
+<img src="https://cdn.xiaolincoding.com//mysql/other/c5e2ab63e6ee4c8db575f3c7c9c85962.png" alt></p>
+<h3 id="缺点">缺点</h3>
+<ol>
+<li><strong>内存外部碎片</strong>的问题：程序的段被回收后可能会存在外部碎片</li>
+<li><strong>内存交换的效率低</strong>的问题：对外部随便进行整理需要使用物理内存做交换，效率低</li>
+</ol>
+<h2 id="内存分页">内存分页</h2>
+<p>分页是把整个虚拟和物理内存空间切成一段段固定尺寸的大小。这样一个连续并且尺寸固定的内存空间，我们叫<strong>页</strong>（<em>Page</em>）。在 Linux 下，每一页的大小为 <code>4KB</code>。<br>
+虚拟地址与物理地址之间通过<strong>页表</strong>来映射，如下图：<br>
+<img src="https://cdn.xiaolincoding.com//mysql/other/08a8e315fedc4a858060db5cb4a654af.png" alt><br>
+而当进程访问的虚拟地址在页表中查不到时，系统会产生一个<strong>缺页异常</strong>，进入系统内核空间分配物理内存、更新进程页表，最后再返回用户空间，恢复进程的运行。<br>
+<img src="https://cdn.xiaolincoding.com//mysql/other/7884f4d8db4949f7a5bb4bbd0f452609.png" alt><br>
+总结一下，对于一个内存地址转换，其实就是这样三个步骤：</p>
+<ul>
+<li>把虚拟内存地址，切分成页号和偏移量；</li>
+<li>根据页号，从页表里面，查询对应的物理页号；</li>
+<li>直接拿物理页号，加上前面的偏移量，就得到了物理内存地址。</li>
+</ul>
+<p>在 32 位的环境下，虚拟地址空间共有 4GB，假设一个页的大小是 4KB（2^12），那么就需要大约 100 万 （2^20） 个页，每个「页表项」需要 4 个字节大小来存储，那么整个 4GB 空间的映射就需要有 <code>4MB</code> 的内存来存储页表。<br>
+这 4MB 大小的页表，看起来也不是很大。但是要知道每个进程都是有自己的虚拟地址空间的，也就说都有自己的页表。那么，<code>100</code> 个进程的话，就需要 <code>400MB</code> 的内存来存储页表，这是非常大的内存了，更别说 64 位的环境了。为了解决这个问题，使用<strong>多级页表</strong>方案。</p>
+<h3 id="TLB（translation-lookaside-buffer）">TLB（translation lookaside buffer）</h3>
+<p>mmu的缓存</p>
+<h2 id="段页式">段页式</h2>
+<p>段页式内存管理实现的方式：</p>
+<ul>
+<li>先将程序划分为多个有逻辑意义的段，也就是前面提到的分段机制；</li>
+<li>接着再把每个段划分为多个页，也就是对分段划分出来的连续空间，再划分固定大小的页；<br>
+这样，地址结构就由<strong>段号、段内页号和页内位移</strong>三部分组成。<br>
+<img src="https://cdn.xiaolincoding.com//mysql/other/8904fb89ae0c49c4b0f2f7b5a0a7b099.png" alt></li>
+</ul>
+<h2 id="linux内存布局">linux内存布局</h2>
+<p>虽然每个进程都各自有独立的虚拟内存，但是<strong>每个虚拟内存中的内核地址，其实关联的都是相同的物理内存</strong>。这样，进程切换到内核态后，就可以很方便地访问内核空间内存。<br>
+<img src="https://cdn.xiaolincoding.com//mysql/other/48403193b7354e618bf336892886bcff.png" alt><br>
+<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/32%E4%BD%8D%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png" alt></p>
+<p>通过这张图你可以看到，用户空间内存，从<strong>低到高</strong>分别是 6 种不同的内存段：</p>
+<ul>
+<li>代码段，包括二进制可执行代码；</li>
+<li>数据段，包括已初始化的静态常量和全局变量；</li>
+<li>BSS 段，包括未初始化的静态变量和全局变量；</li>
+<li>堆段，包括动态分配的内存，从低地址开始向上增长；</li>
+<li>文件映射段，包括动态库、共享内存等，从低地址开始向上增长（<a target="_blank" rel="noopener" href="http://lishiwen4.github.io/linux/linux-process-memory-location">跟硬件和内核版本有关 (opens new window)</a>）；</li>
+<li>栈段，包括局部变量和函数调用的上下文等。栈的大小是固定的，一般是 <code>8 MB</code>。当然系统也提供了参数，以便我们自定义大小；</li>
+</ul>
+<h2 id="在4G的物理内存下申请8G的内存会有什么后果">在4G的物理内存下申请8G的内存会有什么后果</h2>
+<ol>
+<li>如果是32位的操作系统，最大只能索引4G的内存，所以超过4G会报错</li>
+<li>如果是64位的操作系统，如果overcommit_memory配置的是1，进程可以使用128T的虚拟内存，申请了如果使用超过了物理内存，如果没有开始swap，可能会出现oom报错，如果开启了swap则使用也没问题。</li>
+</ol>
 
   </div>
 </article>
@@ -244,7 +348,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">1.3.1.</span> <span class="toc-text">中断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">1.4.</span> <span class="toc-text">浮点数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">2.1.</span> <span class="toc-text">内存分段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.1.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">2.2.</span> <span class="toc-text">内存分页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB%EF%BC%88translation-lookaside-buffer%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">TLB（translation lookaside buffer）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">段页式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.4.</span> <span class="toc-text">linux内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A84G%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E4%B8%8B%E7%94%B3%E8%AF%B78G%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%90%8E%E6%9E%9C"><span class="toc-number">2.5.</span> <span class="toc-text">在4G的物理内存下申请8G的内存会有什么后果</span></a></li></ol></li></ol>
       </div>
     
 
