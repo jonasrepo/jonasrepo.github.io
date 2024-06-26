@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://i.postimg.cc/d12LZszk/Pasted-image-20240126184347.png">
 <meta property="og:image" content="https://i.postimg.cc/G2vbT7G9/image.png">
 <meta property="article:published_time" content="2024-01-26T01:58:04.552Z">
-<meta property="article:modified_time" content="2024-05-23T04:27:04.806Z">
+<meta property="article:modified_time" content="2024-06-26T05:16:31.285Z">
 <meta property="article:author" content="jonas">
 <meta property="article:tag" content="八股">
 <meta property="article:tag" content="Golang">
@@ -359,15 +359,26 @@
 <td>大对象</td>
 <td><code>(32KB, +∞)</code></td>
 </tr>
-<tr>
-<td>线程缓存属于每一个独立的线程，它能够满足线程上绝大多数的内存分配需求，因为不涉及多线程，所以也不需要使用互斥锁来保护内存，这能够减少锁竞争带来的性能损耗。当线程缓存不能满足需求时，运行时会使用中心缓存作为补充解决小对象的内存分配，在遇到 32KB 以上的对象时，内存分配器会选择页堆直接分配大内存。</td>
-<td></td>
-</tr>
-<tr>
-<td><img src="https://i.postimg.cc/G2vbT7G9/image.png" alt="image.png"></td>
-<td></td>
-</tr>
 </tbody></table>
+<ol>
+<li><strong>小对象分配</strong>：<ul>
+<li>Go 使用了一种叫做 <code>tcmalloc</code> (Thread-Caching Malloc) 的技术，这是 Google 开发的一种内存分配技术。</li>
+<li>对于小对象（一般是小于或等于 32KB 的对象），Go 运行时维护了多个固定大小的类别（class），每个类别对应一组大小相同的对象。</li>
+<li>每个处理器（P）有自己的本地缓存（mcache），用于分配小对象。当一个 Goroutine 请求分配内存时，它首先检查本地 mcache 是否有可用的空间，如果有，则直接从本地缓存分配，这个操作不需要加锁，因此非常快。</li>
+</ul>
+</li>
+<li><strong>大对象分配</strong>：<ul>
+<li>对于大于 32KB 的对象，内存分配不经过 mcache，而是直接从中央堆（central heap）分配。</li>
+<li>分配大对象时，通常需要加锁，因为中央堆是被所有处理器共享的。</li>
+</ul>
+</li>
+<li><strong>内存分配器的层次结构</strong>：<ul>
+<li><strong>Mcache</strong>：每个处理器（P）的本地缓存，用于快速分配和释放小对象。</li>
+<li><strong>Mcentral</strong>：中央缓存，负责管理一组大小相同的 mcache。当 mcache 用完时，它会向 mcentral 请求更多的内存。</li>
+<li><strong>Mheap</strong>：所有内存分配请求的全局堆，管理所有的 mcentral。大对象直接从 mheap 分配。<br><img src="https://i.postimg.cc/G2vbT7G9/image.png" alt="image.png"></li>
+</ul>
+</li>
+</ol>
 
   </div>
 </article>
