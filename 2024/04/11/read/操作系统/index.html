@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="硬件结构 冯洛伊曼模型  运算器、控制器、存储器、输入设备、输出设备   内存 CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)  缓存一致性问题 产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。 要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cac">
+    <meta name="description" content="硬件结构冯洛伊曼模型 运算器、控制器、存储器、输入设备、输出设备   内存CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic) 缓存一致性问题产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统">
 <meta property="og:url" content="http://localhost:4000/2024/04/11/read/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Jonas">
-<meta property="og:description" content="硬件结构 冯洛伊曼模型  运算器、控制器、存储器、输入设备、输出设备   内存 CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)  缓存一致性问题 产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。 要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cac">
+<meta property="og:description" content="硬件结构冯洛伊曼模型 运算器、控制器、存储器、输入设备、输出设备   内存CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic) 缓存一致性问题产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。要解决这个问题，要保证两点：  某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Von_Neumann_architecture.svg">
 <meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
@@ -159,7 +159,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">1.3.1.</span> <span class="toc-text">中断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">1.4.</span> <span class="toc-text">浮点数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">2.1.</span> <span class="toc-text">内存分段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.1.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">2.2.</span> <span class="toc-text">内存分页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB%EF%BC%88translation-lookaside-buffer%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">TLB（translation lookaside buffer）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">段页式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.4.</span> <span class="toc-text">linux内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A84G%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E4%B8%8B%E7%94%B3%E8%AF%B78G%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%90%8E%E6%9E%9C"><span class="toc-number">2.5.</span> <span class="toc-text">在4G的物理内存下申请8G的内存会有什么后果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88"><span class="toc-number">2.6.</span> <span class="toc-text">预读失效</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.1.</span> <span class="toc-text">linux解决预读失效问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.2.</span> <span class="toc-text">mysql解决预读失效问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E6%B1%A1%E6%9F%93"><span class="toc-number">2.7.</span> <span class="toc-text">缓存污染</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PCB"><span class="toc-number">3.1.</span> <span class="toc-text">PCB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.</span> <span class="toc-text">上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">CPU上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">进程上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.3.</span> <span class="toc-text">线程上下文切换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%8E%9F%E5%88%99"><span class="toc-number">3.2.1.</span> <span class="toc-text">调度原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">3.3.</span> <span class="toc-text">进程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93"><span class="toc-number">3.3.1.</span> <span class="toc-text">管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.3.2.</span> <span class="toc-text">消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.3.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.3.4.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">3.3.5.</span> <span class="toc-text">信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Socket"><span class="toc-number">3.3.6.</span> <span class="toc-text">Socket</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%9E%E4%BA%89%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="toc-number">3.4.</span> <span class="toc-text">竞争与协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">3.4.1.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%99%E7%AD%89%E5%BE%85%E9%94%81-%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-number">3.4.1.1.</span> <span class="toc-text">忙等待锁(自旋锁)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%AD%89%E5%BE%85%E9%94%81"><span class="toc-number">3.4.1.2.</span> <span class="toc-text">无等待锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-2"><span class="toc-number">3.4.2.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90%E9%97%AE%E9%A2%98"><span class="toc-number">3.4.3.</span> <span class="toc-text">哲学家进餐问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-number">3.4.4.</span> <span class="toc-text">死锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">内存页面置换算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">磁盘调度算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">零拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mmap"><span class="toc-number">6.1.</span> <span class="toc-text">mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sendfile"><span class="toc-number">6.2.</span> <span class="toc-text">sendfile</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">1.3.1.</span> <span class="toc-text">中断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">1.4.</span> <span class="toc-text">浮点数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">2.1.</span> <span class="toc-text">内存分段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.1.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">2.2.</span> <span class="toc-text">内存分页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB%EF%BC%88translation-lookaside-buffer%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">TLB（translation lookaside buffer）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">段页式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.4.</span> <span class="toc-text">linux内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A84G%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E4%B8%8B%E7%94%B3%E8%AF%B78G%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%90%8E%E6%9E%9C"><span class="toc-number">2.5.</span> <span class="toc-text">在4G的物理内存下申请8G的内存会有什么后果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88"><span class="toc-number">2.6.</span> <span class="toc-text">预读失效</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.1.</span> <span class="toc-text">linux解决预读失效问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.2.</span> <span class="toc-text">mysql解决预读失效问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E6%B1%A1%E6%9F%93"><span class="toc-number">2.7.</span> <span class="toc-text">缓存污染</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PCB"><span class="toc-number">3.1.</span> <span class="toc-text">PCB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.</span> <span class="toc-text">上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">CPU上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">进程上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.3.</span> <span class="toc-text">线程上下文切换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%8E%9F%E5%88%99"><span class="toc-number">3.2.1.</span> <span class="toc-text">调度原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">3.3.</span> <span class="toc-text">进程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93"><span class="toc-number">3.3.1.</span> <span class="toc-text">管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.3.2.</span> <span class="toc-text">消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.3.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.3.4.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">3.3.5.</span> <span class="toc-text">信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Socket"><span class="toc-number">3.3.6.</span> <span class="toc-text">Socket</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%9E%E4%BA%89%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="toc-number">3.4.</span> <span class="toc-text">竞争与协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">3.4.1.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%99%E7%AD%89%E5%BE%85%E9%94%81-%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-number">3.4.1.1.</span> <span class="toc-text">忙等待锁(自旋锁)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%AD%89%E5%BE%85%E9%94%81"><span class="toc-number">3.4.1.2.</span> <span class="toc-text">无等待锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-1"><span class="toc-number">3.4.2.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90%E9%97%AE%E9%A2%98"><span class="toc-number">3.4.3.</span> <span class="toc-text">哲学家进餐问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-number">3.4.4.</span> <span class="toc-text">死锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">内存页面置换算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">磁盘调度算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="toc-number">6.</span> <span class="toc-text">零拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mmap"><span class="toc-number">6.1.</span> <span class="toc-text">mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sendfile"><span class="toc-number">6.2.</span> <span class="toc-text">sendfile</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -209,54 +209,35 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/1_hardware/how_cpu_run.html">硬件结构</a></h1>
-<h2 id="冯洛伊曼模型">冯洛伊曼模型</h2>
-<blockquote>
+    <h1 id="硬件结构"><a href="#硬件结构" class="headerlink" title="硬件结构"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/1_hardware/how_cpu_run.html">硬件结构</a></h1><h2 id="冯洛伊曼模型"><a href="#冯洛伊曼模型" class="headerlink" title="冯洛伊曼模型"></a>冯洛伊曼模型</h2><blockquote>
 <p>运算器、控制器、存储器、输入设备、输出设备</p>
 </blockquote>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Von_Neumann_architecture.svg" alt></p>
-<h2 id="内存">内存</h2>
-<p>CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.png" alt></p>
-<h3 id="缓存一致性问题">缓存一致性问题</h3>
-<p>产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。<br>
-要解决这个问题，要保证两点：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Von_Neumann_architecture.svg"></p>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><p>CPU内的寄存器和三级缓存使用的是SRAM(static)，内存条使用的是DRAM(dynamic)<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.png"></p>
+<h3 id="缓存一致性问题"><a href="#缓存一致性问题" class="headerlink" title="缓存一致性问题"></a>缓存一致性问题</h3><p>产生原因：A 号核心和 B 号核心的缓存数据在写入内存时的不一致，会导致执行结果的错误。<br>要解决这个问题，要保证两点：</p>
 <ol>
-<li>某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称为<strong>写传播（<em>Write Propagation</em>）</strong>；</li>
-<li>某个 CPU 核心里对数据的操作顺序，必须在其他核心看起来顺序是一样的，这个称为<strong>事务的串行化（<em>Transaction Serialization</em>）</strong>。</li>
+<li>某个 CPU 核心里的 Cache 数据更新时，必须要传播到其他核心的 Cache，这个称为<strong>写传播（_Write Propagation_）</strong>；</li>
+<li>某个 CPU 核心里对数据的操作顺序，必须在其他核心看起来顺序是一样的，这个称为<strong>事务的串行化（_Transaction Serialization_）</strong>。</li>
 </ol>
 <p>实现方式</p>
 <ol>
-<li>
-<p>总线嗅探（Bus Snooping）<br>
-我还是以前面的 i 变量例子来说明总线嗅探的工作机制，当 A 号 CPU 核心修改了 L1 Cache 中 i 变量的值，通过总线把这个事件广播通知给其他所有的核心，然后每个 CPU 核心都会监听总线上的广播事件，并检查是否有相同的数据在自己的 L1 Cache 里面，如果 B 号 CPU 核心的 L1 Cache 中有该数据，那么也需要把该数据更新到自己的 L1 Cache。<br>
-缺点：总线消息繁忙，无法保证事物串行化</p>
+<li><p>总线嗅探（Bus Snooping）<br>我还是以前面的 i 变量例子来说明总线嗅探的工作机制，当 A 号 CPU 核心修改了 L1 Cache 中 i 变量的值，通过总线把这个事件广播通知给其他所有的核心，然后每个 CPU 核心都会监听总线上的广播事件，并检查是否有相同的数据在自己的 L1 Cache 里面，如果 B 号 CPU 核心的 L1 Cache 中有该数据，那么也需要把该数据更新到自己的 L1 Cache。<br>缺点：总线消息繁忙，无法保证事物串行化</p>
 </li>
-<li>
-<p>MESI协议<br>
-mesi：Modified，exclusive，shared，invalidated<br>
-我们举个具体的例子来看看这四个状态的转换：</p>
+<li><p>MESI协议<br>mesi：Modified，exclusive，shared，invalidated<br>我们举个具体的例子来看看这四个状态的转换：</p>
 </li>
-<li>
-<p>当 A 号 CPU 核心从内存读取变量 i 的值，数据被缓存在 A 号 CPU 核心自己的 Cache 里面，此时其他 CPU 核心的 Cache 没有缓存该数据，于是标记 Cache Line 状态为「独占」，此时其 Cache 中的数据与内存是一致的；</p>
+<li><p>当 A 号 CPU 核心从内存读取变量 i 的值，数据被缓存在 A 号 CPU 核心自己的 Cache 里面，此时其他 CPU 核心的 Cache 没有缓存该数据，于是标记 Cache Line 状态为「独占」，此时其 Cache 中的数据与内存是一致的；</p>
 </li>
-<li>
-<p>然后 B 号 CPU 核心也从内存读取了变量 i 的值，此时会发送消息给其他 CPU 核心，由于 A 号 CPU 核心已经缓存了该数据，所以会把数据返回给 B 号 CPU 核心。在这个时候， A 和 B 核心缓存了相同的数据，Cache Line 的状态就会变成「共享」，并且其 Cache 中的数据与内存也是一致的；</p>
+<li><p>然后 B 号 CPU 核心也从内存读取了变量 i 的值，此时会发送消息给其他 CPU 核心，由于 A 号 CPU 核心已经缓存了该数据，所以会把数据返回给 B 号 CPU 核心。在这个时候， A 和 B 核心缓存了相同的数据，Cache Line 的状态就会变成「共享」，并且其 Cache 中的数据与内存也是一致的；</p>
 </li>
-<li>
-<p>当 A 号 CPU 核心要修改 Cache 中 i 变量的值，发现数据对应的 Cache Line 的状态是共享状态，则要向所有的其他 CPU 核心广播一个请求，要求先把其他核心的 Cache 中对应的 Cache Line 标记为「无效」状态，然后 A 号 CPU 核心才更新 Cache 里面的数据，同时标记 Cache Line 为「已修改」状态，此时 Cache 中的数据就与内存不一致了。</p>
+<li><p>当 A 号 CPU 核心要修改 Cache 中 i 变量的值，发现数据对应的 Cache Line 的状态是共享状态，则要向所有的其他 CPU 核心广播一个请求，要求先把其他核心的 Cache 中对应的 Cache Line 标记为「无效」状态，然后 A 号 CPU 核心才更新 Cache 里面的数据，同时标记 Cache Line 为「已修改」状态，此时 Cache 中的数据就与内存不一致了。</p>
 </li>
-<li>
-<p>如果 A 号 CPU 核心「继续」修改 Cache 中 i 变量的值，由于此时的 Cache Line 是「已修改」状态，因此不需要给其他 CPU 核心发送消息，直接更新数据即可。</p>
+<li><p>如果 A 号 CPU 核心「继续」修改 Cache 中 i 变量的值，由于此时的 Cache Line 是「已修改」状态，因此不需要给其他 CPU 核心发送消息，直接更新数据即可。</p>
 </li>
-<li>
-<p>如果 A 号 CPU 核心的 Cache 里的 i 变量对应的 Cache Line 要被「替换」，发现 Cache Line 状态是「已修改」状态，就会在替换前先把数据同步到内存。</p>
+<li><p>如果 A 号 CPU 核心的 Cache 里的 i 变量对应的 Cache Line 要被「替换」，发现 Cache Line 状态是「已修改」状态，就会在替换前先把数据同步到内存。</p>
 </li>
 </ol>
-<h2 id="cpu调度">cpu调度</h2>
-<p>在linux中，进程和线程都是用 <code>task_struct</code> 结构体表示的，区别在于线程的 task_struct 结构体里部分资源是共享了进程已创建的资源，比如内存地址空间、代码段、文件描述符等，所以 Linux 中的线程也被称为轻量级进程，因为线程的 task_struct 相比进程的 task_struct 承载的 资源比较少，因此以「轻」得名。<br>
-CPU调度的是task_struct。也就是所谓的线程是CPU调度的基本单位。</p>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/%E8%B0%83%E5%BA%A6%E7%B1%BB.png" alt></p>
+<h2 id="cpu调度"><a href="#cpu调度" class="headerlink" title="cpu调度"></a>cpu调度</h2><p>在linux中，进程和线程都是用 <code>task_struct</code> 结构体表示的，区别在于线程的 task_struct 结构体里部分资源是共享了进程已创建的资源，比如内存地址空间、代码段、文件描述符等，所以 Linux 中的线程也被称为轻量级进程，因为线程的 task_struct 相比进程的 task_struct 承载的 资源比较少，因此以「轻」得名。<br>CPU调度的是task_struct。也就是所谓的线程是CPU调度的基本单位。</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/%E8%B0%83%E5%BA%A6%E7%B1%BB.png"></p>
 <ul>
 <li>SCHED_DEADLINE：是按照 deadline 进行调度的，距离当前时间点最近的 deadline 的任务会被优先调度；</li>
 <li>SCHED_FIFO：对于相同优先级的任务，按先来先服务的原则，但是优先级更高的任务，可以抢占低优先级的任务，也就是优先级高的可以「插队」；</li>
@@ -264,57 +245,33 @@ CPU调度的是task_struct。也就是所谓的线程是CPU调度的基本单位
 <li>SCHED_NORMAL：普通任务使用的调度策略；</li>
 <li>SCHED_BATCH：后台任务的调度策略，不和终端进行交互，因此在不影响其他需要交互的任务，可以适当降低它的优先级。</li>
 </ul>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/CPU%E9%98%9F%E5%88%97.png" alt></p>
-<h3 id="中断">中断</h3>
-<p>在计算机中，中断是系统用来响应硬件设备请求的一种机制，操作系统收到硬件的中断请求，会打断正在执行的进程，然后调用内核中的中断处理程序来响应请求。<br>
-为了避免由于中断处理程序执行时间过长，而影响正常进程的调度，Linux 将中断处理程序分为上半部和下半部：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/CPU%E4%BC%AA%E5%85%B1%E4%BA%AB/CPU%E9%98%9F%E5%88%97.png"></p>
+<h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><p>在计算机中，中断是系统用来响应硬件设备请求的一种机制，操作系统收到硬件的中断请求，会打断正在执行的进程，然后调用内核中的中断处理程序来响应请求。<br>为了避免由于中断处理程序执行时间过长，而影响正常进程的调度，Linux 将中断处理程序分为上半部和下半部：</p>
 <ul>
 <li>上半部，对应硬中断，由硬件触发中断，用来快速处理中断；</li>
 <li>下半部，对应软中断，由内核触发中断，用来异步处理上半部未完成的工作；</li>
 </ul>
-<h2 id="浮点数">浮点数</h2>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%B5%AE%E7%82%B9/float.png" alt></p>
-<h1><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/3_memory/vmem.html">内存管理</a></h1>
-<p>操作系统会提供一种机制，将不同进程的虚拟地址和不同内存的物理地址映射起来<br>
-操作系统引入了虚拟内存，进程持有的虚拟地址会通过 CPU 芯片中的内存管理单元（MMU）的映射关系，来转换变成物理地址，然后再通过物理地址访问内存，如下图所示：<br>
-<img src="https://cdn.xiaolincoding.com//mysql/other/72ab76ba697e470b8ceb14d5fc5688d9.png" alt></p>
-<h2 id="内存分段">内存分段</h2>
-<p>程序是由若干个逻辑分段组成的，如可由代码分段、数据分段、栈段、堆段组成。不同的段是有不同的属性的，所以就用分段（Segmentation）的形式把这些段分离出来。<br>
-虚拟地址是通过<strong>段表</strong>与物理地址进行映射的，分段机制会把程序的虚拟地址分成 4 个段，每个段在段表中有一个项，在这一项找到段的基地址，再加上偏移量，于是就能找到物理内存中的地址，如下图：<br>
-<img src="https://cdn.xiaolincoding.com//mysql/other/c5e2ab63e6ee4c8db575f3c7c9c85962.png" alt></p>
-<h3 id="缺点">缺点</h3>
-<ol>
+<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost3@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%B5%AE%E7%82%B9/float.png"></p>
+<h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/3_memory/vmem.html">内存管理</a></h1><p>操作系统会提供一种机制，将不同进程的虚拟地址和不同内存的物理地址映射起来<br>操作系统引入了虚拟内存，进程持有的虚拟地址会通过 CPU 芯片中的内存管理单元（MMU）的映射关系，来转换变成物理地址，然后再通过物理地址访问内存，如下图所示：<br><img src="https://cdn.xiaolincoding.com//mysql/other/72ab76ba697e470b8ceb14d5fc5688d9.png"></p>
+<h2 id="内存分段"><a href="#内存分段" class="headerlink" title="内存分段"></a>内存分段</h2><p>程序是由若干个逻辑分段组成的，如可由代码分段、数据分段、栈段、堆段组成。不同的段是有不同的属性的，所以就用分段（Segmentation）的形式把这些段分离出来。<br>虚拟地址是通过<strong>段表</strong>与物理地址进行映射的，分段机制会把程序的虚拟地址分成 4 个段，每个段在段表中有一个项，在这一项找到段的基地址，再加上偏移量，于是就能找到物理内存中的地址，如下图：<br><img src="https://cdn.xiaolincoding.com//mysql/other/c5e2ab63e6ee4c8db575f3c7c9c85962.png"></p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
 <li><strong>内存外部碎片</strong>的问题：程序的段被回收后可能会存在外部碎片</li>
 <li><strong>内存交换的效率低</strong>的问题：对外部随便进行整理需要使用物理内存做交换，效率低</li>
 </ol>
-<h2 id="内存分页">内存分页</h2>
-<p>分页是把整个虚拟和物理内存空间切成一段段固定尺寸的大小。这样一个连续并且尺寸固定的内存空间，我们叫<strong>页</strong>（<em>Page</em>）。在 Linux 下，每一页的大小为 <code>4KB</code>。<br>
-虚拟地址与物理地址之间通过<strong>页表</strong>来映射，如下图：<br>
-<img src="https://cdn.xiaolincoding.com//mysql/other/08a8e315fedc4a858060db5cb4a654af.png" alt><br>
-而当进程访问的虚拟地址在页表中查不到时，系统会产生一个<strong>缺页异常</strong>，进入系统内核空间分配物理内存、更新进程页表，最后再返回用户空间，恢复进程的运行。<br>
-<img src="https://cdn.xiaolincoding.com//mysql/other/7884f4d8db4949f7a5bb4bbd0f452609.png" alt><br>
-总结一下，对于一个内存地址转换，其实就是这样三个步骤：</p>
+<h2 id="内存分页"><a href="#内存分页" class="headerlink" title="内存分页"></a>内存分页</h2><p>分页是把整个虚拟和物理内存空间切成一段段固定尺寸的大小。这样一个连续并且尺寸固定的内存空间，我们叫<strong>页</strong>（_Page_）。在 Linux 下，每一页的大小为 <code>4KB</code>。<br>虚拟地址与物理地址之间通过<strong>页表</strong>来映射，如下图：<br><img src="https://cdn.xiaolincoding.com//mysql/other/08a8e315fedc4a858060db5cb4a654af.png"><br>而当进程访问的虚拟地址在页表中查不到时，系统会产生一个<strong>缺页异常</strong>，进入系统内核空间分配物理内存、更新进程页表，最后再返回用户空间，恢复进程的运行。<br><img src="https://cdn.xiaolincoding.com//mysql/other/7884f4d8db4949f7a5bb4bbd0f452609.png"><br>总结一下，对于一个内存地址转换，其实就是这样三个步骤：</p>
 <ul>
 <li>把虚拟内存地址，切分成页号和偏移量；</li>
 <li>根据页号，从页表里面，查询对应的物理页号；</li>
 <li>直接拿物理页号，加上前面的偏移量，就得到了物理内存地址。</li>
 </ul>
-<p>在 32 位的环境下，虚拟地址空间共有 4GB，假设一个页的大小是 4KB（2^12），那么就需要大约 100 万 （2^20） 个页，每个「页表项」需要 4 个字节大小来存储，那么整个 4GB 空间的映射就需要有 <code>4MB</code> 的内存来存储页表。<br>
-这 4MB 大小的页表，看起来也不是很大。但是要知道每个进程都是有自己的虚拟地址空间的，也就说都有自己的页表。那么，<code>100</code> 个进程的话，就需要 <code>400MB</code> 的内存来存储页表，这是非常大的内存了，更别说 64 位的环境了。为了解决这个问题，使用<strong>多级页表</strong>方案。</p>
-<h3 id="TLB（translation-lookaside-buffer）">TLB（translation lookaside buffer）</h3>
-<p>mmu的缓存</p>
-<h2 id="段页式">段页式</h2>
-<p>段页式内存管理实现的方式：</p>
+<p>在 32 位的环境下，虚拟地址空间共有 4GB，假设一个页的大小是 4KB（2^12），那么就需要大约 100 万 （2^20） 个页，每个「页表项」需要 4 个字节大小来存储，那么整个 4GB 空间的映射就需要有 <code>4MB</code> 的内存来存储页表。<br>这 4MB 大小的页表，看起来也不是很大。但是要知道每个进程都是有自己的虚拟地址空间的，也就说都有自己的页表。那么，<code>100</code> 个进程的话，就需要 <code>400MB</code> 的内存来存储页表，这是非常大的内存了，更别说 64 位的环境了。为了解决这个问题，使用<strong>多级页表</strong>方案。</p>
+<h3 id="TLB（translation-lookaside-buffer）"><a href="#TLB（translation-lookaside-buffer）" class="headerlink" title="TLB（translation lookaside buffer）"></a>TLB（translation lookaside buffer）</h3><p>mmu的缓存</p>
+<h2 id="段页式"><a href="#段页式" class="headerlink" title="段页式"></a>段页式</h2><p>段页式内存管理实现的方式：</p>
 <ul>
 <li>先将程序划分为多个有逻辑意义的段，也就是前面提到的分段机制；</li>
-<li>接着再把每个段划分为多个页，也就是对分段划分出来的连续空间，再划分固定大小的页；<br>
-这样，地址结构就由<strong>段号、段内页号和页内位移</strong>三部分组成。<br>
-<img src="https://cdn.xiaolincoding.com//mysql/other/8904fb89ae0c49c4b0f2f7b5a0a7b099.png" alt></li>
+<li>接着再把每个段划分为多个页，也就是对分段划分出来的连续空间，再划分固定大小的页；<br>这样，地址结构就由<strong>段号、段内页号和页内位移</strong>三部分组成。<br><img src="https://cdn.xiaolincoding.com//mysql/other/8904fb89ae0c49c4b0f2f7b5a0a7b099.png"></li>
 </ul>
-<h2 id="linux内存布局">linux内存布局</h2>
-<p>虽然每个进程都各自有独立的虚拟内存，但是<strong>每个虚拟内存中的内核地址，其实关联的都是相同的物理内存</strong>。这样，进程切换到内核态后，就可以很方便地访问内核空间内存。<br>
-<img src="https://cdn.xiaolincoding.com//mysql/other/48403193b7354e618bf336892886bcff.png" alt><br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/32%E4%BD%8D%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png" alt></p>
+<h2 id="linux内存布局"><a href="#linux内存布局" class="headerlink" title="linux内存布局"></a>linux内存布局</h2><p>虽然每个进程都各自有独立的虚拟内存，但是<strong>每个虚拟内存中的内核地址，其实关联的都是相同的物理内存</strong>。这样，进程切换到内核态后，就可以很方便地访问内核空间内存。<br><img src="https://cdn.xiaolincoding.com//mysql/other/48403193b7354e618bf336892886bcff.png"><br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/32%E4%BD%8D%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png"></p>
 <p>通过这张图你可以看到，用户空间内存，从<strong>低到高</strong>分别是 6 种不同的内存段：</p>
 <ul>
 <li>代码段，包括二进制可执行代码；</li>
@@ -324,73 +281,47 @@ CPU调度的是task_struct。也就是所谓的线程是CPU调度的基本单位
 <li>文件映射段，包括动态库、共享内存等，从低地址开始向上增长（<a target="_blank" rel="noopener" href="http://lishiwen4.github.io/linux/linux-process-memory-location">跟硬件和内核版本有关 (opens new window)</a>）；</li>
 <li>栈段，包括局部变量和函数调用的上下文等。栈的大小是固定的，一般是 <code>8 MB</code>。当然系统也提供了参数，以便我们自定义大小；</li>
 </ul>
-<h2 id="在4G的物理内存下申请8G的内存会有什么后果">在4G的物理内存下申请8G的内存会有什么后果</h2>
-<ol>
+<h2 id="在4G的物理内存下申请8G的内存会有什么后果"><a href="#在4G的物理内存下申请8G的内存会有什么后果" class="headerlink" title="在4G的物理内存下申请8G的内存会有什么后果"></a>在4G的物理内存下申请8G的内存会有什么后果</h2><ol>
 <li>如果是32位的操作系统，最大只能索引4G的内存，所以超过4G会报错</li>
 <li>如果是64位的操作系统，如果overcommit_memory配置的是1，进程可以使用128T的虚拟内存，申请了如果使用超过了物理内存，如果没有开始swap，可能会出现oom报错，如果开启了swap则使用也没问题。</li>
 </ol>
-<h2 id="预读失效"><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/3_memory/cache_lru.html#%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%80%A0%E6%88%90%E7%9A%84%E5%BD%B1%E5%93%8D">预读失效</a></h2>
-<p>Linux 操作系统为基于 Page Cache 的读缓存机制提供<strong>预读机制</strong>，如果<strong>这些被提前加载进来的页，并没有被访问</strong>，相当于这个预读工作是白做了，这个就是<strong>预读失效</strong>。<br>
-解决方法： <strong>都是将数据分为了冷数据和热数据，然后分别进行 LRU 算法</strong></p>
-<h3 id="linux解决预读失效问题">linux解决预读失效问题</h3>
-<p>Linux 操作系统实现两个了 LRU 链表：<strong>活跃 LRU 链表（active_list）和非活跃 LRU 链表（inactive_list）</strong>。</p>
+<h2 id="预读失效"><a href="#预读失效" class="headerlink" title="预读失效"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/3_memory/cache_lru.html#%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%80%A0%E6%88%90%E7%9A%84%E5%BD%B1%E5%93%8D">预读失效</a></h2><p>Linux 操作系统为基于 Page Cache 的读缓存机制提供<strong>预读机制</strong>，如果<strong>这些被提前加载进来的页，并没有被访问</strong>，相当于这个预读工作是白做了，这个就是<strong>预读失效</strong>。<br>解决方法： <strong>都是将数据分为了冷数据和热数据，然后分别进行 LRU 算法</strong></p>
+<h3 id="linux解决预读失效问题"><a href="#linux解决预读失效问题" class="headerlink" title="linux解决预读失效问题"></a>linux解决预读失效问题</h3><p>Linux 操作系统实现两个了 LRU 链表：<strong>活跃 LRU 链表（active_list）和非活跃 LRU 链表（inactive_list）</strong>。</p>
 <ul>
 <li><strong>active list</strong> 活跃内存页链表，这里存放的是最近被访问过（活跃）的内存页；</li>
-<li><strong>inactive list</strong> 不活跃内存页链表，这里存放的是很少被访问（非活跃）的内存页；<br>
-有了这两个 LRU 链表后，<strong>预读页就只需要加入到 inactive list 区域的头部，当页被真正访问的时候，才将页插入 active list 的头部</strong>。如果预读的页一直没有被访问，就会从 inactive list 移除，这样就不会影响 active list 中的热点数据。</li>
+<li><strong>inactive list</strong> 不活跃内存页链表，这里存放的是很少被访问（非活跃）的内存页；<br>有了这两个 LRU 链表后，<strong>预读页就只需要加入到 inactive list 区域的头部，当页被真正访问的时候，才将页插入 active list 的头部</strong>。如果预读的页一直没有被访问，就会从 inactive list 移除，这样就不会影响 active list 中的热点数据。</li>
 </ul>
-<h3 id="mysql解决预读失效问题">mysql解决预读失效问题</h3>
-<p>MySQL 的 Innodb 存储引擎是在一个 LRU 链表上划分来 2 个区域，<strong>young 区域 和 old 区域</strong>。比例大概是70：30<br>
-young 区域在 LRU 链表的前半部分，old 区域则是在后半部分，这两个区域都有各自的头和尾节点，如下图：<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/mysql/innodb/young%2Bold.png" alt><br>
-<strong>划分这两个区域后，预读的页就只需要加入到 old 区域的头部，当页被真正访问的时候，才将页插入 young 区域的头部</strong>。如果预读的页一直没有被访问，就会从 old 区域移除，这样就不会影响 young 区域中的热点数据。</p>
-<h2 id="缓存污染">缓存污染</h2>
-<p>即使存在缓存两个lru链表能解决预读的问题，但是如果缓存被访问了还是会放倒activlist，造成缓存污染。<br>
-为了解决这个问题，需要加大进入到activelist的门槛。<br>
-mysql和linux的解决方案是一样的，只要在第二次被访问时才会加入到activelist，且时间间隔要大于1s。</p>
+<h3 id="mysql解决预读失效问题"><a href="#mysql解决预读失效问题" class="headerlink" title="mysql解决预读失效问题"></a>mysql解决预读失效问题</h3><p>MySQL 的 Innodb 存储引擎是在一个 LRU 链表上划分来 2 个区域，<strong>young 区域 和 old 区域</strong>。比例大概是70：30<br>young 区域在 LRU 链表的前半部分，old 区域则是在后半部分，这两个区域都有各自的头和尾节点，如下图：<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/mysql/innodb/young%2Bold.png"><br><strong>划分这两个区域后，预读的页就只需要加入到 old 区域的头部，当页被真正访问的时候，才将页插入 young 区域的头部</strong>。如果预读的页一直没有被访问，就会从 old 区域移除，这样就不会影响 young 区域中的热点数据。</p>
+<h2 id="缓存污染"><a href="#缓存污染" class="headerlink" title="缓存污染"></a>缓存污染</h2><p>即使存在缓存两个lru链表能解决预读的问题，但是如果缓存被访问了还是会放倒activlist，造成缓存污染。<br>为了解决这个问题，需要加大进入到activelist的门槛。<br>mysql和linux的解决方案是一样的，只要在第二次被访问时才会加入到activelist，且时间间隔要大于1s。</p>
 <ul>
 <li><strong><code>innodb_old_blocks_time</code></strong>: 这个参数定义了一个数据页从 Old 区移到 Young 区所需的最小时间（毫秒）。默认值是 1000 毫秒（1秒）。这个参数防止了频繁访问的数据页立即从 Old 区移到 Young 区，从而可以避免短时间内的大量数据页进入 Young 区。</li>
 </ul>
-<h1>进程与线程</h1>
-<p>通常会说进程是操作系统资源分配的基本单位，线程是cpu调度的基本单位。<br>
-进程和线程在操作系统里都是task_struct，他是PCB（process control block）的实现</p>
+<h1 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h1><p>通常会说进程是操作系统资源分配的基本单位，线程是cpu调度的基本单位。<br>进程和线程在操作系统里都是task_struct，他是PCB（process control block）的实现</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> &#123;</span></span><br><span class="line">        <span class="comment">// 进程id</span></span><br><span class="line">	    <span class="type">pid_t</span>				pid;</span><br><span class="line">        <span class="comment">// 用于标识线程所属的进程 pid</span></span><br><span class="line">	    <span class="type">pid_t</span>				tgid;</span><br><span class="line">        <span class="comment">// 进程打开的文件信息</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span>		*<span class="title">files</span>;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 内存描述符表示进程虚拟地址空间</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span>		*<span class="title">mm</span>;</span></span><br><span class="line"></span><br><span class="line">        .......... 省略 .......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> task_size;    <span class="comment">/* size of task vm space */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> start_code, end_code, start_data, end_data;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> start_brk, brk, start_stack;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> arg_start, arg_end, env_start, env_end;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> mmap_base;  <span class="comment">/* base of mmap area */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> total_vm;    <span class="comment">/* Total pages mapped */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> locked_vm;  <span class="comment">/* Pages that have PG_mlocked set */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> pinned_vm;  <span class="comment">/* Refcount permanently increased */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> data_vm;    <span class="comment">/* VM_WRITE &amp; ~VM_SHARED &amp; ~VM_STACK */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> exec_vm;    <span class="comment">/* VM_EXEC &amp; ~VM_WRITE &amp; ~VM_STACK */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> stack_vm;    <span class="comment">/* VM_STACK */</span></span><br><span class="line">       ...... 省略 ........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>子进程共享了父进程的虚拟内存空间，这样子进程就变成了我们熟悉的线程，<strong>是否共享地址空间</strong>几乎是进程和线程之间的本质区别。Linux 内核并不区别对待它们，线程对于内核来说仅仅是一个共享特定资源的进程而已。</p>
-<p><img src="https://cdn.xiaolincoding.com//mysql/other/2b2dbb2b6ea19871152a3bf6566df205.png" alt><br>
-<img src="https://cdn.xiaolincoding.com//mysql/other/d1e65b91b67422c2cc08a04549c5f3ba.png" alt></p>
-<h2 id="PCB">PCB</h2>
-<p>通过就绪队列和阻塞队列管理<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/12-PCB%E7%8A%B6%E6%80%81%E9%93%BE%E8%A1%A8%E7%BB%84%E7%BB%87.jpg" alt></p>
-<h3 id="上下文切换">上下文切换</h3>
-<h4 id="CPU上下文切换">CPU上下文切换</h4>
-<p>将CPU寄存器的内容和程序计数器保存在task_struct中</p>
-<h4 id="进程上下文切换">进程上下文切换</h4>
-<p>进程的上下文切换不仅包含了虚拟内存、栈、全局变量等用户空间的资源，还包括了内核堆栈、寄存器等内核空间的资源。</p>
-<h4 id="线程上下文切换">线程上下文切换</h4>
-<p>同一进程的线程上下文切换只需要切换线程的基本信息（栈和寄存器等私有数据）</p>
-<h2 id="调度">调度</h2>
-<h3 id="调度原则">调度原则</h3>
-<ul>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/2b2dbb2b6ea19871152a3bf6566df205.png"><br><img src="https://cdn.xiaolincoding.com//mysql/other/d1e65b91b67422c2cc08a04549c5f3ba.png"></p>
+<h2 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h2><p>通过就绪队列和阻塞队列管理<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/12-PCB%E7%8A%B6%E6%80%81%E9%93%BE%E8%A1%A8%E7%BB%84%E7%BB%87.jpg"></p>
+<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><h4 id="CPU上下文切换"><a href="#CPU上下文切换" class="headerlink" title="CPU上下文切换"></a>CPU上下文切换</h4><p>将CPU寄存器的内容和程序计数器保存在task_struct中</p>
+<h4 id="进程上下文切换"><a href="#进程上下文切换" class="headerlink" title="进程上下文切换"></a>进程上下文切换</h4><p>进程的上下文切换不仅包含了虚拟内存、栈、全局变量等用户空间的资源，还包括了内核堆栈、寄存器等内核空间的资源。</p>
+<h4 id="线程上下文切换"><a href="#线程上下文切换" class="headerlink" title="线程上下文切换"></a>线程上下文切换</h4><p>同一进程的线程上下文切换只需要切换线程的基本信息（栈和寄存器等私有数据）</p>
+<h2 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h2><h3 id="调度原则"><a href="#调度原则" class="headerlink" title="调度原则"></a>调度原则</h3><ul>
 <li><strong>CPU 利用率</strong>：调度程序应确保 CPU 是始终匆忙的状态，这可提高 CPU 的利用率；</li>
 <li><strong>系统吞吐量</strong>：吞吐量表示的是单位时间内 CPU 完成进程的数量，长作业的进程会占用较长的 CPU 资源，因此会降低吞吐量，相反，短作业的进程会提升系统吞吐量；</li>
 <li><strong>周转时间</strong>：周转时间是进程运行+阻塞时间+等待时间的总和，一个进程的周转时间越小越好；</li>
 <li><strong>等待时间</strong>：这个等待时间不是阻塞状态的时间，而是进程处于就绪队列的时间，等待的时间越长，用户越不满意；</li>
 <li><strong>响应时间</strong>：用户提交请求到系统第一次产生响应所花费的时间，在交互式系统中，响应时间是衡量调度算法好坏的主要标准。</li>
 </ul>
-<h3 id="调度算法">调度算法</h3>
-<ul>
+<h3 id="调度算法"><a href="#调度算法" class="headerlink" title="调度算法"></a>调度算法</h3><ul>
 <li>先来先服务调度算法 FCFS</li>
 <li>最短作业优先调度算法 short job first SJF</li>
-<li>高响应比优先调度算法 Highest Response Ratio Next, HRRN ：要是权衡了短作业和长作业，实现不了</li>
+<li> 高响应比优先调度算法 Highest Response Ratio Next, HRRN ：要是权衡了短作业和长作业，实现不了</li>
 <li>时间片轮转调度算法 Round Robin, RR</li>
-<li>最高优先级调度算法 Highest Priority First，HPF</li>
-<li>多级反馈队列调度算法 Multilevel Feedback Queue</li>
+<li> 最高优先级调度算法 Highest Priority First，HPF</li>
+<li>多级反馈队列调度算法 Multilevel Feedback Queue </li>
 <li>「多级」表示有多个队列，每个队列优先级从高到低，同时优先级越高时间片越短。</li>
 <li>「反馈」表示如果有新的进程加入优先级高的队列时，立刻停止当前正在运行的进程，转而去运行优先级高的队列；</li>
 </ul>
-<h2 id="进程间通信">进程间通信</h2>
-<h3 id="管道">管道</h3>
-<p>所谓的管道，就是内核里面的一串缓存。管道工作在半双工模式下，数据只能单向流动。同时通信数据都遵循<strong>先进先出</strong>原则。管道效率低，不适合频繁的交换数据。</p>
+<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>所谓的管道，就是内核里面的一串缓存。管道工作在半双工模式下，数据只能单向流动。同时通信数据都遵循<strong>先进先出</strong>原则。管道效率低，不适合频繁的交换数据。</p>
 <table>
 <thead>
 <tr>
@@ -399,8 +330,7 @@ mysql和linux的解决方案是一样的，只要在第二次被访问时才会�
 <th>命名管道</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>创建方式</td>
 <td>通过<code>pipe()</code>系统调用创建<code>ps aux |grep mysql</code></td>
 <td>通过<code>mkfifo()</code>系统调用或<code>mknod()</code>命令创建</td>
@@ -431,113 +361,73 @@ mysql和linux的解决方案是一样的，只要在第二次被访问时才会�
 <td>单向传输</td>
 </tr>
 <tr>
-<td>同步/阻塞</td>
+<td>同步&#x2F;阻塞</td>
 <td>支持同步和阻塞机制</td>
 <td>支持同步和阻塞机制</td>
 </tr>
-</tbody>
-</table>
-<h3 id="消息队列">消息队列</h3>
-<p><strong>消息队列是保存在内核中的消息链表</strong>，在发送数据时，会分成一个一个独立的数据单元，也就是消息体（数据块），消息体是用户自定义的数据类型，消息的发送方和接收方要约定好消息体的数据类型，所以每个消息体都是固定大小的存储块。<br>
-缺点：</p>
+</tbody></table>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p><strong>消息队列是保存在内核中的消息链表</strong>，在发送数据时，会分成一个一个独立的数据单元，也就是消息体（数据块），消息体是用户自定义的数据类型，消息的发送方和接收方要约定好消息体的数据类型，所以每个消息体都是固定大小的存储块。<br>缺点：</p>
 <ol>
 <li>不适合大数据量的数据传输，有单个消息大小限制MSGMAX，总消息大小限制MSGMNB</li>
 <li>消息队列通信过程中，存在用户态与内核态之间的数据拷贝开销</li>
 </ol>
-<h3 id="共享内存">共享内存</h3>
-<p>共享内存的机制，就是拿出一块虚拟地址空间来，映射到相同的物理内存中。<br>
-没有从内核态到用户态数据拷贝的开销<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/9-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98.jpg" alt></p>
-<h3 id="信号量">信号量</h3>
-<p>用了共享内存通信方式，带来新的问题，那就是如果多个进程同时修改同一个共享内存，很有可能就冲突了。例如两个进程都同时写一个地址，那先写的那个进程会发现内容被别人覆盖了。<br>
-为了防止多进程竞争共享资源，而造成的数据错乱，所以需要保护机制，使得共享的资源，在任意时刻只能被一个进程访问。正好，<strong>信号量</strong>就实现了这一保护机制。<br>
-信号量其实是一个整型的计数器，主要用于实现进程间的互斥与同步，而不是用于缓存进程间通信的数据。<br>
-信号量表示资源的数量，控制信号量的方式有两种原子操作：</p>
+<h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><p>共享内存的机制，就是拿出一块虚拟地址空间来，映射到相同的物理内存中。<br>没有从内核态到用户态数据拷贝的开销<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/9-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98.jpg"></p>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><p>用了共享内存通信方式，带来新的问题，那就是如果多个进程同时修改同一个共享内存，很有可能就冲突了。例如两个进程都同时写一个地址，那先写的那个进程会发现内容被别人覆盖了。<br>为了防止多进程竞争共享资源，而造成的数据错乱，所以需要保护机制，使得共享的资源，在任意时刻只能被一个进程访问。正好，<strong>信号量</strong>就实现了这一保护机制。<br>信号量其实是一个整型的计数器，主要用于实现进程间的互斥与同步，而不是用于缓存进程间通信的数据。<br>信号量表示资源的数量，控制信号量的方式有两种原子操作：</p>
 <ul>
-<li>一个是 <strong>P 操作</strong>，这个操作会把信号量减去 1，相减后如果信号量 &lt; 0，则表明资源已被占用，进程需阻塞等待；相减后如果信号量 &gt;= 0，则表明还有资源可使用，进程可正常继续执行。</li>
-<li>另一个是 <strong>V 操作</strong>，这个操作会把信号量加上 1，相加后如果信号量 &lt;= 0，则表明当前有阻塞中的进程，于是会将该进程唤醒运行；相加后如果信号量 &gt; 0，则表明当前没有阻塞中的进程；</li>
+<li>一个是 <strong>P 操作</strong>，这个操作会把信号量减去 1，相减后如果信号量 &lt; 0，则表明资源已被占用，进程需阻塞等待；相减后如果信号量 &gt;&#x3D; 0，则表明还有资源可使用，进程可正常继续执行。</li>
+<li>另一个是 <strong>V 操作</strong>，这个操作会把信号量加上 1，相加后如果信号量 &lt;&#x3D; 0，则表明当前有阻塞中的进程，于是会将该进程唤醒运行；相加后如果信号量 &gt; 0，则表明当前没有阻塞中的进程；</li>
 </ul>
-<h3 id="信号">信号</h3>
-<p>上面说的进程间通信，都是常规状态下的工作模式。<strong>对于异常情况下的工作模式，就需要用「信号」的方式来通知进程。</strong></p>
+<h3 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h3><p>上面说的进程间通信，都是常规状态下的工作模式。<strong>对于异常情况下的工作模式，就需要用「信号」的方式来通知进程。</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">[work]$</span><span class="language-bash"><span class="built_in">kill</span> -l</span></span><br><span class="line"> 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL</span><br><span class="line"> 5) SIGTRAP      6) SIGABRT      7) SIGBUS       8) SIGFPE</span><br><span class="line"> 9) SIGKILL     10) SIGUSR1     11) SIGSEGV     12) SIGUSR2</span><br><span class="line">13) SIGPIPE     14) SIGALRM     15) SIGTERM     17) SIGCHLD</span><br><span class="line">18) SIGCONT     19) SIGSTOP     20) SIGTSTP     21) SIGTTIN</span><br><span class="line">22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ</span><br><span class="line">26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO</span><br><span class="line">30) SIGPWR      31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1</span><br><span class="line">36) SIGRTMIN+2  37) SIGRTMIN+3  38) SIGRTMIN+4  39) SIGRTMIN+5</span><br><span class="line">40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8  43) SIGRTMIN+9</span><br><span class="line">44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13</span><br><span class="line">48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13</span><br><span class="line">52) SIGRTMAX-12 53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9</span><br><span class="line">56) SIGRTMAX-8  57) SIGRTMAX-7  58) SIGRTMAX-6  59) SIGRTMAX-5</span><br><span class="line">60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2  63) SIGRTMAX-1</span><br><span class="line">64) SIGRTMAX</span><br></pre></td></tr></table></figure>
-<h3 id="Socket">Socket</h3>
-<p>前面提到的管道、消息队列、共享内存、信号量和信号都是在同一台主机上进行进程间通信，那要想<strong>跨网络与不同主机上的进程之间通信，就需要 Socket 通信了。</strong></p>
-<h2 id="竞争与协作">竞争与协作</h2>
-<p>同步：并发进程/线程在一些关键点上可能需要互相等待与互通消息，这种相互制约的等待与互通信息称为进程/线程同步<br>
-互斥：保证一个线程在临界区执行时，其他线程应该被阻止进入临界区。<br>
-实现方式：锁，信号量</p>
-<h3 id="锁">锁</h3>
-<p>锁的实现不同，可以分为「忙等待锁」和「无忙等待锁」</p>
-<h4 id="忙等待锁-自旋锁">忙等待锁(自旋锁)</h4>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/13-TestAndSet.jpg" alt></p>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/14-%E8%87%AA%E6%97%8B%E9%94%81.jpg" alt></p>
-<h4 id="无等待锁">无等待锁</h4>
-<p>为了防止等待，将线程挂起<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/15-%E6%97%A0%E7%AD%89%E5%BE%85%E9%94%81.jpg" alt></p>
-<h3 id="信号量-2">信号量</h3>
-<p>信号量是操作系统提供的一种协调共享资源访问的方法。<br>
-通常<strong>信号量表示资源的数量</strong>，对应的变量是一个整型（<code>sem</code>）变量。<br>
-另外，还有<strong>两个原子操作的系统调用函数来控制信号量的</strong>，分别是：</p>
+
+<h3 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h3><p>前面提到的管道、消息队列、共享内存、信号量和信号都是在同一台主机上进行进程间通信，那要想<strong>跨网络与不同主机上的进程之间通信，就需要 Socket 通信了。</strong></p>
+<h2 id="竞争与协作"><a href="#竞争与协作" class="headerlink" title="竞争与协作"></a>竞争与协作</h2><p>同步：并发进程&#x2F;线程在一些关键点上可能需要互相等待与互通消息，这种相互制约的等待与互通信息称为进程&#x2F;线程同步<br>互斥：保证一个线程在临界区执行时，其他线程应该被阻止进入临界区。<br>实现方式：锁，信号量</p>
+<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><p>锁的实现不同，可以分为「忙等待锁」和「无忙等待锁」</p>
+<h4 id="忙等待锁-自旋锁"><a href="#忙等待锁-自旋锁" class="headerlink" title="忙等待锁(自旋锁)"></a>忙等待锁(自旋锁)</h4><p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/13-TestAndSet.jpg"></p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/14-%E8%87%AA%E6%97%8B%E9%94%81.jpg"></p>
+<h4 id="无等待锁"><a href="#无等待锁" class="headerlink" title="无等待锁"></a>无等待锁</h4><p>为了防止等待，将线程挂起<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/15-%E6%97%A0%E7%AD%89%E5%BE%85%E9%94%81.jpg"></p>
+<h3 id="信号量-1"><a href="#信号量-1" class="headerlink" title="信号量"></a>信号量</h3><p>信号量是操作系统提供的一种协调共享资源访问的方法。<br>通常<strong>信号量表示资源的数量</strong>，对应的变量是一个整型（<code>sem</code>）变量。<br>另外，还有<strong>两个原子操作的系统调用函数来控制信号量的</strong>，分别是：</p>
 <ul>
-<li><em>P 操作</em>：将 <code>sem</code> 减 <code>1</code>，相减后，如果 <code>sem &lt; 0</code>，则进程/线程进入阻塞等待，否则继续，表明 P 操作可能会阻塞；</li>
-<li><em>V 操作</em>：将 <code>sem</code> 加 <code>1</code>，相加后，如果 <code>sem &lt;= 0</code>，唤醒一个等待中的进程/线程，表明 V 操作不会阻塞；<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/17-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9FPV%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0.jpg" alt></li>
+<li>_P 操作_：将 <code>sem</code> 减 <code>1</code>，相减后，如果 <code>sem &lt; 0</code>，则进程&#x2F;线程进入阻塞等待，否则继续，表明 P 操作可能会阻塞；</li>
+<li>_V 操作_：将 <code>sem</code> 加 <code>1</code>，相加后，如果 <code>sem &lt;= 0</code>，唤醒一个等待中的进程&#x2F;线程，表明 V 操作不会阻塞；<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/17-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9FPV%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0.jpg"></li>
 </ul>
-<h3 id="哲学家进餐问题">哲学家进餐问题</h3>
-<p>解决方案一：加锁，每次只能有一个人进餐<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/26-%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90-%E6%96%B9%E6%A1%88%E4%BA%8C%E7%A4%BA%E4%BE%8B.jpg" alt><br>
-解决方案二：改变哲学家拿筷子的顺序，即让偶数编号的哲学家「先拿左边的叉子后拿右边的叉子」，奇数编号的哲学家「先拿右边的叉子后拿左边的叉子」。每次只能有一个人进餐。<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/28-%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90-%E6%96%B9%E6%A1%88%E4%B8%89%E7%A4%BA%E4%BE%8B.jpg" alt></p>
-<h3 id="死锁">死锁</h3>
-<p>当<strong>两个</strong>线程为了保护<strong>两个</strong>不同的共享资源而使用了两个互斥锁，那么这两个互斥锁应用不当的时候，可能会造成两个线程都在等待对方释放锁，在没有外力的作用下，这些线程会一直相互等待，就没办法继续运行，这种情况就是发生了<strong>死锁</strong><br>
-死锁只有<strong>同时满足</strong>以下四个条件才会发生：</p>
+<h3 id="哲学家进餐问题"><a href="#哲学家进餐问题" class="headerlink" title="哲学家进餐问题"></a>哲学家进餐问题</h3><p>解决方案一：加锁，每次只能有一个人进餐<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/26-%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90-%E6%96%B9%E6%A1%88%E4%BA%8C%E7%A4%BA%E4%BE%8B.jpg"><br>解决方案二：改变哲学家拿筷子的顺序，即让偶数编号的哲学家「先拿左边的叉子后拿右边的叉子」，奇数编号的哲学家「先拿右边的叉子后拿左边的叉子」。每次只能有一个人进餐。<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5/28-%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90-%E6%96%B9%E6%A1%88%E4%B8%89%E7%A4%BA%E4%BE%8B.jpg"></p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>当<strong>两个</strong>线程为了保护<strong>两个</strong>不同的共享资源而使用了两个互斥锁，那么这两个互斥锁应用不当的时候，可能会造成两个线程都在等待对方释放锁，在没有外力的作用下，这些线程会一直相互等待，就没办法继续运行，这种情况就是发生了<strong>死锁</strong><br>死锁只有<strong>同时满足</strong>以下四个条件才会发生：</p>
 <ul>
 <li>互斥条件：多个线程不能同时使用同一资源；</li>
 <li>持有并等待条件：持有A，想持有B，而B由于互斥不可持有，则等待；</li>
 <li>不可剥夺条件：已获得的资源在使用完前不能被其他线程剥夺；</li>
 <li>环路等待条件：两个线程获取资源的顺序构成了环形链；</li>
 </ul>
-<p>避免死锁<br>
-那么避免死锁问题就只需要破环其中一个条件就可以，最常见的并且可行的就是<strong>使用资源有序分配法，来破环环路等待条件</strong>。<br>
-线程 A 和 线程 B 获取资源的顺序要一样，当线程 A 是先尝试获取资源 A，然后尝试获取资源 B 的时候，线程 B 同样也是先尝试获取资源 A，然后尝试获取资源 B。也就是说，线程 A 和 线程 B 总是以相同的顺序申请自己想要的资源。</p>
-<h1><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/5_schedule/schedule.html#%E5%86%85%E5%AD%98%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95">内存页面置换算法</a></h1>
-<ul>
+<p>避免死锁<br>那么避免死锁问题就只需要破环其中一个条件就可以，最常见的并且可行的就是<strong>使用资源有序分配法，来破环环路等待条件</strong>。<br>线程 A 和 线程 B 获取资源的顺序要一样，当线程 A 是先尝试获取资源 A，然后尝试获取资源 B 的时候，线程 B 同样也是先尝试获取资源 A，然后尝试获取资源 B。也就是说，线程 A 和 线程 B 总是以相同的顺序申请自己想要的资源。</p>
+<h1 id="内存页面置换算法"><a href="#内存页面置换算法" class="headerlink" title="内存页面置换算法"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/5_schedule/schedule.html#%E5%86%85%E5%AD%98%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95">内存页面置换算法</a></h1><ul>
 <li>最佳页面置换算法：置换在「未来」最长时间不访问的页面，实现不了</li>
 <li>FIFO</li>
 <li>LRU</li>
 <li>LFU</li>
-<li>时钟页面置换算法
-<ul>
+<li>时钟页面置换算法<ul>
 <li>当发生缺页中断时，算法首先检查表针指向的页面</li>
 <li>如果它的访问位位是 0 就淘汰该页面，并把新的页面插入这个位置，然后把表针前移一个位置；</li>
 <li>如果访问位是 1 就清除访问位，并把表针前移一个位置，重复这个过程直到找到了一个访问位为 0 的页面为止；</li>
 </ul>
 </li>
 </ul>
-<h1><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/5_schedule/schedule.html#%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95">磁盘调度算法</a></h1>
-<ul>
+<h1 id="磁盘调度算法"><a href="#磁盘调度算法" class="headerlink" title="磁盘调度算法"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/os/5_schedule/schedule.html#%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95">磁盘调度算法</a></h1><ul>
 <li>FCFS（first come first service）</li>
 <li>最短寻道优先(may hungry)</li>
-<li>scan : 磁头在一个方向上移动，访问所有未完成的请求，直到磁头到达该方向上的最后的磁道，才调换方向，这就是扫描（<em>Scan</em>）算法</li>
+<li>scan : 磁头在一个方向上移动，访问所有未完成的请求，直到磁头到达该方向上的最后的磁道，才调换方向，这就是扫描（_Scan_）算法</li>
 <li>cscan : 只有磁头朝某个特定方向移动时，才处理磁道访问请求，而返回时直接快速移动至最靠边缘的磁道，也就是复位磁头，这个过程是很快的，并且<strong>返回中途不处理任何请求</strong>，该算法的特点，就是<strong>磁道只响应一个方向上的请求</strong></li>
 <li>look clook: 我们前面说到的扫描算法和循环扫描算法，都是磁头移动到磁盘「最始端或最末端」才开始调换方向。那这其实是可以优化的，优化的思路就是<strong>磁头在移动到「最远的请求」位置，然后立即反向移动。</strong></li>
 </ul>
-<h1>零拷贝</h1>
-<p>传统的读写流程<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9B%B6%E6%8B%B7%E8%B4%9D/%E4%BC%A0%E7%BB%9F%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93.png" alt><br>
-一次读+写总共有四次用户态与内核态上下文切换，四次内存拷贝<br>
-为了减少切换和拷贝开销，有两种零拷贝技术</p>
+<h1 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h1><p>传统的读写流程<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9B%B6%E6%8B%B7%E8%B4%9D/%E4%BC%A0%E7%BB%9F%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93.png"><br>一次读+写总共有四次用户态与内核态上下文切换，四次内存拷贝<br>为了减少切换和拷贝开销，有两种零拷贝技术</p>
 <ul>
 <li>mmap + write</li>
 <li>sendfile</li>
 </ul>
-<h2 id="mmap">mmap</h2>
-<p><code>mmap()</code> 系统调用函数会直接把内核缓冲区里的数据「<strong>映射</strong>」到用户空间，这样，操作系统内核与用户空间就不需要再进行任何的数据拷贝操作。<br>
-<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9B%B6%E6%8B%B7%E8%B4%9D/mmap%20%2B%20write%20%E9%9B%B6%E6%8B%B7%E8%B4%9D.png" alt></p>
-<h2 id="sendfile">sendfile</h2>
-<p>该系统调用，可以直接把内核缓冲区里的数据拷贝到 socket 缓冲区里，不再拷贝到用户态</p>
+<h2 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h2><p><code>mmap()</code> 系统调用函数会直接把内核缓冲区里的数据「<strong>映射</strong>」到用户空间，这样，操作系统内核与用户空间就不需要再进行任何的数据拷贝操作。<br><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9B%B6%E6%8B%B7%E8%B4%9D/mmap%20%2B%20write%20%E9%9B%B6%E6%8B%B7%E8%B4%9D.png"></p>
+<h2 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h2><p>该系统调用，可以直接把内核缓冲区里的数据拷贝到 socket 缓冲区里，不再拷贝到用户态</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">sendfile</span><span class="params">(<span class="type">int</span> out_fd, <span class="type">int</span> in_fd, <span class="type">off_t</span> *offset, <span class="type">size_t</span> count)</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9B%B6%E6%8B%B7%E8%B4%9D/senfile-3%E6%AC%A1%E6%8B%B7%E8%B4%9D.png" alt></p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost2/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E9%9B%B6%E6%8B%B7%E8%B4%9D/senfile-3%E6%AC%A1%E6%8B%B7%E8%B4%9D.png"></p>
 
   </div>
 </article>
@@ -571,7 +461,7 @@ mysql和linux的解决方案是一样的，只要在第二次被访问时才会�
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">1.3.1.</span> <span class="toc-text">中断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">1.4.</span> <span class="toc-text">浮点数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">2.1.</span> <span class="toc-text">内存分段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.1.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">2.2.</span> <span class="toc-text">内存分页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB%EF%BC%88translation-lookaside-buffer%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">TLB（translation lookaside buffer）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">段页式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.4.</span> <span class="toc-text">linux内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A84G%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E4%B8%8B%E7%94%B3%E8%AF%B78G%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%90%8E%E6%9E%9C"><span class="toc-number">2.5.</span> <span class="toc-text">在4G的物理内存下申请8G的内存会有什么后果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88"><span class="toc-number">2.6.</span> <span class="toc-text">预读失效</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.1.</span> <span class="toc-text">linux解决预读失效问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.2.</span> <span class="toc-text">mysql解决预读失效问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E6%B1%A1%E6%9F%93"><span class="toc-number">2.7.</span> <span class="toc-text">缓存污染</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PCB"><span class="toc-number">3.1.</span> <span class="toc-text">PCB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.</span> <span class="toc-text">上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">CPU上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">进程上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.3.</span> <span class="toc-text">线程上下文切换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%8E%9F%E5%88%99"><span class="toc-number">3.2.1.</span> <span class="toc-text">调度原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">3.3.</span> <span class="toc-text">进程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93"><span class="toc-number">3.3.1.</span> <span class="toc-text">管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.3.2.</span> <span class="toc-text">消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.3.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.3.4.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">3.3.5.</span> <span class="toc-text">信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Socket"><span class="toc-number">3.3.6.</span> <span class="toc-text">Socket</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%9E%E4%BA%89%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="toc-number">3.4.</span> <span class="toc-text">竞争与协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">3.4.1.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%99%E7%AD%89%E5%BE%85%E9%94%81-%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-number">3.4.1.1.</span> <span class="toc-text">忙等待锁(自旋锁)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%AD%89%E5%BE%85%E9%94%81"><span class="toc-number">3.4.1.2.</span> <span class="toc-text">无等待锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-2"><span class="toc-number">3.4.2.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90%E9%97%AE%E9%A2%98"><span class="toc-number">3.4.3.</span> <span class="toc-text">哲学家进餐问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-number">3.4.4.</span> <span class="toc-text">死锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">内存页面置换算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">磁盘调度算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">零拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mmap"><span class="toc-number">6.1.</span> <span class="toc-text">mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sendfile"><span class="toc-number">6.2.</span> <span class="toc-text">sendfile</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%AF%E6%B4%9B%E4%BC%8A%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">冯洛伊曼模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cpu%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">cpu调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">1.3.1.</span> <span class="toc-text">中断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">1.4.</span> <span class="toc-text">浮点数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">2.1.</span> <span class="toc-text">内存分段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.1.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">2.2.</span> <span class="toc-text">内存分页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB%EF%BC%88translation-lookaside-buffer%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">TLB（translation lookaside buffer）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">段页式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.4.</span> <span class="toc-text">linux内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A84G%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E4%B8%8B%E7%94%B3%E8%AF%B78G%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%90%8E%E6%9E%9C"><span class="toc-number">2.5.</span> <span class="toc-text">在4G的物理内存下申请8G的内存会有什么后果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88"><span class="toc-number">2.6.</span> <span class="toc-text">预读失效</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.1.</span> <span class="toc-text">linux解决预读失效问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E8%A7%A3%E5%86%B3%E9%A2%84%E8%AF%BB%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.2.</span> <span class="toc-text">mysql解决预读失效问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E6%B1%A1%E6%9F%93"><span class="toc-number">2.7.</span> <span class="toc-text">缓存污染</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PCB"><span class="toc-number">3.1.</span> <span class="toc-text">PCB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.</span> <span class="toc-text">上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">CPU上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">进程上下文切换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">3.1.1.3.</span> <span class="toc-text">线程上下文切换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%8E%9F%E5%88%99"><span class="toc-number">3.2.1.</span> <span class="toc-text">调度原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">3.3.</span> <span class="toc-text">进程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93"><span class="toc-number">3.3.1.</span> <span class="toc-text">管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.3.2.</span> <span class="toc-text">消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.3.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.3.4.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">3.3.5.</span> <span class="toc-text">信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Socket"><span class="toc-number">3.3.6.</span> <span class="toc-text">Socket</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%9E%E4%BA%89%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="toc-number">3.4.</span> <span class="toc-text">竞争与协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">3.4.1.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%99%E7%AD%89%E5%BE%85%E9%94%81-%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-number">3.4.1.1.</span> <span class="toc-text">忙等待锁(自旋锁)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%AD%89%E5%BE%85%E9%94%81"><span class="toc-number">3.4.1.2.</span> <span class="toc-text">无等待锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-1"><span class="toc-number">3.4.2.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%B2%E5%AD%A6%E5%AE%B6%E8%BF%9B%E9%A4%90%E9%97%AE%E9%A2%98"><span class="toc-number">3.4.3.</span> <span class="toc-text">哲学家进餐问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-number">3.4.4.</span> <span class="toc-text">死锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">内存页面置换算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">磁盘调度算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="toc-number">6.</span> <span class="toc-text">零拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mmap"><span class="toc-number">6.1.</span> <span class="toc-text">mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sendfile"><span class="toc-number">6.2.</span> <span class="toc-text">sendfile</span></a></li></ol></li></ol>
       </div>
     
 
