@@ -6,14 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="物联网的主要特点  连接 （连接到云平台） 协同 （设备之间的系统能力） 智能 （根据特定条件和环境的自我调节能力，能够通过持续的学习，不断优化和改进）  IoT平台 物联网平台是连接物联网生态系统中所有事物的中心枢纽。物联网平台将物联网设备连接到互联网，实现数据的管理和分析，并提供构建和部署物联网应用程序所需的工具。物联网平台的一般功能包括：  设备管理 数据管理 数据分析 应用开发：提供api">
+    <meta name="description" content="物联网的主要特点 连接 （连接到云平台） 协同 （设备之间的系统能力） 智能 （根据特定条件和环境的自我调节能力，能够通过持续的学习，不断优化和改进）  IoT平台物联网平台是连接物联网生态系统中所有事物的中心枢纽。物联网平台将物联网设备连接到互联网，实现数据的管理和分析，并提供构建和部署物联网应用程序所需的工具。物联网平台的一般功能包括：  设备管理 数据管理 数据分析 应用开发：提供api，s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="物联网操作系统">
 <meta property="og:url" content="http://localhost:4000/2024/09/18/read/%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Jonas">
-<meta property="og:description" content="物联网的主要特点  连接 （连接到云平台） 协同 （设备之间的系统能力） 智能 （根据特定条件和环境的自我调节能力，能够通过持续的学习，不断优化和改进）  IoT平台 物联网平台是连接物联网生态系统中所有事物的中心枢纽。物联网平台将物联网设备连接到互联网，实现数据的管理和分析，并提供构建和部署物联网应用程序所需的工具。物联网平台的一般功能包括：  设备管理 数据管理 数据分析 应用开发：提供api">
+<meta property="og:description" content="物联网的主要特点 连接 （连接到云平台） 协同 （设备之间的系统能力） 智能 （根据特定条件和环境的自我调节能力，能够通过持续的学习，不断优化和改进）  IoT平台物联网平台是连接物联网生态系统中所有事物的中心枢纽。物联网平台将物联网设备连接到互联网，实现数据的管理和分析，并提供构建和部署物联网应用程序所需的工具。物联网平台的一般功能包括：  设备管理 数据管理 数据分析 应用开发：提供api，s">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.postimg.cc/zf1FjdDH/image.png">
+<meta property="og:image" content="https://i.postimg.cc/vHC2ZQ00/image.png">
 <meta property="og:image" content="https://i.postimg.cc/xT9G6zHc/image.png">
 <meta property="og:image" content="https://i.postimg.cc/FKcqvSK0/image.png">
 <meta property="og:image" content="http://localhost:4000/2024/09/18/read/%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/attachments/IOTSystemStructure.png">
@@ -21,7 +22,7 @@
 <meta property="og:image" content="https://i.postimg.cc/v87wdMGk/Pasted-image-20240918154743.png">
 <meta property="og:image" content="https://i.postimg.cc/xTtrcRJP/Pasted-image-20240918154921.png">
 <meta property="article:published_time" content="2024-09-18T03:15:27.145Z">
-<meta property="article:modified_time" content="2024-10-05T12:09:58.150Z">
+<meta property="article:modified_time" content="2024-10-05T13:05:37.497Z">
 <meta property="article:author" content="jonas">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.postimg.cc/zf1FjdDH/image.png">
@@ -136,7 +137,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E7%9A%84%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">物联网的主要特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.1.</span> <span class="toc-text">IoT平台</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">四层模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E8%A6%81%E7%B4%A0"><span class="toc-number">1.1.2.</span> <span class="toc-text">技术要素</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">设备</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">传感器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">网络</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">物联网服务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">数据分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E7%A0%94%E7%A9%B6%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-number">1.1.3.</span> <span class="toc-text">可研究的方向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.1.4.</span> <span class="toc-text">全局技术栈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT-OS%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">IoT OS整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E6%A0%B8%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">物联网操作系统内核概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E5%9B%B4%E5%8A%9F%E8%83%BD%E7%BB%84%E4%BB%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">外围功能组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E5%8D%8F%E5%90%8C%E6%A1%86%E6%9E%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">物联网协同框架</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AC%E5%85%B1%E6%99%BA%E8%83%BD%E5%BC%95%E6%93%8E"><span class="toc-number">1.2.4.</span> <span class="toc-text">公共智能引擎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.2.5.</span> <span class="toc-text">集成开发环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E9%A2%86%E5%9F%9F%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.6.</span> <span class="toc-text">物联网领域应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%89%A9%E8%81%94%E7%BD%91OS"><span class="toc-number">1.3.</span> <span class="toc-text">常见的物联网OS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ARM-mbed-OS"><span class="toc-number">1.3.1.</span> <span class="toc-text">ARM mbed OS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BALiteOS"><span class="toc-number">1.3.2.</span> <span class="toc-text">华为LiteOS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%86%E7%A7%91MiCO-OS-2-0"><span class="toc-number">1.3.3.</span> <span class="toc-text">庆科MiCO OS 2.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Win-10-IoT-core"><span class="toc-number">1.3.4.</span> <span class="toc-text">Win 10 IoT core</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Andorid-Things"><span class="toc-number">1.3.5.</span> <span class="toc-text">Andorid Things</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E7%9A%84%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">物联网的主要特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.1.</span> <span class="toc-text">IoT平台</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">四层模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E8%A6%81%E7%B4%A0"><span class="toc-number">1.1.2.</span> <span class="toc-text">技术要素</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">设备</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">传感器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">网络</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">物联网服务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">数据分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E7%A0%94%E7%A9%B6%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-number">1.1.3.</span> <span class="toc-text">可研究的方向</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#AIOT%E6%96%B9%E5%90%91"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">AIOT方向</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.1.4.</span> <span class="toc-text">全局技术栈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT-OS%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">IoT OS整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E6%A0%B8%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">物联网操作系统内核概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E5%9B%B4%E5%8A%9F%E8%83%BD%E7%BB%84%E4%BB%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">外围功能组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E5%8D%8F%E5%90%8C%E6%A1%86%E6%9E%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">物联网协同框架</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AC%E5%85%B1%E6%99%BA%E8%83%BD%E5%BC%95%E6%93%8E"><span class="toc-number">1.2.4.</span> <span class="toc-text">公共智能引擎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.2.5.</span> <span class="toc-text">集成开发环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E9%A2%86%E5%9F%9F%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.6.</span> <span class="toc-text">物联网领域应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%89%A9%E8%81%94%E7%BD%91OS"><span class="toc-number">1.3.</span> <span class="toc-text">常见的物联网OS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ARM-mbed-OS"><span class="toc-number">1.3.1.</span> <span class="toc-text">ARM mbed OS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BALiteOS"><span class="toc-number">1.3.2.</span> <span class="toc-text">华为LiteOS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%86%E7%A7%91MiCO-OS-2-0"><span class="toc-number">1.3.3.</span> <span class="toc-text">庆科MiCO OS 2.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Win-10-IoT-core"><span class="toc-number">1.3.4.</span> <span class="toc-text">Win 10 IoT core</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Andorid-Things"><span class="toc-number">1.3.5.</span> <span class="toc-text">Andorid Things</span></a></li></ol></li></ol></li></ol>
       </div>
     
   </span>
@@ -181,14 +182,12 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h2 id="物联网的主要特点">物联网的主要特点</h2>
-<ul>
+    <h2 id="物联网的主要特点"><a href="#物联网的主要特点" class="headerlink" title="物联网的主要特点"></a>物联网的主要特点</h2><ul>
 <li>连接 （连接到云平台）</li>
 <li>协同 （设备之间的系统能力）</li>
 <li>智能 （根据特定条件和环境的自我调节能力，能够通过持续的学习，不断优化和改进）</li>
 </ul>
-<h3 id="IoT平台">IoT平台</h3>
-<p>物联网平台是连接物联网生态系统中所有事物的中心枢纽。物联网平台将物联网设备连接到互联网，实现数据的管理和分析，并提供构建和部署物联网应用程序所需的工具。物联网平台的一般功能包括：</p>
+<h3 id="IoT平台"><a href="#IoT平台" class="headerlink" title="IoT平台"></a>IoT平台</h3><p>物联网平台是连接物联网生态系统中所有事物的中心枢纽。物联网平台将物联网设备连接到互联网，实现数据的管理和分析，并提供构建和部署物联网应用程序所需的工具。物联网平台的一般功能包括：</p>
 <ul>
 <li>设备管理</li>
 <li>数据管理</li>
@@ -196,36 +195,31 @@
 <li>应用开发：提供api，sdk供外部接入</li>
 <li>安全管理</li>
 </ul>
-<h4 id="四层模型">四层模型</h4>
-<p><img src="https://i.postimg.cc/zf1FjdDH/image.png" alt></p>
-<h4 id="技术要素">技术要素</h4>
-<h5 id="设备">设备</h5>
-<h5 id="传感器">传感器</h5>
-<p>图像传感器，光学传感器，温湿度传感光器，加速度传感器，磁场传感器</p>
-<h5 id="网络">网络</h5>
-<p>物联网使用的网络大体上分为两种：</p>
+<h4 id="四层模型"><a href="#四层模型" class="headerlink" title="四层模型"></a>四层模型</h4><p><img src="https://i.postimg.cc/zf1FjdDH/image.png"></p>
+<h4 id="技术要素"><a href="#技术要素" class="headerlink" title="技术要素"></a>技术要素</h4><h5 id="设备"><a href="#设备" class="headerlink" title="设备"></a>设备</h5><h5 id="传感器"><a href="#传感器" class="headerlink" title="传感器"></a>传感器</h5><p>图像传感器，光学传感器，温湿度传感光器，加速度传感器，磁场传感器</p>
+<h5 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h5><p>物联网使用的网络大体上分为两种：</p>
 <ul>
 <li>一种是把设备连接到其他设备的网络（某些设置不支持直接连接互联网，通过蓝牙或者zigbee等协议连接）</li>
 <li>一种是把设备连接到物联网服务的网络（3G，4G，WIFI）。</li>
 </ul>
-<h5 id="物联网服务">物联网服务</h5>
-<p>两个作用，一个是从设备接收数据以及发送数据给设备，二是保存和处理数据（批处理，流失处理）</p>
-<h5 id="数据分析">数据分析</h5>
-<p>代表方法有两种，基于统计学和机器学习</p>
-<h4 id="可研究的方向">可研究的方向</h4>
-<p><a target="_blank" rel="noopener" href="https://sspai.com/post/57087">如何沟通选题</a></p>
-<h4 id="全局技术栈">全局技术栈</h4>
-<ul>
-<li>第1章 物联网的基础知识
-<ul>
-<li>1.1 物联网入门
-<ul>
+<h5 id="物联网服务"><a href="#物联网服务" class="headerlink" title="物联网服务"></a>物联网服务</h5><p>两个作用，一个是从设备接收数据以及发送数据给设备，二是保存和处理数据（批处理，流失处理）</p>
+<h5 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h5><p>代表方法有两种，基于统计学和机器学习</p>
+<h4 id="可研究的方向"><a href="#可研究的方向" class="headerlink" title="可研究的方向"></a>可研究的方向</h4><p><a target="_blank" rel="noopener" href="https://sspai.com/post/57087">如何沟通选题</a></p>
+<h5 id="AIOT方向"><a href="#AIOT方向" class="headerlink" title="AIOT方向"></a>AIOT方向</h5><ul>
+<li>AI 融合 IoT 数据采集</li>
+<li>AI 融合物联网复杂事件处理及协同</li>
+<li>云雾边融合研究</li>
+<li>AI 融合 IoT 应用（主要场景包括工业  物联网、智慧农业物联网、智能家居和智慧城市  相关应用）</li>
+<li>AI 融合 IoT 安全及隐私保护<br><img src="https://i.postimg.cc/vHC2ZQ00/image.png" alt="image.png"></li>
+</ul>
+<h4 id="全局技术栈"><a href="#全局技术栈" class="headerlink" title="全局技术栈"></a>全局技术栈</h4><ul>
+<li>第1章 物联网的基础知识<ul>
+<li>1.1 物联网入门<ul>
 <li>1.1.1 物联网</li>
 <li>1.1.2 物联网的相关动向</li>
 </ul>
 </li>
-<li>1.2 物联网所实现的世界
-<ul>
+<li>1.2 物联网所实现的世界<ul>
 <li>1.2.1 “泛在网络”社会</li>
 <li>1.2.2 “物”的互联网连接</li>
 <li>1.2.3 机器对机器通信所实现的事</li>
@@ -233,8 +227,7 @@
 <li>COLUMN 蓬勃发展的标准化活动</li>
 </ul>
 </li>
-<li>1.3 实现物联网的技术要素
-<ul>
+<li>1.3 实现物联网的技术要素<ul>
 <li>1.3.1 设备</li>
 <li>1.3.2 传感器</li>
 <li>1.3.3 网络</li>
@@ -244,18 +237,15 @@
 </li>
 </ul>
 </li>
-<li>第2章 物联网的架构
-<ul>
-<li>2.1 物联网的整体结构
-<ul>
+<li>第2章 物联网的架构<ul>
+<li>2.1 物联网的整体结构<ul>
 <li>2.1.1 整体结构</li>
 <li>2.1.2 网关</li>
 <li>2.1.3 服务器的结构</li>
 </ul>
 </li>
 <li>2.2 采集数据</li>
-<li>2.3 接收数据
-<ul>
+<li>2.3 接收数据<ul>
 <li>2.3.1 数据接收服务器的作用</li>
 <li>2.3.2 HTTP 协议</li>
 <li>REST API</li>
@@ -265,21 +255,18 @@
 <li>图像、语音、视频数据的处理</li>
 </ul>
 </li>
-<li>2.4 处理数据
-<ul>
+<li>2.4 处理数据<ul>
 <li>2.4.1 处理服务器的作用</li>
 <li>2.4.2 批处理（Hadoop，Spark）</li>
 <li>2.4.3 流处理（Spark，Storm）</li>
 </ul>
 </li>
-<li>2.5 存储数据
-<ul>
+<li>2.5 存储数据<ul>
 <li>2.5.1 数据库的作用</li>
 <li>2.5.2 数据库的种类和特征（RDB，NoSql）</li>
 </ul>
 </li>
-<li>2.6 控制设备
-<ul>
+<li>2.6 控制设备<ul>
 <li>2.6.1 发送服务器的作用</li>
 <li>2.6.2 使用HTTP 发送数据</li>
 <li>2.6.3 使用WebSocket 发送数据</li>
@@ -289,32 +276,27 @@
 </li>
 </ul>
 </li>
-<li>第3章 物联网设备
-<ul>
-<li>3.1 设备——通向现实世界的接口
-<ul>
+<li>第3章 物联网设备<ul>
+<li>3.1 设备——通向现实世界的接口<ul>
 <li>3.1.1 为什么要学习设备的相关知识</li>
 <li>3.1.2 连通性带来的变化</li>
 </ul>
 </li>
-<li>3.2 物联网设备的结构
-<ul>
+<li>3.2 物联网设备的结构<ul>
 <li>3.2.1 基本结构</li>
 <li>3.2.2 微控制器主板的类型和选择方法（H8型微控制器主板，Arduino，Raspberry Pi，beagle bone black，Edison）</li>
 <li>COLUMN 开源硬件的兴起</li>
 </ul>
 </li>
-<li>3.3 连接“云”与现实世界
-<ul>
+<li>3.3 连接“云”与现实世界<ul>
 <li>3.3.1 与全球网络相连接</li>
 <li>3.3.2 与网关设备的通信方式</li>
 <li>3.3.3 有线连接（以太网，串行通信，USB）</li>
-<li>3.3.4 无线连接（WIFI，3G/LTE，蓝牙，ZigBee）</li>
+<li>3.3.4 无线连接（WIFI，3G&#x2F;LTE，蓝牙，ZigBee）</li>
 <li>3.3.5 获得电波认证</li>
 </ul>
 </li>
-<li>3.4 采集现实世界的信息
-<ul>
+<li>3.4 采集现实世界的信息<ul>
 <li>3.4.1 传感器是什么</li>
 <li>3.4.2 传感器的机制</li>
 <li>3.4.3 传感器的利用过程</li>
@@ -324,16 +306,14 @@
 <li>3.4.7 如何选择传感器</li>
 </ul>
 </li>
-<li>3.5 反馈给现实世界
-<ul>
+<li>3.5 反馈给现实世界<ul>
 <li>3.5.1 使用输出设备时的重要事项</li>
 <li>3.5.2 驱动的作用</li>
 <li>3.5.3 制作正确的电源</li>
 <li>3.5.4 把数字信号转换成模拟信号</li>
 </ul>
 </li>
-<li>3.6 硬件原型设计
-<ul>
+<li>3.6 硬件原型设计<ul>
 <li>3.6.1 原型设计的重要性</li>
 <li>3.6.2 硬件原型设计的注意事项</li>
 <li>3.6.3 硬件原型设计的工具</li>
@@ -343,17 +323,14 @@
 </li>
 </ul>
 </li>
-<li>第4章 先进的感测技术
-<ul>
+<li>第4章 先进的感测技术<ul>
 <li>4.1 逐步扩张的传感器世界</li>
-<li>4.2 先进的感测设备
-<ul>
+<li>4.2 先进的感测设备<ul>
 <li>4.2.1 RGB-D 传感器</li>
 <li>4.2.2 自然用户界面</li>
 </ul>
 </li>
-<li>4.3 先进的感测系统
-<ul>
+<li>4.3 先进的感测系统<ul>
 <li>4.3.1 卫星定位系统</li>
 <li>4.3.2 准天顶卫星</li>
 <li>4.3.3 IMES</li>
@@ -364,35 +341,27 @@
 </li>
 </ul>
 </li>
-<li>第5章 物联网服务的系统开发
-<ul>
-<li>5.1 物联网和系统开发
-<ul>
+<li>第5章 物联网服务的系统开发<ul>
+<li>5.1 物联网和系统开发<ul>
 <li>5.1.1 物联网系统开发的问题</li>
 <li>5.1.2 物联网系统开发的特征</li>
 </ul>
 </li>
-<li>5.2 物联网系统开发的流程
-<ul>
+<li>5.2 物联网系统开发的流程<ul>
 <li>5.2.1 验证假设阶段</li>
 <li>5.2.2 系统开发阶段</li>
 <li>5.2.3 维护应用阶段</li>
 <li>COLUMN 收益共享</li>
 </ul>
 </li>
-<li>5.3 物联网服务的系统开发案例
-<ul>
-<li>5.3.1 楼层环境监控系统<br>
-<img src="https://i.postimg.cc/xT9G6zHc/image.png" alt="image.png"></li>
-<li>5.3.2 节能监控系统<br>
-<img src="https://i.postimg.cc/FKcqvSK0/image.png" alt="image.png"></li>
+<li>5.3 物联网服务的系统开发案例<ul>
+<li>5.3.1 楼层环境监控系统<br>  <img src="https://i.postimg.cc/xT9G6zHc/image.png" alt="image.png"></li>
+<li>5.3.2 节能监控系统<br>  <img src="https://i.postimg.cc/FKcqvSK0/image.png" alt="image.png"></li>
 </ul>
 </li>
-<li>5.4 物联网服务开发的重点
-<ul>
+<li>5.4 物联网服务开发的重点<ul>
 <li>5.4.1 设备</li>
-<li>5.4.2 处理方式设计
-<ul>
+<li>5.4.2 处理方式设计<ul>
 <li>如何连接多种多样的设备（分层化数据处理，在设备附件进行设备的相关处理）</li>
 <li>如何应对接收数据量的增多（接收数据入队列）</li>
 <li>数据库的选择（RDB，KVS）</li>
@@ -406,43 +375,32 @@
 <li>5.4.5 应用与维护</li>
 </ul>
 </li>
-<li>5.5 面向物联网服务的系统开发
-<ul>
+<li>5.5 面向物联网服务的系统开发<ul>
 <li>日志设计</li>
 <li>设备及网关的远程应用</li>
 </ul>
 </li>
 </ul>
+<p>		</p>
 </li>
-<li>第6章 物联网与数据分析
-<ul>
-<li>6.1 传感器数据与分析<br>
-获取数据 -&gt; 预处理 -&gt; 累积  -&gt; 采集 -&gt; 可视化<br>
-|<br>
-构建模型<br>
-|                |       ---------&gt; 发现<br>
-应用模型<br>
-|                |         ---------&gt; 预测
-<ul>
+<li>第6章 物联网与数据分析<ul>
+<li>6.1 传感器数据与分析<br>  获取数据 -&gt; 预处理 -&gt; 累积  -&gt; 采集 -&gt; 可视化<br>                      |<br>                  构建模型<br>              |                |       ———&gt; 发现<br>                  应用模型<br>              |                |         ———&gt; 预测<ul>
 <li>数据采集（数据搜集存储）</li>
 <li>预处理（过滤等）</li>
 </ul>
 </li>
-<li>6.2 可视化
-<ul>
+<li>6.2 可视化<ul>
 <li>采集（Excel表格分析，网络图，地理图）</li>
 </ul>
 </li>
-<li>6.3 高级分析
-<ul>
+<li>6.3 高级分析<ul>
 <li>6.3.1 高级分析的基础</li>
 <li>COLUMN 机器学习和数据挖掘</li>
 <li>6.3.2 用分析算法来发现和预测</li>
 <li>6.3.3 预测</li>
 </ul>
 </li>
-<li>6.4 分析所需要的要素
-<ul>
+<li>6.4 分析所需要的要素<ul>
 <li>6.4.1 数据分析的基础架构</li>
 <li>6.4.2 CEP（complex event process）</li>
 <li>6.4.3 Jubatus</li>
@@ -451,17 +409,14 @@
 </li>
 </ul>
 </li>
-<li>第7章 物联网与可穿戴设备
-<ul>
-<li>7.1 可穿戴设备的基础
-<ul>
+<li>第7章 物联网与可穿戴设备<ul>
+<li>7.1 可穿戴设备的基础<ul>
 <li>7.1.1 物联网和可穿戴设备的关系</li>
 <li>7.1.2 可穿戴设备市场</li>
 <li>7.1.3 可穿戴设备的特征</li>
 </ul>
 </li>
-<li>7.2 可穿戴设备的种类
-<ul>
+<li>7.2 可穿戴设备的种类<ul>
 <li>7.2.1 可穿戴设备的分类</li>
 <li>7.2.2 眼镜型</li>
 <li>7.2.3 手表型</li>
@@ -469,8 +424,7 @@
 <li>7.2.5 按照目的来选择</li>
 </ul>
 </li>
-<li>7.3 可穿戴设备的应用
-<ul>
+<li>7.3 可穿戴设备的应用<ul>
 <li>7.3.1 可穿戴设备的方便之处</li>
 <li>7.3.2 消费者应用情景</li>
 <li>7.3.3 用于企业领域</li>
@@ -479,24 +433,20 @@
 </li>
 </ul>
 </li>
-<li>第8章 物联网与机器人
-<ul>
-<li>8.1 由设备到机器人
-<ul>
+<li>第8章 物联网与机器人<ul>
+<li>8.1 由设备到机器人<ul>
 <li>8.1.1 机器人——设备的延续</li>
 <li>8.1.2 机器人的实用范围正在扩大</li>
 <li>8.1.3 构建机器人系统的关键</li>
 </ul>
 </li>
-<li>8.2 利用机器人专用中间件
-<ul>
+<li>8.2 利用机器人专用中间件<ul>
 <li>8.2.1 机器人专用中间件的作用</li>
 <li>8.2.2 RT 中间件</li>
 <li>8.2.3 ROS</li>
 </ul>
 </li>
-<li>8.3 连接到云端的机器人
-<ul>
+<li>8.3 连接到云端的机器人<ul>
 <li>8.3.1 云机器人</li>
 <li>8.3.2 UNR-PF</li>
 <li>8.3.3 RoboEarth</li>
@@ -507,61 +457,44 @@
 </ul>
 </li>
 </ul>
-<h3 id="IoT-OS整体架构">IoT OS整体架构</h3>
-<p><img src="/2024/09/18/read/%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/attachments/IOTSystemStructure.png" alt="IOTSystemStructure.png"></p>
-<h4 id="物联网操作系统内核概述">物联网操作系统内核概述</h4>
-<p>最核心的线程/任务管理，内存管理，内核安全和同步等机制</p>
-<h4 id="外围功能组件">外围功能组件</h4>
-<p>比如文件系统，TCP/IP网络协议栈，数据库</p>
-<h4 id="物联网协同框架">物联网协同框架</h4>
-<p>实现物联网“协同”功能性需求的关键功能系统。通常包括如下功能：</p>
+<h3 id="IoT-OS整体架构"><a href="#IoT-OS整体架构" class="headerlink" title="IoT OS整体架构"></a>IoT OS整体架构</h3><p><img src="/2024/09/18/read/%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/attachments/IOTSystemStructure.png" alt="IOTSystemStructure.png"></p>
+<h4 id="物联网操作系统内核概述"><a href="#物联网操作系统内核概述" class="headerlink" title="物联网操作系统内核概述"></a>物联网操作系统内核概述</h4><p>最核心的线程&#x2F;任务管理，内存管理，内核安全和同步等机制</p>
+<h4 id="外围功能组件"><a href="#外围功能组件" class="headerlink" title="外围功能组件"></a>外围功能组件</h4><p>比如文件系统，TCP&#x2F;IP网络协议栈，数据库</p>
+<h4 id="物联网协同框架"><a href="#物联网协同框架" class="headerlink" title="物联网协同框架"></a>物联网协同框架</h4><p>实现物联网“协同”功能性需求的关键功能系统。通常包括如下功能：</p>
 <ul>
 <li>物联网设备发现机制。</li>
 <li>物联网设备的初始化与配置管理</li>
 <li>物联网设备之间的协同交互</li>
 <li>云端服务</li>
 </ul>
-<h4 id="公共智能引擎">公共智能引擎</h4>
-<p>物联网智能引擎，就是指包含了诸如语音与语义识别，机器学习等等功能模块，以使得物联网能够超出“事先定义好”的活动规则，能够具备像人一样具备“智慧”的能力。</p>
-<h4 id="集成开发环境">集成开发环境</h4>
-<p>集成开发环境是任何一个完备的操作系统所必需提供的功能组件，程序员通过集成开发环境的辅助，完成具体应用的开发，这些应用最终运行在目标操作系统上</p>
-<h4 id="物联网领域应用">物联网领域应用</h4>
-<p>领域应用是物联网操作系统的直接服务目标，它利用物联网操作系统这个基础软件平台，并根据具体领域的特征，来完成某项具体的功能</p>
-<h3 id="常见的物联网OS">常见的物联网OS</h3>
-<h4 id="ARM-mbed-OS">ARM mbed OS</h4>
-<p><img src="https://i.postimg.cc/D0kjMWW0/Pasted-image-20240918154716.png" alt="Pasted-image-20240918154716.png"></p>
-<h4 id="华为LiteOS">华为LiteOS</h4>
-<p><img src="https://i.postimg.cc/v87wdMGk/Pasted-image-20240918154743.png" alt></p>
+<h4 id="公共智能引擎"><a href="#公共智能引擎" class="headerlink" title="公共智能引擎"></a>公共智能引擎</h4><p>物联网智能引擎，就是指包含了诸如语音与语义识别，机器学习等等功能模块，以使得物联网能够超出“事先定义好”的活动规则，能够具备像人一样具备“智慧”的能力。</p>
+<h4 id="集成开发环境"><a href="#集成开发环境" class="headerlink" title="集成开发环境"></a>集成开发环境</h4><p>集成开发环境是任何一个完备的操作系统所必需提供的功能组件，程序员通过集成开发环境的辅助，完成具体应用的开发，这些应用最终运行在目标操作系统上</p>
+<h4 id="物联网领域应用"><a href="#物联网领域应用" class="headerlink" title="物联网领域应用"></a>物联网领域应用</h4><p>领域应用是物联网操作系统的直接服务目标，它利用物联网操作系统这个基础软件平台，并根据具体领域的特征，来完成某项具体的功能</p>
+<h3 id="常见的物联网OS"><a href="#常见的物联网OS" class="headerlink" title="常见的物联网OS"></a>常见的物联网OS</h3><h4 id="ARM-mbed-OS"><a href="#ARM-mbed-OS" class="headerlink" title="ARM mbed OS"></a>ARM mbed OS</h4><p><img src="https://i.postimg.cc/D0kjMWW0/Pasted-image-20240918154716.png" alt="Pasted-image-20240918154716.png"></p>
+<h4 id="华为LiteOS"><a href="#华为LiteOS" class="headerlink" title="华为LiteOS"></a>华为LiteOS</h4><p><img src="https://i.postimg.cc/v87wdMGk/Pasted-image-20240918154743.png"></p>
 <ul>
-<li>体积小
-<ul>
+<li>体积小 <ul>
 <li>最小内核 RAM&lt;16k ROM&lt;10k ，先进分散加载技术。</li>
 </ul>
 </li>
-<li>低功耗
-<ul>
+<li>低功耗<ul>
 <li>配套海思芯片整体功耗低至uW，专门设计的节能调度算法和针对传 感网开放轻量级网络协议（低功耗路由算法）。</li>
 </ul>
 </li>
-<li>弹性内核
-<ul>
+<li>弹性内核 <ul>
 <li>双模式：RTOS和事件驱动双模式，模块可裁减伸缩。</li>
 </ul>
 </li>
-<li>安全性
-<ul>
+<li>安全性 <ul>
 <li>多种安全机制，包括内核与用户态分隔，保护系统敏感信息的 safearea 软件，安全认证API等。</li>
 </ul>
 </li>
 </ul>
-<h4 id="庆科MiCO-OS-2-0">庆科MiCO OS 2.0</h4>
-<blockquote>
+<h4 id="庆科MiCO-OS-2-0"><a href="#庆科MiCO-OS-2-0" class="headerlink" title="庆科MiCO OS 2.0"></a>庆科MiCO OS 2.0</h4><blockquote>
 <p>MiCO 内含一个面向 IoT 设备的RTOS内核， 特别适合运 行在低功耗的微控制设备上。MiCO 还包含了网络通信协 议栈，安全算法和协议，硬件抽象层，编程工具等开发 IoT 必不可少的软件功能包。</p>
 </blockquote>
-<p><img src="https://i.postimg.cc/xTtrcRJP/Pasted-image-20240918154921.png" alt><br>
-`</p>
-<h4 id="Win-10-IoT-core">Win 10 IoT core</h4>
-<ul>
+<p><img src="https://i.postimg.cc/xTtrcRJP/Pasted-image-20240918154921.png"><br>&#96;</p>
+<h4 id="Win-10-IoT-core"><a href="#Win-10-IoT-core" class="headerlink" title="Win 10 IoT core"></a>Win 10 IoT core</h4><ul>
 <li>Windows 10 家族一个成员：企业、手机和IoT 三个版本。</li>
 <li>占用256K RAM 2G Flash，目前支持Intel Edison 和树莓派Pi 2 高端处理器。</li>
 <li>放弃了以前winCE 方式，没有入门费也没有版税。</li>
@@ -569,8 +502,7 @@
 <li>VS2015 开发环境、windows OS平台资源。</li>
 <li>微软20年嵌入式开发和设备维护经验。</li>
 </ul>
-<h4 id="Andorid-Things">Andorid Things</h4>
-<p>Andorid Things 是谷歌推出的物联网操作系统，是 “Brillo”操作系统的更新版本，作为 Andorid 系统的一个分支版本，类似于可穿戴和智能手表用的Andorid Wear（实际上它也是一种物联网操作系统）</p>
+<h4 id="Andorid-Things"><a href="#Andorid-Things" class="headerlink" title="Andorid Things"></a>Andorid Things</h4><p>Andorid Things 是谷歌推出的物联网操作系统，是 “Brillo”操作系统的更新版本，作为 Andorid 系统的一个分支版本，类似于可穿戴和智能手表用的Andorid Wear（实际上它也是一种物联网操作系统）</p>
 
   </div>
 </article>
@@ -604,7 +536,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E7%9A%84%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">物联网的主要特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.1.</span> <span class="toc-text">IoT平台</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">四层模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E8%A6%81%E7%B4%A0"><span class="toc-number">1.1.2.</span> <span class="toc-text">技术要素</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">设备</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">传感器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">网络</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">物联网服务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">数据分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E7%A0%94%E7%A9%B6%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-number">1.1.3.</span> <span class="toc-text">可研究的方向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.1.4.</span> <span class="toc-text">全局技术栈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT-OS%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">IoT OS整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E6%A0%B8%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">物联网操作系统内核概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E5%9B%B4%E5%8A%9F%E8%83%BD%E7%BB%84%E4%BB%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">外围功能组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E5%8D%8F%E5%90%8C%E6%A1%86%E6%9E%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">物联网协同框架</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AC%E5%85%B1%E6%99%BA%E8%83%BD%E5%BC%95%E6%93%8E"><span class="toc-number">1.2.4.</span> <span class="toc-text">公共智能引擎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.2.5.</span> <span class="toc-text">集成开发环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E9%A2%86%E5%9F%9F%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.6.</span> <span class="toc-text">物联网领域应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%89%A9%E8%81%94%E7%BD%91OS"><span class="toc-number">1.3.</span> <span class="toc-text">常见的物联网OS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ARM-mbed-OS"><span class="toc-number">1.3.1.</span> <span class="toc-text">ARM mbed OS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BALiteOS"><span class="toc-number">1.3.2.</span> <span class="toc-text">华为LiteOS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%86%E7%A7%91MiCO-OS-2-0"><span class="toc-number">1.3.3.</span> <span class="toc-text">庆科MiCO OS 2.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Win-10-IoT-core"><span class="toc-number">1.3.4.</span> <span class="toc-text">Win 10 IoT core</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Andorid-Things"><span class="toc-number">1.3.5.</span> <span class="toc-text">Andorid Things</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E7%9A%84%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">物联网的主要特点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.1.</span> <span class="toc-text">IoT平台</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">四层模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E8%A6%81%E7%B4%A0"><span class="toc-number">1.1.2.</span> <span class="toc-text">技术要素</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">设备</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">传感器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">网络</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">物联网服务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">数据分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E7%A0%94%E7%A9%B6%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-number">1.1.3.</span> <span class="toc-text">可研究的方向</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#AIOT%E6%96%B9%E5%90%91"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">AIOT方向</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.1.4.</span> <span class="toc-text">全局技术栈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IoT-OS%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">IoT OS整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E6%A0%B8%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">物联网操作系统内核概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E5%9B%B4%E5%8A%9F%E8%83%BD%E7%BB%84%E4%BB%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">外围功能组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E5%8D%8F%E5%90%8C%E6%A1%86%E6%9E%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">物联网协同框架</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AC%E5%85%B1%E6%99%BA%E8%83%BD%E5%BC%95%E6%93%8E"><span class="toc-number">1.2.4.</span> <span class="toc-text">公共智能引擎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.2.5.</span> <span class="toc-text">集成开发环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E8%81%94%E7%BD%91%E9%A2%86%E5%9F%9F%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.6.</span> <span class="toc-text">物联网领域应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%89%A9%E8%81%94%E7%BD%91OS"><span class="toc-number">1.3.</span> <span class="toc-text">常见的物联网OS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ARM-mbed-OS"><span class="toc-number">1.3.1.</span> <span class="toc-text">ARM mbed OS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BALiteOS"><span class="toc-number">1.3.2.</span> <span class="toc-text">华为LiteOS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%86%E7%A7%91MiCO-OS-2-0"><span class="toc-number">1.3.3.</span> <span class="toc-text">庆科MiCO OS 2.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Win-10-IoT-core"><span class="toc-number">1.3.4.</span> <span class="toc-text">Win 10 IoT core</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Andorid-Things"><span class="toc-number">1.3.5.</span> <span class="toc-text">Andorid Things</span></a></li></ol></li></ol></li></ol>
       </div>
     
 
