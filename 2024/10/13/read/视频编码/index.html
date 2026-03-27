@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="常见概念帧类型 I帧：帧内编码帧 P帧：前向编码帧（参考前面的I帧和P帧） B帧：双向编码帧（参考前面和后面的I帧和P帧）  参数集 SPS（序列参数集）：主要包含的是图像的宽、高、YUV 格式和位深等基本信息 PPS（图像参数集）：主要包含熵编码类型、基础 QP 和最大参考帧数量等基本编码信息  POC（Picture Of Count）在视频编码中用来标记帧的显示顺序的指数 GOP（group">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视频编码">
+<meta property="og:url" content="http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/index.html">
+<meta property="og:site_name" content="Jonas">
+<meta property="og:description" content="常见概念帧类型 I帧：帧内编码帧 P帧：前向编码帧（参考前面的I帧和P帧） B帧：双向编码帧（参考前面和后面的I帧和P帧）  参数集 SPS（序列参数集）：主要包含的是图像的宽、高、YUV 格式和位深等基本信息 PPS（图像参数集）：主要包含熵编码类型、基础 QP 和最大参考帧数量等基本编码信息  POC（Picture Of Count）在视频编码中用来标记帧的显示顺序的指数 GOP（group">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/1441092/201906/1441092-20190616144459010-1460612046.png">
+<meta property="article:published_time" content="2024-10-13T08:14:31.461Z">
+<meta property="article:modified_time" content="2025-03-12T10:58:32.653Z">
+<meta property="article:author" content="jonas">
+<meta property="article:tag" content="视频">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2018.cnblogs.com/blog/1441092/201906/1441092-20190616144459010-1460612046.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>视频编码</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search">Search</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo.github.io">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2024/12/05/read/%E6%91%84%E5%BD%B1/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/09/18/read/%E7%89%A9%E8%81%94%E7%BD%91%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&text=视频编码"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&is_video=false&description=视频编码"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=视频编码&body=Check out this article: http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&name=视频编码&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&t=视频编码"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">常见概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A7%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">帧类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E9%9B%86"><span class="toc-number">1.2.</span> <span class="toc-text">参数集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#POC%EF%BC%88Picture-Of-Count%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">POC（Picture Of Count）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GOP%EF%BC%88group-of-picture%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">GOP（group of picture）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%81%E6%B5%81"><span class="toc-number">1.5.</span> <span class="toc-text">码流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NALU%EF%BC%88network-abstract-layer-unit-%E7%BD%91%E7%BB%9C%E6%8A%BD%E8%B1%A1%E5%B1%82%E5%8D%95%E5%85%83%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">NALU（network abstract layer unit 网络抽象层单元）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NALU-Header"><span class="toc-number">1.6.1.</span> <span class="toc-text">NALU Header</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DCT%E5%8F%98%E6%8D%A2"><span class="toc-number">1.7.</span> <span class="toc-text">DCT变换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#YCbCr"><span class="toc-number">1.8.</span> <span class="toc-text">YCbCr</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E6%8E%A7%E5%88%B6%E8%A7%86%E9%A2%91%E7%A0%81%E7%8E%87%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.9.</span> <span class="toc-text">三种控制视频码率的方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.</span> <span class="toc-text">视频压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B"><span class="toc-number">2.1.</span> <span class="toc-text">帧内预测</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%AE%E5%BA%A6%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.1.</span> <span class="toc-text">亮度预测模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%BC%8F%E9%80%89%E6%8B%A9"><span class="toc-number">2.1.2.</span> <span class="toc-text">帧内预测模式选择</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CU%E4%B8%AD%E7%9A%84PU%E5%88%92%E5%88%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">CU中的PU划分</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#h265%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B%E6%B5%81%E7%A8%8B"><span class="toc-number">2.1.4.</span> <span class="toc-text">h265帧内预测流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#MPM"><span class="toc-number">2.1.5.</span> <span class="toc-text">MPM</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A7%E9%97%B4%E9%A2%84%E6%B5%8B"><span class="toc-number">2.2.</span> <span class="toc-text">帧间预测</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%90%E5%8A%A8%E6%90%9C%E7%B4%A2"><span class="toc-number">2.2.1.</span> <span class="toc-text">运动搜索</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%9A%E5%83%8F%E7%B4%A0%E6%8F%92%E5%80%BC"><span class="toc-number">2.2.2.</span> <span class="toc-text">亚像素插值</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#h265%E5%B8%A7%E9%97%B4%E9%A2%84%E6%B5%8B"><span class="toc-number">2.2.3.</span> <span class="toc-text">h265帧间预测</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8F%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">量化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#DCT%E5%8F%98%E5%8C%96"><span class="toc-number">3.1.</span> <span class="toc-text">DCT变化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hadamard%E5%8F%98%E6%8D%A2"><span class="toc-number">3.2.</span> <span class="toc-text">Hadamard变换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8F%E5%8C%96-1"><span class="toc-number">3.3.</span> <span class="toc-text">量化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E8%B7%AF%E5%90%8E%E5%A4%84%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">环路后处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81%E8%AF%84%E4%BB%B7%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">视频编码评价标准</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PSNR%EF%BC%88%E5%B3%B0%E5%80%BC%E4%BF%A1%E5%99%AA%E6%AF%94-Peak-Signal-to-Noise-Ratio%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">PSNR（峰值信噪比 Peak Signal-to-Noise Ratio）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSIM%EF%BC%88%E7%BB%93%E6%9E%84%E7%9B%B8%E4%BC%BC%E6%80%A7%E6%8C%87%E6%95%B0-Structural-Similarity-Index%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">SSIM（结构相似性指数 Structural Similarity Index）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="toc-number">6.</span> <span class="toc-text">研究方向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        视频编码
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">jonas</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-10-13T08:14:31.461Z" class="dt-published" itemprop="datePublished">2024-10-13</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/buaa/">buaa</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E8%A7%86%E9%A2%91/" rel="tag">视频</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h3 id="常见概念"><a href="#常见概念" class="headerlink" title="常见概念"></a>常见概念</h3><h4 id="帧类型"><a href="#帧类型" class="headerlink" title="帧类型"></a>帧类型</h4><ul>
+<li>I帧：帧内编码帧</li>
+<li>P帧：前向编码帧（参考前面的I帧和P帧）</li>
+<li>B帧：双向编码帧（参考前面和后面的I帧和P帧）</li>
+</ul>
+<h4 id="参数集"><a href="#参数集" class="headerlink" title="参数集"></a>参数集</h4><ul>
+<li>SPS（序列参数集）：主要包含的是图像的宽、高、YUV 格式和位深等基本信息</li>
+<li>PPS（图像参数集）：主要包含熵编码类型、基础 QP 和最大参考帧数量等基本编码信息</li>
+</ul>
+<h4 id="POC（Picture-Of-Count）"><a href="#POC（Picture-Of-Count）" class="headerlink" title="POC（Picture Of Count）"></a>POC（Picture Of Count）</h4><p>在视频编码中用来标记帧的显示顺序的指数</p>
+<h4 id="GOP（group-of-picture）"><a href="#GOP（group-of-picture）" class="headerlink" title="GOP（group of picture）"></a>GOP（group of picture）</h4><p>每一组IPB帧的序列包含了多少帧，也就是I帧之后要过多少帧才会再次出现I帧<br>![[Pasted image 20241015154421.png]]<br>![[Pasted image 20241015152932.png]]<br>h.265结构<br>CTU（coding block unit）：包含3个块，一个亮度块，两个色度块<br>CU(coding unit)：CTU被划分为不同大小的CU，包含3个块，一个亮度块，两个色度块<br>PU(Prediction unit): 一个CU包含一个TU和一个PU<br>TU（transform unit）：一个CU可以递归按照四叉树结构划分成TUs，CU作为四叉树的root<br>CB（coding block）：CTB被划分为不同大小的CB<br>PB（predict block）：CB被划分为不同规格的PB，用于预测<br>CTU &#x3D; luma CTB + 2 chroma CTB; CTU,CTB位于最顶层，是tree，CB是其节点</p>
+<p>![[Pasted image 20241022121921.png]]<br>![[Pasted image 20241022122059.png]]<br>![[Pasted image 20241022122850.png]]<br>![[Pasted image 20241022130436.png]]<br>![[Pasted image 20241022130535.png]]</p>
+<h4 id="码流"><a href="#码流" class="headerlink" title="码流"></a>码流</h4><p>码流主要是SPS，PPS，I Slice, P Slice, B Slice组成</p>
+<ul>
+<li>SPS(序列参数集)：宽，高，位深，YUK格式等信息</li>
+<li>PPS（图像参数集）：熵编码类型，基础QP，最大参考帧数量等基础编码i信息<br>![[Pasted image 20241015154443.png]]</li>
+</ul>
+<h4 id="NALU（network-abstract-layer-unit-网络抽象层单元）"><a href="#NALU（network-abstract-layer-unit-网络抽象层单元）" class="headerlink" title="NALU（network abstract layer unit 网络抽象层单元）"></a>NALU（network abstract layer unit 网络抽象层单元）</h4><p>![[Pasted image 20241015154716.png]]</p>
+<h5 id="NALU-Header"><a href="#NALU-Header" class="headerlink" title="NALU Header"></a>NALU Header</h5><p>![[Pasted image 20241019150842.png]]</p>
+<ul>
+<li>F： 禁止位，默认是0</li>
+<li>NRI(nal_ref_idc)：数值在0-11，表示nalu的重要性，参考帧，SPS，PPS对应的值大于0</li>
+<li>Type(nal_unit_type)：NALU的类型<br>![[Pasted image 20241019151215.png]]</li>
+</ul>
+<h4 id="DCT变换"><a href="#DCT变换" class="headerlink" title="DCT变换"></a>DCT变换</h4><p>将图像从空域转到频域，分离高频和低频，将高频数据做量化后减少占用</p>
+<h4 id="YCbCr"><a href="#YCbCr" class="headerlink" title="YCbCr"></a>YCbCr</h4><p>通常有有4:4:4，4:2:2，4:2:0，这种比例N1:N2:N3分别代表的是：<br>N1表示在奇数行和偶数行里Y样本的个数<br>N2表示奇数行里Cb和Cr样本的个数<br>N3表示偶数行里Cb和Cr样本的个数<br>存储方式：</p>
+<ul>
+<li>PLANNER：先存储所有的Y，再存储所有的U，再存储所有的V（或先先V再U）</li>
+<li>packed：先存储所有的Y，再交错存储所有的UV</li>
+</ul>
+<p>已经编码的帧里面找一块作为<strong>预测块</strong>，已经编码的帧称之为<strong>参考帧</strong></p>
+<h4 id="三种控制视频码率的方法"><a href="#三种控制视频码率的方法" class="headerlink" title="三种控制视频码率的方法"></a>三种控制视频码率的方法</h4><ul>
+<li>ABR（Average Bit Rate 平均比特率）</li>
+<li>CBR（Constant Bit Rate 固定码率）它通过固定量化参数(QP)来控制视频帧的压缩程度</li>
+<li>CQP (Constant Quantization Parameter，恒定量化参数)<br>全程码率恒定，文件大小可预测，编码压力小，直播常用</li>
+<li>VBR（Variable Bit Rate 可变码率）<br>码率可变，按需分配，简单场景码率低，动态场景码率高</li>
+<li>CRF（Constant Rate Factor 固定质量）<br>CRF值越低，视频看起来质量越高，反之亦然。由于是以视频质量为目标，所以码率，文件大小不可预测</li>
+</ul>
+<h3 id="视频压缩"><a href="#视频压缩" class="headerlink" title="视频压缩"></a>视频压缩</h3><p>每一帧图像，是被划分为一个个块来进行编码的，这个块被成为<strong>宏块（或超级快）</strong>，宏块大小在不同的codec中不一样，有16*16， 32*32，64*64，128*128等。<br>图像的冗余分为下面几个部分：</p>
+<ol>
+<li>空间冗余：相邻宏块之间具有明显的相似性</li>
+<li>时间冗余：两个相邻帧之间相似度非常高</li>
+<li>视觉冗余：人眼对低频信息比对高频信息敏感，去除一些高频信息人眼看不出来</li>
+<li>信息熵冗余：数据能被无损压缩，说明是有信息熵冗余的。<br>以帧内编码说明编码过程</li>
+<li>选择一个块作为已编码块</li>
+<li>选择一个即将编码的块，通常是左边块，上边块，左上边块，右上边块，通过不同的算法得到多个不同的预测块。</li>
+<li>分别使用编码块减去预测块得到残差块，选择绝对值和最小的块作为预测块。</li>
+<li>对预测块进行DCT编码，分离出低频和高频信息，低频数据在左上角，且低频数据比较大。</li>
+<li>使用QT系数进行量化，QT值越大，量化程度越高，高频数据有损越严重，压缩率越高。</li>
+</ol>
+<h4 id="帧内预测"><a href="#帧内预测" class="headerlink" title="帧内预测"></a>帧内预测</h4><p>在H.264编码中，块分为宏块和字块，宏块的大小是16*16（Yuv4:2:0图像亮度块为16*16，色度块为8*8），在帧内预测中，亮度宏块可以继续划分为16个4*4的字块，因为图像中，有的地方细节很多，需要被划分为更小的块做预测。</p>
+<h5 id="亮度预测模式"><a href="#亮度预测模式" class="headerlink" title="亮度预测模式"></a>亮度预测模式</h5><table>
+<thead>
+<tr>
+<th>亮度块</th>
+<th>模式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4*4</td>
+<td>Vertical模式</td>
+<td>当前编码亮度块的<strong>每一列的像素值</strong>都是复制上面已编码块的<strong>最下面那一行</strong>对应的像素值</td>
+</tr>
+<tr>
+<td></td>
+<td>Horizontal模式</td>
+<td>当前编码亮度块的<strong>每一行像素值</strong>都是复制左边一遍吗的<strong>最右边那一列</strong>对应的像素值</td>
+</tr>
+<tr>
+<td></td>
+<td>DC模式</td>
+<td>当前编码亮度块的每一个像素值是上边已编码块的最下面那一行和左边已编码块的最右边那一列像素值之和的<strong>平均值</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Diagonal Down-Left模式</td>
+<td>上边块和右边块的像素值通过插值得到，如果上边块和右边块不存在则无效</td>
+</tr>
+<tr>
+<td></td>
+<td>Diagonal Down-Right模式</td>
+<td>上边块和左边块，左上角对角的像素值通过插值得到，如果三个有一个不存在则无效</td>
+</tr>
+<tr>
+<td></td>
+<td>Vertical-Right模式</td>
+<td>通过上边块、左边块以及左上角对角的像素插值得到的，必须要这三个都有效才能使用，否则该模式无效。</td>
+</tr>
+<tr>
+<td></td>
+<td>Horizontal-Down 模式</td>
+<td>通过上边块、左边块以及左上角对角的像素插值得到。必须要这三个都有效才能使用，否则该模式无效。</td>
+</tr>
+<tr>
+<td></td>
+<td>Vertical-Left 模式</td>
+<td>Vertical-Left 模式是需要通过上边块和右上块（上边块和右上块有可能是一个块，因为可能是一个 16 x 16 的亮度块，意思理解就可以）最下面一行的像素通过插值得到。</td>
+</tr>
+<tr>
+<td></td>
+<td>Horizontal-Up 模式</td>
+<td>Horizontal-Up 模式是需要通过左边块的像素通过插值得到的，。如果左边块不存在，则该模式不可用。</td>
+</tr>
+<tr>
+<td>16*16</td>
+<td>Vertical模式</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Horizontal模式</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>DC模式</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Plan模式</td>
+<td>Plane 预测块的每一个像素值，都是将上边已编码块的最下面那一行，和左边已编码块右边最后一列的像素值经过下面公式计算得到的</td>
+</tr>
+<tr>
+<td>色度块</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>8*8</td>
+<td>Vertical模式</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Horizontal模式</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>DC模式</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Plan模式</td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="帧内预测模式选择"><a href="#帧内预测模式选择" class="headerlink" title="帧内预测模式选择"></a>帧内预测模式选择</h5><p>![[Pasted image 20241022132042.png]]<br>![[Pasted image 20241022132152.png]]<br>![[Pasted image 20241022132250.png]]</p>
+<h5 id="CU中的PU划分"><a href="#CU中的PU划分" class="headerlink" title="CU中的PU划分"></a>CU中的PU划分</h5><p>PU是HEVC预测的基本单元，只能定义在不能划分的最底层的CU中，包括帧内预测和帧间预测。CU决定本单元的所有PU的预测方式和划分方式。</p>
+<ol>
+<li>CU中所有PU为同一种预测方式，即在帧内和帧间预测二选一</li>
+<li>CU-&gt; PU划分方式，帧内预测只有两种划分方式，且只有在最小CU尺寸8*8的大小时可以划分为4*4，<strong>其余情况CU和PU尺寸一致</strong>（<strong>在一个pu中，亮度和色度pu共享一个预测模式</strong>，这也是论文中只使用亮度作为输入的原因）<br>![[Pasted image 20241117144951.png]]</li>
+</ol>
+<h5 id="h265帧内预测流程"><a href="#h265帧内预测流程" class="headerlink" title="h265帧内预测流程"></a>h265帧内预测流程</h5><p>![[Pasted image 20241022130851.png]]<br>帧内预测模式</p>
+<ul>
+<li>planner模式 编号0 像素值缓慢变化</li>
+<li>DC模式 编号1  平坦</li>
+<li>33中角度 编号2-34 不同方向的纹理</li>
+</ul>
+<h5 id="MPM"><a href="#MPM" class="headerlink" title="MPM"></a>MPM</h5><blockquote>
+<p>主要目的是减少编码字节数</p>
+</blockquote>
+<ol>
+<li>构建MPM列表:</li>
+</ol>
+<ul>
+<li>通常从左侧和上方相邻块的预测模式中选择3个最可能的模式作为MPM列表。</li>
+<li>如果相邻块不可用或使用了非角度模式(如DC、Planar),会使用预定义的默认模式。</li>
+</ul>
+<ol start="2">
+<li>编码MPM标志:</li>
+</ol>
+<ul>
+<li>使用1个比特表示当前块的最佳模式是否在MPM列表中。</li>
+</ul>
+<ol start="3">
+<li>MPM索引编码:</li>
+</ol>
+<ul>
+<li>如果最佳模式在MPM列表中,则用1-2个比特编码它在列表中的索引。</li>
+<li>如果不在列表中,则需要用5位编码实际使用的模式（35-）&#x3D;32,最少需要5字节编码）。</li>
+</ul>
+<h4 id="帧间预测"><a href="#帧间预测" class="headerlink" title="帧间预测"></a>帧间预测</h4><p>相比帧内预测，帧间预测的块划分类型要多很多。宏块大小 16 x 16，可以划分为 16 x 8，8 x 16， 8 x 8 三种，其中 8 x 8 可以继续划分成 8 x 4，4 x 8 和 4 x 4，这是亮度块的划分。在 YUV 4:2:0 中，色度块宽高大小都是亮度块的一半。<br><strong>运动估计（ME）</strong>:为当前像素的每个像素块在之前已编码图像中找到最佳匹配快，该过程称为ME<br><strong>参考帧</strong>：在已经编码的帧里面找到一个块来作为预测块，这个已经编码的帧称之为参考帧。<br><strong>运动矢量（MV）</strong>：来表示编码帧中编码块和参考帧中的预测块之间的位置的差值。<br><strong>预测残差</strong>：当前像素块与参考块的差值称为预测残差<br><strong>MVD</strong>：为去除相邻块运动向量之间的相关性，对MV进行差分编码$MVD&#x3D;MV_{C}- MV_P$，$MV_C$代表当前已编码块的MV，$MV_p$代表前一个已编码块的MV（在大多数情况下该值接近于0）<br><strong>拉格朗日代价</strong>：由于SAD仅考虑了残差，未考虑编码运动所需要的比特数，故引入拉格兰日率失真优化来计算代价$J &#x3D; SAD_{x,y} + \lambda_{motion} * R_{motion}$，其中$R_{motion}$代表编码运动信息（如MV，参考图像标号）等所需的比特数，$\lambda_{motion}$为运动估计过程的拉格朗日因子</p>
+<h5 id="运动搜索"><a href="#运动搜索" class="headerlink" title="运动搜索"></a>运动搜索</h5><p>运动搜索的目标就是在参考帧中找到一个块，称之为预测块，且这个预测块与编码块的差距最小。从计算机的角度来说就是，编码块跟这个预测块的差值，也就是残差块的像素绝对值之和（下面我们用 SAD 表示残差块的像素绝对值之和）最小。</p>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>过程</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全搜索算法</td>
+<td>就是从参考帧中第一个像素开始，将一个个 16 x 16 大小的块都遍历一遍。我们总是可以找到差距最小的块。这种方法我们称之为全搜索算法</td>
+<td>需要逐个像素去遍历每一个块，非常费时间</td>
+</tr>
+<tr>
+<td>钻石（菱形）搜索算法TZSearch</td>
+<td>以一个菱形的模式去寻找最优预测块。 （1）从搜索的起始点开始，以起始点作为菱形的中心点。首先以该中心点为左上角像素的 16 x 16 的块作为预测块，求得残差块并求得像素绝对值之和，也就是 SAD。之后对菱形 4 个角的 4 个点分别做同样的操作求得 SAD 值。得到最小的 SAD 值，最小 SAD 值对应的点就是当前最佳匹配点。（2）如果最佳匹配点是菱形的中心点，那我们就找到了预测块了，搜索结束。（3）如果最佳匹配点不是菱形的中心点，则用以当前最佳匹配点为中心点的菱形继续搜索，重复之前的步骤直到菱形的中心点为最佳匹配点。</td>
+<td>它搜索到的预测块不一定是全局最优预测块，可能只是局部最优。</td>
+</tr>
+<tr>
+<td>六边形搜索算法</td>
+<td>六边形搜索跟钻石搜索差不多，只是搜索模式是六边形的。</td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="亚像素插值"><a href="#亚像素插值" class="headerlink" title="亚像素插值"></a>亚像素插值</h5><p>在运动补偿过程中，编码器会尝试找到当前帧中的一个块（block）在前一帧中最匹配的位置。然而，最佳匹配位置有时候可能不会落在整数像素位置上，而是在像素之间。这就是所谓的亚像素（sub-pixel）位置。为了在这些亚像素位置上获得像素值，需要执行亚像素插值。<br>在这里，已经有的像素就是整像素（就是图像本身有的像素称为整像素），需要插值求得的就是半像素和 1&#x2F;4 像素。其中半像素通过整像素插值得到，1&#x2F;4 像素又是通过整像素和半像素插值得到的。因此，我们先通过整像素插值得到半像素，然后通过半像素和整像素插值得到 1&#x2F;4 像素。<br>半像素点的插值是以 6 个整像素点使用六抽头插值滤波器计算得到的，滤波器权重系数为：(1&#x2F;32, -5&#x2F;32, 5&#x2F;8, 5&#x2F;8, -5&#x2F;32, 1&#x2F;32)。<br>因此，半像素插值得到的预测块并不一定就比整像素预测块的残差小。只是我们多了很多个半像素预测块和 1&#x2F;4 像素预测块的选择，所以我们可以在整像素预测块、半像素预测块和 1&#x2F;4 像素预测块里面选择一个最好的。怎么选择呢，就是在整像素运动搜索的基础上，再做一次<strong>精细化的亚像素运动搜索</strong></p>
+<h5 id="h265帧间预测"><a href="#h265帧间预测" class="headerlink" title="h265帧间预测"></a>h265帧间预测</h5><p>![[Pasted image 20241022135707.png]]</p>
+<table>
+<thead>
+<tr>
+<th>帧间模式</th>
+<th>MV预测技术</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SKIP mode</td>
+<td>merge</td>
+<td>与merge模式相比，不需要传输任何额外的运动矢量或残差信息。这种模式假定当前块与参考帧中对应位置的块完全相同</td>
+</tr>
+<tr>
+<td>merge mode</td>
+<td>merge</td>
+<td>当前编码块 PU 的 MV 直接由当前帧相邻 PU 或相邻已编码帧的  <strong>同位 PU</strong> 预测而来,不需要传输额外的运动矢量信息，而Merge模式虽然重用运动矢量，但通常需要编码残差信息。</td>
+</tr>
+<tr>
+<td>inter mode</td>
+<td>AMVP（Advanced Motion Vector Prediction）</td>
+<td>mv预测列表需要通过快速搜索算法找出最优的，把预测  MV 在候选列表的索引号和运动向量残差 MVD 一起编码入码流进行传递</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>merge预测</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>![[Pasted image 20241022140837.png]]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>![[Pasted image 20241022141030.png]]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>![[Pasted image 20241022141142.png]]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>![[Pasted image 20241022143052.png]]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>帧间预测优化-加速算法</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>![[Pasted image 20241022143430.png]]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>![[Pasted image 20241022143624.png]]</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="量化"><a href="#量化" class="headerlink" title="量化"></a>量化</h3><p>而为了分离图像块的高频和低频信息从而去除视觉冗余，我们需要做 DCT 变换和量化。<br>由于 H264 中用到的 DCT 变换和量化跟常规的 DCT 变换和量化有一些区别，其主要在于 H264 使用<strong>整数变换</strong>代替常规的 DCT 变换，并将 DCT 变换中的一部分计算整合到量化中，从而减少浮点运算漂移问题。因此，我们还会对 H264 中的 DCT 变换和量化做一下介绍，最后对比一下 H264 中的变换和量化与常规的变换和量化的区别。</p>
+<h4 id="DCT变化"><a href="#DCT变化" class="headerlink" title="DCT变化"></a>DCT变化</h4><p>DCT 变换，就是离散余弦变换。它能够将空域的信号（对于图像来说，空域就是你平时看到的图像）转换到频域（对于图像来说，就是将图像做完 DCT 变换之后的数据）上表示，并能够比较好的去除相关性。<br>DCT 变换本身是无损的，同时也是可逆的。</p>
+<p>离散余弦变换（DCT）是一种常用于图像和音频处理的线性变换，特别适用于信号或图像数据的压缩。在图像处理中，最常用的是二维DCT，它对图像的小块（例如，8x8像素块）进行变换。这里，我们将主要介绍二维DCT的变换公式，它是在一维DCT的基础上进行的扩展。</p>
+<ol>
+<li>一维DCT变换公式<br>对于一维序列  $x[n]$ （n &#x3D; 0, 1, …, N-1），一维DCT的类型II（最常用的类型）的变换公式定义为：<br>$$X[k] &#x3D; \sum_{n&#x3D;0}^{N-1} x[n] \cos \left[ \frac{\pi}{N} \left( n + \frac{1}{2} \right) k \right] \quad \text{for} \quad k &#x3D; 0, 1, …, N-1$$</li>
+</ol>
+<p>其中 $X[k]$  是DCT域的系数，N是序列的长度。</p>
+<ol start="2">
+<li>二维DCT变换公式<br>在图像处理中，对于一个  $M \times N$  的图像块，二维DCT变换公式可以定义为：<br>$$C[u][v] &#x3D; \alpha(u) \alpha(v) \sum_{x&#x3D;0}^{M-1} \sum_{y&#x3D;0}^{N-1} f[x][y] \cos \left[ \frac{(2x+1)u\pi}{2M} \right] \cos \left[ \frac{(2y+1)v\pi}{2N} \right]$$</li>
+</ol>
+<p>这里：</p>
+<ul>
+<li>$f[x][y]$ 是图像块中位于位置 (x, y) 的像素值。</li>
+<li>$C[u][v]$  是变换后的DCT系数。</li>
+<li>$\alpha(u)$  和  $\alpha(v)$ 是缩放因子，定义为：</li>
+<li>$\alpha(u) &#x3D; \sqrt{\frac{1}{M}}$  当  $u &#x3D; 0$  时，</li>
+<li>$\alpha(u) &#x3D; \sqrt{\frac{2}{M}}$  当 $u \neq 0$ 时，</li>
+<li>同理， $\alpha(v)$  对 v 有相同的定义。</li>
+</ul>
+<p> 缩放因子<br>缩放因子 $\alpha(u)$ 和  $\alpha(v)$  的引入是为了确保变换是正交的。正交变换在反变换中非常重要，因为它保证了变换和反变换的简洁性和准确性。。</p>
+<p>通常情况下 DCT 变换是在 4x4 的子块上进行的.</p>
+<h4 id="Hadamard变换"><a href="#Hadamard变换" class="headerlink" title="Hadamard变换"></a>Hadamard变换</h4><p>DCT变换中涉及到浮点数的运算，浮点数运算比较慢，引出hadamard变换。<br>$$<br>\begin{aligned}&amp;Y&#x3D;AXA^T\&amp;\text{其中}\&amp;\text{作整数而的以格数块}\&amp;\text{化性的供}\Y&#x3D;\begin{bmatrix}1&amp;1&amp;1&amp;1\\1&amp;1&amp;-1&amp;-1\\1&amp;-1&amp;-1&amp;1\\1&amp;-1&amp;1&amp;-1\end{bmatrix}X\begin{bmatrix}1&amp;1&amp;1&amp;1\\1&amp;1&amp;-1&amp;-1\\1&amp;-1&amp;-1&amp;1\\1&amp;-1&amp;1&amp;-1\end{bmatrix}\end{aligned}<br>$$</p>
+<h4 id="量化-1"><a href="#量化-1" class="headerlink" title="量化"></a>量化</h4><p>$$Z&#x3D;round(\frac{y}{QStep})$$</p>
+<p>其中：Z是量化后的系数，y是变换系数。<br>通常 QStep 值越大，DC 系数和 AC 系数被量化成 0 的概率也就越大，从而压缩程度就越大，但是丢失的信息也就越多。这个值太大了会造成视频出现一个个块状的效应，且严重的时候看起来像马赛克一样；这个值比较小的话，压缩程度也会比较小，从而图像失真就会比较小，但是压缩之后的码流大小就会比较大。</p>
+<h3 id="环路后处理"><a href="#环路后处理" class="headerlink" title="环路后处理"></a>环路后处理</h3><p>类似于以往的视频编码标准，H.265&#x2F;HEVC仍采用基于块的混合编码框架，方块效应、振铃效应、颜色偏差以及图像模糊等失真效应仍存在于采用H.265&#x2F;HEVC标准的压缩视频中。为了降低这类失真对视频质量的影响，H.265&#x2F;HEVC中采用了环路滤波技术(In-loop Filtering),包括<strong>去方块滤波</strong>(Deblocking Filter）和<strong>像素自适应补偿</strong>(Sample AdaptiveOffset)两个模块。去方块滤波用于降低方块效应，像素自适应补偿用于改善振铃效应，去方块滤波模块和像素自适应补偿模块都处在编码环路中，即经过滤波的重构像素才能作为后续编码像素的参考使用。环路滤波处理后的重建像素更有利于参考，进一步减小后续编码像素的预测残差，有效地提高视频的主客观质量。</p>
+<h3 id="视频编码评价标准"><a href="#视频编码评价标准" class="headerlink" title="视频编码评价标准"></a>视频编码评价标准</h3><h4 id="PSNR（峰值信噪比-Peak-Signal-to-Noise-Ratio）"><a href="#PSNR（峰值信噪比-Peak-Signal-to-Noise-Ratio）" class="headerlink" title="PSNR（峰值信噪比 Peak Signal-to-Noise Ratio）"></a>PSNR（峰值信噪比 Peak Signal-to-Noise Ratio）</h4><blockquote>
+<p>峰值信噪比PSNR是最为流行的质量度量标准，特别是在率失真性能的分析中。</p>
+</blockquote>
+<h4 id="SSIM（结构相似性指数-Structural-Similarity-Index）"><a href="#SSIM（结构相似性指数-Structural-Similarity-Index）" class="headerlink" title="SSIM（结构相似性指数 Structural Similarity Index）"></a>SSIM（结构相似性指数 Structural Similarity Index）</h4><blockquote>
+<p>SSIM 是一个更先进的测量方法，它考虑了图像的结构信息。SSIM 指标评估了亮度、对比度和结构三个方面的变化。SSIM 的值介于 -1 和 1 之间，其中 1 表示完全相同。SSIM 通常被认为比 PSNR 更能反映人类视觉系统的感知特性。<br>该评价方法充分考虑了人眼的视觉特征,  认为图像的结构信息、亮度和对比度是影响人眼视觉感受的重要因素,并将编码  图像和原始图像在结构信息、亮度和对比度三方面的相似度作为评价因子来计算  得出 SSIM 值。假设有原始灰度图像为 x,编码后的图像为 y,则两个图像的亮度  相似性定义为:</p>
+</blockquote>
+<p>h264流分析工具：VQAnalyzer<br>如果在视频技术里面结合AI技术的话，视频前处理和美颜特效这些会涉及一些AI技术，现在编码器其实也有一些AI技术引入。这两个方向都还不错。</p>
+<h3 id="研究方向"><a href="#研究方向" class="headerlink" title="研究方向"></a>研究方向</h3><p><img src="https://img2018.cnblogs.com/blog/1441092/201906/1441092-20190616144459010-1460612046.png"></p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV14v41137pK">bilibili- video coding with deep learning</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/leixiaohua1020">leixiaohua博客</a></li>
+<li><a target="_blank" rel="noopener" href="http://ebooks.cmpbook.com/detail?id=6148">book-视频编码全角度详解-可作为选题来源参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1pK4y1R7Kz">HEVC 预测编码</a></li>
+<li><a target="_blank" rel="noopener" href="https://open.163.com/newview/movie/free?pid=LGVD54E42&mid=GGVD55CEA">西安邮电大学公开课</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lucifer1997/p/11018551.html">Deep Learning-Based Video Coding: A Review and A Case Study</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+          <li><a href="/search">Search</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo.github.io">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">常见概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A7%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">帧类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E9%9B%86"><span class="toc-number">1.2.</span> <span class="toc-text">参数集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#POC%EF%BC%88Picture-Of-Count%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">POC（Picture Of Count）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GOP%EF%BC%88group-of-picture%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">GOP（group of picture）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%81%E6%B5%81"><span class="toc-number">1.5.</span> <span class="toc-text">码流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NALU%EF%BC%88network-abstract-layer-unit-%E7%BD%91%E7%BB%9C%E6%8A%BD%E8%B1%A1%E5%B1%82%E5%8D%95%E5%85%83%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">NALU（network abstract layer unit 网络抽象层单元）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#NALU-Header"><span class="toc-number">1.6.1.</span> <span class="toc-text">NALU Header</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DCT%E5%8F%98%E6%8D%A2"><span class="toc-number">1.7.</span> <span class="toc-text">DCT变换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#YCbCr"><span class="toc-number">1.8.</span> <span class="toc-text">YCbCr</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E6%8E%A7%E5%88%B6%E8%A7%86%E9%A2%91%E7%A0%81%E7%8E%87%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.9.</span> <span class="toc-text">三种控制视频码率的方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.</span> <span class="toc-text">视频压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B"><span class="toc-number">2.1.</span> <span class="toc-text">帧内预测</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%AE%E5%BA%A6%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.1.</span> <span class="toc-text">亮度预测模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%BC%8F%E9%80%89%E6%8B%A9"><span class="toc-number">2.1.2.</span> <span class="toc-text">帧内预测模式选择</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CU%E4%B8%AD%E7%9A%84PU%E5%88%92%E5%88%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">CU中的PU划分</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#h265%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B%E6%B5%81%E7%A8%8B"><span class="toc-number">2.1.4.</span> <span class="toc-text">h265帧内预测流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#MPM"><span class="toc-number">2.1.5.</span> <span class="toc-text">MPM</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A7%E9%97%B4%E9%A2%84%E6%B5%8B"><span class="toc-number">2.2.</span> <span class="toc-text">帧间预测</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%90%E5%8A%A8%E6%90%9C%E7%B4%A2"><span class="toc-number">2.2.1.</span> <span class="toc-text">运动搜索</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%9A%E5%83%8F%E7%B4%A0%E6%8F%92%E5%80%BC"><span class="toc-number">2.2.2.</span> <span class="toc-text">亚像素插值</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#h265%E5%B8%A7%E9%97%B4%E9%A2%84%E6%B5%8B"><span class="toc-number">2.2.3.</span> <span class="toc-text">h265帧间预测</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8F%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">量化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#DCT%E5%8F%98%E5%8C%96"><span class="toc-number">3.1.</span> <span class="toc-text">DCT变化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hadamard%E5%8F%98%E6%8D%A2"><span class="toc-number">3.2.</span> <span class="toc-text">Hadamard变换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8F%E5%8C%96-1"><span class="toc-number">3.3.</span> <span class="toc-text">量化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E8%B7%AF%E5%90%8E%E5%A4%84%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">环路后处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81%E8%AF%84%E4%BB%B7%E6%A0%87%E5%87%86"><span class="toc-number">5.</span> <span class="toc-text">视频编码评价标准</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PSNR%EF%BC%88%E5%B3%B0%E5%80%BC%E4%BF%A1%E5%99%AA%E6%AF%94-Peak-Signal-to-Noise-Ratio%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">PSNR（峰值信噪比 Peak Signal-to-Noise Ratio）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSIM%EF%BC%88%E7%BB%93%E6%9E%84%E7%9B%B8%E4%BC%BC%E6%80%A7%E6%8C%87%E6%95%B0-Structural-Similarity-Index%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">SSIM（结构相似性指数 Structural Similarity Index）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="toc-number">6.</span> <span class="toc-text">研究方向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&text=视频编码"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&is_video=false&description=视频编码"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=视频编码&body=Check out this article: http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&title=视频编码"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&name=视频编码&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/10/13/read/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/&t=视频编码"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    jonas
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/search">Search</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/jonasrepo.github.io">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
